@@ -67,7 +67,8 @@ export default function Home() {
 
 
       {/* Features Section */}
-      <section className="px-6 py-28 lg:px-20 bg-gradient-to-br from-[#fffdf5] via-[#fff4e5] to-[#ffffff] border-t border-gray-100">
+      <section className="relative px-6 py-28 lg:px-20 bg-gradient-to-br from-[#fffdf5] via-[#fff4e5] to-[#ffffff] border-t border-gray-100">
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <motion.div 
           initial="hidden" 
           whileInView="visible" 
@@ -92,7 +93,7 @@ export default function Home() {
             <motion.div 
               key={idx} 
               variants={fadeInUp} 
-              className="p-6 border border-gray-200 rounded-2xl"
+              className="p-6 bg-white shadow-md border border-gray-200 rounded-2xl"
             >
               <h3 className="text-xl font-medium mb-3">{item.title}</h3>
               <p className="text-gray-600 text-base leading-relaxed">{item.desc}</p>
@@ -102,7 +103,8 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-gradient-to-r from-[#fff9f3] via-[#fdf2e9] to-[#ffffff] py-24 px-6 lg:px-20">
+      <section className="relative bg-gradient-to-r from-[#fff9f3] via-[#fdf2e9] to-[#ffffff] py-24 px-6 lg:px-20">
+  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-semibold mb-12">What People Are Saying</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -150,7 +152,8 @@ export default function Home() {
 
 
       {/* Partners */}
-      <section className="py-16 px-6 lg:px-20 bg-gradient-to-r from-[#fff9f4] via-[#fff3e7] to-[#ffffff] border-t border-gray-100">
+      <section className="relative bg-gradient-to-r from-[#fff9f3] via-[#fdf2e9] to-[#ffffff] py-24 px-6 lg:px-20">
+  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl font-medium mb-10 text-gray-800">Trusted by Innovators</h2>
           <div className="overflow-x-auto whitespace-nowrap flex items-center justify-start space-x-10 animate-scroll">
@@ -169,7 +172,8 @@ export default function Home() {
       </section>
 
       {/* ROI Section */}
-      <section className="bg-gradient-to-br from-[#fef9f5] via-[#fff3e0] to-[#ffffff] px-6 py-28 lg:px-20 border-t border-gray-100">
+      <section className="relative bg-gradient-to-br from-[#fef9f5] via-[#fff3e0] to-[#ffffff] px-6 py-28 lg:px-20 border-t border-gray-100">
+  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-4xl font-semibold mb-4">Drive ROI on Autopilot</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto mb-12">
@@ -200,7 +204,8 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="px-6 py-24 lg:px-20 bg-gradient-to-br from-[#fdf8f2] via-[#fef1e2] to-[#ffffff] border-t border-gray-100">
+      <section className="relative bg-gradient-to-br from-[#fef9f5] via-[#fff3e0] to-[#ffffff] px-6 py-28 lg:px-20 border-t border-gray-100">
+  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-semibold text-center mb-12">FAQs</h2>
           <div className="space-y-6">
