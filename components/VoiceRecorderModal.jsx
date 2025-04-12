@@ -185,7 +185,7 @@ export default function VoiceRecorderModal({ onClose }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <h3 className="text-2xl font-bold text-[#1A3A6C] mb-4">
-          {recording ? "Talking to Urvashi..." : "Talk to Urvashi"}
+          {recording ? "Talking to Riya..." : "Talk to Riya"}
         </h3>
         <canvas
           ref={canvasRef}
@@ -209,7 +209,7 @@ export default function VoiceRecorderModal({ onClose }) {
             Stop
           </button>
         )}
-        <p className="text-xs text-[#666] mt-3">You’re chatting live with Urvashi 🧡</p>
+        <p className="text-xs text-[#666] mt-3">You’re chatting live with Riya 🧡</p>
         <button
           onClick={onClose}
           className="mt-4 text-sm text-[#1A3A6C] underline"
