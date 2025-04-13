@@ -29,6 +29,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <title>VOYO – Your Voice AI Partner</title>
+        <meta name="description" content="Talk to VOYO – your AI genie that listens, speaks, and solves." />
+        <meta property="og:title" content="VOYO – AI that Talks Back" />
+        <meta property="og:description" content="Try VOYO, the voice-first AI agent for work and emotion." />
+        <meta property="og:image" content="/preview.png" />
+        <meta property="og:url" content="https://voyo.club" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
