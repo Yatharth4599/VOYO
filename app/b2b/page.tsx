@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import VoiceRecorderModal from "../components/VoiceRecorderModal";
+import VoiceRecorderModal from "../../components/VoiceRecorderModal";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -29,11 +29,12 @@ export default function Home() {
             Join Waitlist
           </button>
           <button
-            className="hidden md:inline-block px-6 py-2 text-sm rounded-full border border-[#1A3A6C] text-[#1A3A6C] hover:bg-[#1A3A6C] hover:text-white transition"
-            onClick={() => router.push("/b2b")}
+            className="hidden md:inline-block px-6 py-2 text-sm rounded-full border border-[#F59F24] text-[#F59F24] hover:bg-[#F59F24] hover:text-white transition"
+            onClick={() => router.push("/")}
           >
-            Switch to B2B
+            Switch to B2C
           </button>
+
         </div>
       </header>
 
@@ -72,10 +73,7 @@ export default function Home() {
       </section>
 
 
-
-
-
-      {/* Features Section */}
+ {/* Features Section */}
       <section className="relative px-6 py-28 lg:px-20 bg-gradient-to-br from-[#fffdf5] via-[#fff4e5] to-[#ffffff] border-t border-gray-100">
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
         <motion.div 
@@ -282,7 +280,6 @@ export default function Home() {
 
       {showVoiceModal && <VoiceRecorderModal onClose={() => setShowVoiceModal(false)} />}
           <div className="absolute top-[-120px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#F59F24]/20 rounded-full left-[-100px]"></div>
-      <div className="absolute bottom-[-100px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#1A3A6C]/10 rounded-full right-[-120px]"></div>
-    </main>
+      <div className="absolute bottom-[-100px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#1A3A6C]/10 rounded-full right-[-120px]"></div>    </main>
   );
 }
