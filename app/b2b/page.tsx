@@ -33,8 +33,8 @@ export default function Home() {
             <div
               className={`absolute w-1/2 h-full rounded-full transition-all duration-300 ${view === "b2c" ? "left-0 bg-[#F59F24]" : "left-1/2 bg-[#1A3A6C]"}`}
             ></div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>B2B</div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>B2C</div>
+      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>Buisness</div>
+      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>Personal</div>
           </div>
         </div>
 

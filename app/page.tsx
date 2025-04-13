@@ -33,8 +33,8 @@ export default function Home() {
             <div
               className={`absolute w-1/2 h-full rounded-full transition-all duration-300 ${view === "b2c" ? "left-0 bg-[#F59F24]" : "left-1/2 bg-[#1A3A6C]"}`}
             ></div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>B2B</div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>B2C</div>
+      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>Business</div>
+      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>Personal</div>
           </div>
         </div>
         <button
@@ -166,25 +166,6 @@ export default function Home() {
 
 
 
-      {/* Partners */}
-      <section className="relative bg-gradient-to-r from-[#fff9f3] via-[#fdf2e9] to-[#ffffff] py-24 px-6 lg:px-20">
-  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#F59F24] rounded-full mb-12"></div>
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-medium mb-10 text-gray-800">Trusted by Innovators</h2>
-          <div className="overflow-x-auto whitespace-nowrap flex items-center justify-start space-x-10 animate-scroll">
-            {["/partner1.png", "/partner2.png", "/partner3.png", "/partner4.png", "/partner5.png"].map((src, i) => (
-              <Image
-                key={i}
-                src={src}
-                alt={`Partner ${i + 1}`}
-                width={120}
-                height={60}
-                className="grayscale hover:grayscale-0 transition duration-300"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ROI Section */}
       <section className="relative bg-gradient-to-br from-[#fef9f5] via-[#fff3e0] to-[#ffffff] px-6 py-28 lg:px-20 border-t border-gray-100">

@@ -185,7 +185,7 @@ export default function VoiceRecorderModal({ onClose }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <h3 className="text-2xl font-bold text-[#1A3A6C] mb-4">
-          {recording ? "Talking to Urvashi..." : "Talk to Urvashi"}
+          {recording ? "Talking to Urvashi..." : "Talk to Urvashi Your AI Companion"}
         </h3>
         <canvas
           ref={canvasRef}
