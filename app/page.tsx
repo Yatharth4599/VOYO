@@ -14,6 +14,7 @@ export default function Home() {
     visible: { opacity: 1, y: 0 }
   };
 
+
   return (
     <main className="bg-white font-sans text-gray-900 overflow-x-hidden relative">
       {/* Header */}
