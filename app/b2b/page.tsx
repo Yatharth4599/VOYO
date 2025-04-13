@@ -19,22 +19,21 @@ export default function Home() {
   return (
     <main className="bg-white font-sans text-gray-900 overflow-x-hidden overflow-y-auto min-h-screen relative">
       {/* Header */}
-      <header className="px-2 py-1 lg:px-6 flex items-center justify-between border-b border-gray-200 h-25">
-        <Image src="/logo-voyo.png" alt="Voyo Logo" width={200} height={50} className="relative drop-shadow-lg logo-shimmer" />
-        <div className="flex gap-4">
+      <header className="px-2 py-2 lg:px-6 flex items-center justify-between border-b border-gray-200">
+        <Image src="/logo-voyo.png" alt="Voyo Logo" width={180} height={50} className="relative drop-shadow-lg logo-shimmer" />
+        <div className="flex gap-2 md:gap-4">
           <button
-            className="hidden md:inline-block px-6 py-2 text-sm rounded-full border border-black hover:bg-black hover:text-white transition"
+            className="px-4 py-2 text-sm rounded-full border border-black hover:bg-black hover:text-white transition"
             onClick={() => setShowModal(true)}
           >
             Join Waitlist
           </button>
           <button
-            className="hidden md:inline-block px-6 py-2 text-sm rounded-full border border-[#F59F24] text-[#F59F24] hover:bg-[#F59F24] hover:text-white transition"
+            className="px-4 py-2 text-sm rounded-full border border-[#F59F24] text-[#F59F24] hover:bg-[#F59F24] hover:text-white transition md:hidden"
             onClick={() => router.push("/")}
           >
             Switch to B2C
           </button>
-
         </div>
       </header>
 
