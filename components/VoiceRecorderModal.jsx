@@ -25,9 +25,7 @@ export default function VoiceRecorderModal({ onClose }) {
     }
   }, [recording]);
 
-  const startTalking = () => {
-    setRecording(true);
-  };
+  const startTalking = () => setRecording(true);
 
   const stopWaveform = () => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
@@ -66,14 +64,9 @@ export default function VoiceRecorderModal({ onClose }) {
 
       for (let i = 0; i < dataArrayRef.current.length; i++) {
         const v = dataArrayRef.current[i] / 128.0;
-        const y = middle + (v - 1.0) * middle * 0.75; // compress height a bit
+        const y = middle + (v - 1.0) * middle * 0.75;
 
-        if (i === 0) {
-          canvasCtx.moveTo(x, y);
-        } else {
-          canvasCtx.lineTo(x, y);
-        }
-
+        i === 0 ? canvasCtx.moveTo(x, y) : canvasCtx.lineTo(x, y);
         x += sliceWidth;
       }
 
@@ -81,12 +74,14 @@ export default function VoiceRecorderModal({ onClose }) {
       gradient.addColorStop(0, "#1A3A6C");
       gradient.addColorStop(0.5, "#57A0D3");
       gradient.addColorStop(1, "#F59F24");
+
       canvasCtx.strokeStyle = gradient;
       canvasCtx.lineWidth = 4;
       canvasCtx.lineJoin = "round";
       canvasCtx.lineCap = "round";
       canvasCtx.stroke();
     };
+
     draw();
 
     const processor = audioContext.createScriptProcessor(4096, 1, 1);
@@ -108,35 +103,45 @@ export default function VoiceRecorderModal({ onClose }) {
     };
   };
 
-  const playNextAudio = () => {
-    if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
-    const buffer = audioQueueRef.current.shift();
-    const source = audioContextRef.current.createBufferSource();
-    source.buffer = buffer;
-    source.connect(audioContextRef.current.destination);
-    isPlayingRef.current = true;
-    source.onended = () => {
-      isPlayingRef.current = false;
-      playNextAudio();
-    };
-    source.start();
+ // Play decoded PCM buffer (reliable and supported everywhere)
+const playNextAudio = () => {
+  if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
+
+  const buffer = audioQueueRef.current.shift();
+  const source = audioContextRef.current.createBufferSource();
+  source.buffer = buffer;
+  source.connect(audioContextRef.current.destination);
+  isPlayingRef.current = true;
+
+  source.onended = () => {
+    isPlayingRef.current = false;
+    playNextAudio();
   };
 
-  const startWebSocket = () => {
-    const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=fmbVD2UvN89DSPzYqZaG");
-    socketRef.current = socket;
+  source.start();
+};
 
-    socket.onopen = () => {
-      socket.send(
-        JSON.stringify({
-          type: "conversation_initiation_client_data"
-        })
-      );
-    };
+const startWebSocket = () => {
+  const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=QToM8kQDmosNTgBrqM4Q");
+  socketRef.current = socket;
 
-    socket.onmessage = async (message) => {
-      const data = JSON.parse(message.data);
-      if (data.type === "audio" && data.audio_event?.audio_base_64) {
+  socket.onopen = () => {
+    socket.send(
+      JSON.stringify({
+        type: "conversation_initiation_client_data",
+        conversation_config_override: {
+          agent: {
+            agent_id: "QToM8kQDmosNTgBrqM4Q"
+          }
+        }
+      })
+    );
+  };
+
+  socket.onmessage = async (message) => {
+    const data = JSON.parse(message.data);
+    if (data.type === "audio" && data.audio_event?.audio_base_64) {
+      try {
         const raw = atob(data.audio_event.audio_base_64);
         const buffer = new ArrayBuffer(raw.length);
         const view = new Uint8Array(buffer);
@@ -144,10 +149,11 @@ export default function VoiceRecorderModal({ onClose }) {
           view[i] = raw.charCodeAt(i);
         }
 
+        // Decode to PCM (not mp3) — guaranteed to work
         const dataView = new DataView(buffer);
         const pcm = new Float32Array(buffer.byteLength / 2);
         for (let i = 0; i < pcm.length; i++) {
-          const val = dataView.getInt16(i * 2, true); // little-endian
+          const val = dataView.getInt16(i * 2, true);
           pcm[i] = val / 32768;
         }
 
@@ -155,37 +161,28 @@ export default function VoiceRecorderModal({ onClose }) {
         audioBuffer.copyToChannel(pcm, 0);
         audioQueueRef.current.push(audioBuffer);
         playNextAudio();
+      } catch (err) {
+        console.error("🎧 Failed to decode incoming audio:", err);
       }
-    };
-
-    socket.onerror = (err) => console.error("WebSocket Error:", err);
-    socket.onclose = () => console.log("WebSocket closed");
+    }
   };
+
+  socket.onerror = (err) => console.error("WebSocket Error:", err);
+  socket.onclose = () => console.log("WebSocket closed");
+};
+
+  
 
   const stopWebSocket = () => {
-    if (processorRef.current) {
-      processorRef.current.disconnect();
-    }
-    if (socketRef.current) {
-      socketRef.current.close();
-    }
-  };
-
-  const base64ToBlob = (base64, type = "application/octet-stream") => {
-    const binary = atob(base64);
-    const len = binary.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-    return new Blob([bytes], { type });
+    if (processorRef.current) processorRef.current.disconnect();
+    if (socketRef.current) socketRef.current.close();
   };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <h3 className="text-2xl font-bold text-[#1A3A6C] mb-4">
-          {recording ? "Talking to Urvashi..." : "Talk to Urvashi Your AI Companion"}
+          {recording ? "Talking to Urvashi..." : "Talk to Urvashi – Your AI Companion"}
         </h3>
         <canvas
           ref={canvasRef}
@@ -193,15 +190,14 @@ export default function VoiceRecorderModal({ onClose }) {
           height={100}
           className="mx-auto bg-gray-100 rounded-lg mb-4"
         />
-        {!recording && (
+        {!recording ? (
           <button
             onClick={startTalking}
             className="bg-[#F59F24] text-white font-semibold px-6 py-2 rounded-full hover:bg-[#e08a00] transition"
           >
             Start Talking
           </button>
-        )}
-        {recording && (
+        ) : (
           <button
             onClick={() => setRecording(false)}
             className="bg-[#e08a00] text-white font-semibold px-6 py-2 rounded-full hover:bg-[#c46c00] transition"

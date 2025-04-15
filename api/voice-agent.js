@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       console.log("📤 Sending audio to ElevenLabs agent...");
 
       const response = await axios.post(
-        "https://api.elevenlabs.io/v1/agents/fmbVD2UvN89DSPzYqZaG/audio-input",
+        "https://api.elevenlabs.io/v1/agents/QToM8kQDmosNTgBrqM4Q/audio-input",
         audioBuffer,
         {
           headers: {
