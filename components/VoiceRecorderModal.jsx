@@ -14,6 +14,7 @@ export default function VoiceRecorderModal({ onClose }) {
   const processorRef = useRef(null);
   const audioQueueRef = useRef([]);
   const isPlayingRef = useRef(false);
+  const currentSourceRef = useRef(null);
 
   useEffect(() => {
     if (recording) {
@@ -42,8 +43,7 @@ export default function VoiceRecorderModal({ onClose }) {
     analyserRef.current = audioContext.createAnalyser();
     source.connect(analyserRef.current);
     analyserRef.current.fftSize = 256;
-    const bufferLength = analyserRef.current.frequencyBinCount;
-    dataArrayRef.current = new Uint8Array(bufferLength);
+    dataArrayRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
 
     const canvas = canvasRef.current;
     const canvasCtx = canvas.getContext("2d");
@@ -61,11 +61,9 @@ export default function VoiceRecorderModal({ onClose }) {
       let x = 0;
 
       canvasCtx.beginPath();
-
       for (let i = 0; i < dataArrayRef.current.length; i++) {
         const v = dataArrayRef.current[i] / 128.0;
         const y = middle + (v - 1.0) * middle * 0.75;
-
         i === 0 ? canvasCtx.moveTo(x, y) : canvasCtx.lineTo(x, y);
         x += sliceWidth;
       }
@@ -74,7 +72,6 @@ export default function VoiceRecorderModal({ onClose }) {
       gradient.addColorStop(0, "#1A3A6C");
       gradient.addColorStop(0.5, "#57A0D3");
       gradient.addColorStop(1, "#F59F24");
-
       canvasCtx.strokeStyle = gradient;
       canvasCtx.lineWidth = 4;
       canvasCtx.lineJoin = "round";
@@ -103,79 +100,116 @@ export default function VoiceRecorderModal({ onClose }) {
     };
   };
 
- // Play decoded PCM buffer (reliable and supported everywhere)
-const playNextAudio = () => {
-  if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
+  const playNextAudio = () => {
+    if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
 
-  const buffer = audioQueueRef.current.shift();
-  const source = audioContextRef.current.createBufferSource();
-  source.buffer = buffer;
-  source.connect(audioContextRef.current.destination);
-  isPlayingRef.current = true;
+    const buffer = audioQueueRef.current.shift();
+    const source = audioContextRef.current.createBufferSource();
+    currentSourceRef.current = source;
+    source.buffer = buffer;
+    source.connect(audioContextRef.current.destination);
+    isPlayingRef.current = true;
 
-  source.onended = () => {
-    isPlayingRef.current = false;
-    playNextAudio();
+    source.onended = () => {
+      isPlayingRef.current = false;
+      playNextAudio();
+    };
+
+    source.start();
+    monitorMicWhileSpeaking();
   };
 
-  source.start();
-};
+  const monitorMicWhileSpeaking = () => {
+    if (!isPlayingRef.current) return;
 
-const startWebSocket = () => {
-  const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=QToM8kQDmosNTgBrqM4Q");
-  socketRef.current = socket;
+    const threshold = 0.18;
+    const spikeThreshold = 0.10;
+    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
 
-  socket.onopen = () => {
-    socket.send(
-      JSON.stringify({
-        type: "conversation_initiation_client_data",
-        conversation_config_override: {
-          agent: {
-            agent_id: "QToM8kQDmosNTgBrqM4Q"
+    let lastAvg = 0;
+
+    const checkMic = () => {
+      analyserRef.current.getByteTimeDomainData(dataArray);
+      const avg = dataArray.reduce((sum, val) => sum + Math.abs(val - 128), 0) / dataArray.length / 128;
+      const change = Math.abs(avg - lastAvg);
+
+      if (avg > threshold && change > spikeThreshold && isPlayingRef.current) {
+        console.log("🎤 User spoke (spike detected)! Stopping...");
+        stopAudioPlayback();
+        return;
+      }
+
+      lastAvg = avg;
+      if (isPlayingRef.current) {
+        requestAnimationFrame(checkMic);
+      }
+    };
+
+    requestAnimationFrame(checkMic);
+  };
+
+  const startWebSocket = () => {
+    const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=QToM8kQDmosNTgBrqM4Q");
+    socketRef.current = socket;
+
+    socket.onopen = () => {
+      socket.send(
+        JSON.stringify({
+          type: "conversation_initiation_client_data",
+          conversation_config_override: {
+            agent: { agent_id: "QToM8kQDmosNTgBrqM4Q" }
           }
+        })
+      );
+    };
+
+    socket.onmessage = async (message) => {
+      const data = JSON.parse(message.data);
+      if (data.type === "audio" && data.audio_event?.audio_base_64) {
+        try {
+          const raw = atob(data.audio_event.audio_base_64);
+          const buffer = new ArrayBuffer(raw.length);
+          const view = new Uint8Array(buffer);
+          for (let i = 0; i < raw.length; i++) view[i] = raw.charCodeAt(i);
+
+          const dataView = new DataView(buffer);
+          const pcm = new Float32Array(buffer.byteLength / 2);
+          for (let i = 0; i < pcm.length; i++) {
+            const val = dataView.getInt16(i * 2, true);
+            pcm[i] = val / 32768;
+          }
+
+          const audioBuffer = audioContextRef.current.createBuffer(1, pcm.length, 16000);
+          audioBuffer.copyToChannel(pcm, 0);
+          audioQueueRef.current.push(audioBuffer);
+          playNextAudio();
+        } catch (err) {
+          console.error("🎧 Failed to decode incoming audio:", err);
         }
-      })
-    );
+      }
+    };
+
+    socket.onerror = (err) => console.error("WebSocket Error:", err);
+    socket.onclose = () => console.log("WebSocket closed");
   };
 
-  socket.onmessage = async (message) => {
-    const data = JSON.parse(message.data);
-    if (data.type === "audio" && data.audio_event?.audio_base_64) {
+  const stopAudioPlayback = () => {
+    if (currentSourceRef.current) {
       try {
-        const raw = atob(data.audio_event.audio_base_64);
-        const buffer = new ArrayBuffer(raw.length);
-        const view = new Uint8Array(buffer);
-        for (let i = 0; i < raw.length; i++) {
-          view[i] = raw.charCodeAt(i);
-        }
-
-        // Decode to PCM (not mp3) — guaranteed to work
-        const dataView = new DataView(buffer);
-        const pcm = new Float32Array(buffer.byteLength / 2);
-        for (let i = 0; i < pcm.length; i++) {
-          const val = dataView.getInt16(i * 2, true);
-          pcm[i] = val / 32768;
-        }
-
-        const audioBuffer = audioContextRef.current.createBuffer(1, pcm.length, 16000);
-        audioBuffer.copyToChannel(pcm, 0);
-        audioQueueRef.current.push(audioBuffer);
-        playNextAudio();
+        currentSourceRef.current.stop();
+        currentSourceRef.current.disconnect();
+        console.log("🔇 Audio manually stopped.");
       } catch (err) {
-        console.error("🎧 Failed to decode incoming audio:", err);
+        console.error("Error stopping audio:", err);
       }
     }
+    isPlayingRef.current = false;
   };
-
-  socket.onerror = (err) => console.error("WebSocket Error:", err);
-  socket.onclose = () => console.log("WebSocket closed");
-};
-
-  
 
   const stopWebSocket = () => {
     if (processorRef.current) processorRef.current.disconnect();
     if (socketRef.current) socketRef.current.close();
+    stopAudioPlayback();
   };
 
   return (
