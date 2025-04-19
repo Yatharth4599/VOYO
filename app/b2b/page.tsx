@@ -19,7 +19,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-[#fffaf3] font-sans text-gray-900 overflow-x-hidden overflow-y-auto min-h-screen relative">
+    <main className="bg-[#fffaf3] font-sans text-gray-900 overflow-x-hidden min-h-screen relative">
 
       {/* Header */}
       <header className="px-4 py-4 lg:px-6 flex flex-col md:flex-row items-center justify-between border-b border-gray-200">
@@ -36,7 +36,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="relative px-6 pt-20 pb-24 lg:px-20 lg:pt-28 text-center overflow-hidden">
+      <section className="relative px-6 pt-20 pb-24 lg:px-20 lg:pt-28 text-center">
 
         {/* Flex container */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 relative z-10">
