@@ -67,20 +67,28 @@ export default function Home() {
             Try VOYO AI Now
           </button>
           <p className="text-xs text-[#1A3A6C]/60 mt-6 mb-2">Trusted by 100+ founders across industries</p>
-          <div className="overflow-hidden">
-            <div className="flex animate-marquee whitespace-nowrap gap-4">
-              {["Fintech", "Healthcare", "Logistics", "BFSI", "Edtech", "Ecommerce", "Customer Support", "Retail", "Real Estate"]
-                .concat(["Fintech", "Healthcare", "Logistics", "BFSI", "Edtech", "Ecommerce", "Customer Support", "Retail", "Real Estate"])
-                .map((industry, i) => (
-                  <span
-                    key={i}
-                    className="px-4 py-2 text-xs font-medium rounded-full border border-[#F59F24] text-[#1A3A6C] bg-[#fff8f0] shadow-sm"
-                  >
-                    {industry}
-                  </span>
-                ))}
-            </div>
-          </div>
+          <div className="w-full overflow-x-auto">
+  <div className="flex whitespace-nowrap gap-4">
+    {[
+      "Fintech",
+      "Healthcare",
+      "Logistics",
+      "BFSI",
+      "Edtech",
+      "Ecommerce",
+      "Customer Support",
+      "Retail",
+      "Real Estate",
+    ].map((industry, i) => (
+      <span
+        key={i}
+        className="px-4 py-2 text-xs font-medium rounded-full border border-[#F59F24] text-[#1A3A6C] bg-[#fff8f0] shadow-sm"
+      >
+        {industry}
+      </span>
+    ))}
+  </div>
+</div>
         </div>
       </section>
 
