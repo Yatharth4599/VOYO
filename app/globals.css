@@ -25,6 +25,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@keyframes waveMove {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+.animate-wave {
+  animation: waveMove 8s ease-in-out infinite;
+}
+
+
 @keyframes marquee {
   0% {
     transform: translateX(0%);
