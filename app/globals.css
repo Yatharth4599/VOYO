@@ -65,4 +65,9 @@ body {
   100% {
     left: 125%;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  
 }
