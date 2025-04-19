@@ -24,8 +24,12 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-white font-sans text-gray-900 overflow-x-hidden overflow-y-auto min-h-screen relative">
-      {/* Header */}
+<main className="bg-white font-sans text-gray-900 overflow-x-hidden min-h-screen relative">
+
+<div className="absolute top-[-120px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#F59F24]/20 rounded-full left-[-100px]"></div>
+<div className="absolute bottom-[-100px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#1A3A6C]/10 rounded-full right-[-120px]"></div> 
+
+{/* Header */}
       <header className="px-4 py-4 lg:px-6 flex flex-col md:flex-row items-center justify-between border-b border-gray-200">
         <div className="flex items-center justify-between w-full md:w-auto gap-4">
           <Image src="/logo-voyo.png" alt="Voyo Logo" width={180} height={50} className="relative drop-shadow-lg logo-shimmer" />
@@ -268,7 +272,6 @@ export default function Home() {
       )}
 
       {showVoiceModal && <VoiceRecorderModal onClose={() => setShowVoiceModal(false)} />}
-          <div className="absolute top-[-120px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#F59F24]/20 rounded-full left-[-100px]"></div>
-      <div className="absolute bottom-[-100px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#1A3A6C]/10 rounded-full right-[-120px]"></div>    </main>
+         </main>
   );
 }
