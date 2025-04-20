@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import VoiceRecorderModal from "../components/VoiceRecorderModal";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -14,7 +15,7 @@ export default function Home() {
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   };
 
   const handleToggle = () => {
@@ -23,74 +24,67 @@ export default function Home() {
     router.push(newView === "b2b" ? "/b2b" : "/");
   };
 
+
   return (
-<main className="bg-white font-sans text-gray-900 overflow-x-hidden min-h-screen relative">
-
-<div className="absolute top-[-120px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#F59F24]/20 rounded-full left-[-100px]"></div>
-<div className="absolute bottom-[-100px] -z-10 blur-3xl w-[500px] h-[500px] bg-[#1A3A6C]/10 rounded-full right-[-120px]"></div> 
-
-{/* Header */}
-      <header className="px-4 py-4 lg:px-6 flex flex-col md:flex-row items-center justify-between border-b border-gray-200">
-        <div className="flex items-center justify-between w-full md:w-auto gap-4">
-          <Image src="/logo-voyo.png" alt="Voyo Logo" width={180} height={50} className="relative drop-shadow-lg logo-shimmer" />
-          <div className="w-40 h-10 bg-gray-100 border border-gray-300 rounded-full relative flex items-center cursor-pointer" onClick={handleToggle}>
-            <div
-              className={`absolute w-1/2 h-full rounded-full transition-all duration-300 ${view === "b2c" ? "left-0 bg-[#F59F24]" : "left-1/2 bg-[#1A3A6C]"}`}
-            ></div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>Business</div>
-      <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>Personal</div>
-          </div>
-        </div>
-        <button
-          className="mt-4 md:mt-0 px-4 py-2 text-sm rounded-full border border-black hover:bg-black hover:text-white transition"
-          onClick={() => setShowModal(true)}
-        >
-          Join Waitlist
-        </button>
-      </header>
-
-
-      {/* Hero */}
-      <section className="relative px-6 pt-20 pb-24 lg:px-20 lg:pt-28 text-center bg-gradient-to-br from-[#fff8f0] via-[#fff6ea] to-[#fefcf8]">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <p className="text-md text-[#1A3A6C] font-medium mb-2">Meet VOYO — Your AI Partner for Everything</p>
-          <h1 className="text-3xl md:text-5xl font-bold text-[#1A3A6C] leading-tight mb-4">
-            Build with India's Voice-Native AI Stack
-          </h1>
-          <p className="text-base md:text-lg leading-relaxed text-[#1A3A6C]/80 mb-8">
-            VOYO gives you the tools to launch multilingual, emotion-aware voice experiences — for customer support, sales, and automation.
-          </p>
-          <button
-            className="inline-block bg-[#F59F24] text-white px-8 py-3 rounded-full text-base font-semibold hover:bg-[#e08a00] transition"
-            onClick={() => setShowVoiceModal(true)}
-          >
-            Try VOYO AI Now
-          </button>
-          <p className="text-xs text-[#1A3A6C]/60 mt-6 mb-2">Trusted by 100+ founders across industries</p>
-          <div className="w-full overflow-x-auto">
-  <div className="flex whitespace-nowrap gap-4">
-    {[
-      "Fintech",
-      "Healthcare",
-      "Logistics",
-      "BFSI",
-      "Edtech",
-      "Ecommerce",
-      "Customer Support",
-      "Retail",
-      "Real Estate",
-    ].map((industry, i) => (
-      <span
-        key={i}
-        className="px-4 py-2 text-xs font-medium rounded-full border border-[#F59F24] text-[#1A3A6C] bg-[#fff8f0] shadow-sm"
-      >
-        {industry}
-      </span>
-    ))}
+    <>
+      {/* Main Page Content */}
+      <main className="bg-white font-sans text-gray-900 overflow-x-hidden min-h-screen relative">
+        
+        {/* ✅ Fixed Background Blobs */}
+  <div className="absolute top-0 left-0 w-full h-0 overflow-hidden -z-10 pointer-events-none">
+    <div className="absolute top-[-250px] left-[-200px] w-[500px] h-[500px] rounded-full bg-[#F59F24]/20 blur-3xl" />
+    <div className="absolute bottom-[-250px] right-[-200px] w-[500px] h-[500px] rounded-full bg-[#1A3A6C]/10 blur-3xl" />
   </div>
-</div>
-        </div>
-      </section>
+        {/* Header */}
+        <header className="px-4 py-4 lg:px-6 flex flex-col md:flex-row items-center justify-between border-b border-gray-200">
+          <div className="flex items-center justify-between w-full md:w-auto gap-4">
+            <Image src="/logo-voyo.png" alt="Voyo Logo" width={180} height={50} className="relative drop-shadow-lg logo-shimmer" />
+            <div className="w-40 h-10 bg-gray-100 border border-gray-300 rounded-full relative flex items-center cursor-pointer" onClick={handleToggle}>
+              <div className={`absolute w-1/2 h-full rounded-full transition-all duration-300 ${view === "b2c" ? "left-0 bg-[#F59F24]" : "left-1/2 bg-[#1A3A6C]"}`} />
+              <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2c" ? "text-white" : "text-black"}`}>Business</div>
+              <div className={`w-1/2 text-center z-10 text-sm font-medium ${view === "b2b" ? "text-white" : "text-black"}`}>Personal</div>
+            </div>
+          </div>
+          <button
+            className="mt-4 md:mt-0 px-4 py-2 text-sm rounded-full border border-black hover:bg-black hover:text-white transition"
+            onClick={() => setShowModal(true)}
+          >
+            Join Waitlist
+          </button>
+        </header>
+
+        {/* Hero Section */}
+        <section className="relative px-6 pt-20 pb-24 lg:px-20 lg:pt-28 text-center bg-gradient-to-br from-[#fff8f0] via-[#fff6ea] to-[#fefcf8]">
+          <div className="max-w-4xl mx-auto relative z-10">
+            <p className="text-md text-[#1A3A6C] font-medium mb-2">Meet VOYO — Your AI Partner for Everything</p>
+            <h1 className="text-3xl md:text-5xl font-bold text-[#1A3A6C] leading-tight mb-4">
+              Build with India's Voice-Native AI Stack
+            </h1>
+            <p className="text-base md:text-lg leading-relaxed text-[#1A3A6C]/80 mb-8">
+              VOYO gives you the tools to launch multilingual, emotion-aware voice experiences — for customer support, sales, and automation.
+            </p>
+            <button
+              className="inline-block bg-[#F59F24] text-white px-8 py-3 rounded-full text-base font-semibold hover:bg-[#e08a00] transition"
+              onClick={() => setShowVoiceModal(true)}
+            >
+              Try VOYO AI Now
+            </button>
+            <p className="text-xs text-[#1A3A6C]/60 mt-6 mb-2">Trusted by 100+ founders across industries</p>
+
+            {/* Horizontal Scroll Industries */}
+            <div className="w-full overflow-x-auto">
+              <div className="flex whitespace-nowrap gap-4">
+                {[
+                  "Fintech", "Healthcare", "Logistics", "BFSI", "Edtech", "Ecommerce", "Customer Support", "Retail", "Real Estate",
+                ].map((industry, i) => (
+                  <span key={i} className="px-4 py-2 text-xs font-medium rounded-full border border-[#F59F24] text-[#1A3A6C] bg-[#fff8f0] shadow-sm">
+                    {industry}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
 
  {/* Features Section */}
@@ -258,31 +252,33 @@ export default function Home() {
       <footer className="text-sm text-center text-gray-500 py-10 bg-white border-t border-gray-100">
         © 2025 VOYO. India’s Voice Infrastructure.
       </footer>
+    </main>
 
-{/* Modals */}
-{showModal && (
-  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-    <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center">
-      <h3 className="text-2xl font-semibold mb-6">Join the Waitlist</h3>
-      <form className="space-y-4">
-        <input type="text" placeholder="Your Name" className="w-full px-4 py-2 border rounded-lg" />
-        <input type="email" placeholder="Email" className="w-full px-4 py-2 border rounded-lg" />
-        <input type="tel" placeholder="Phone Number" className="w-full px-4 py-2 border rounded-lg" />
-        <button type="submit" className="bg-black text-white px-6 py-2 rounded-full w-full hover:bg-gray-900">
-          Submit
-        </button>
-      </form>
-      <button onClick={() => setShowModal(false)} className="mt-4 text-sm text-gray-600 underline">
-        Close
-      </button>
-    </div>
-  </div>
-)}
+      {/* Portaled Modals */}
+      {showModal && createPortal(
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center">
+            <h3 className="text-2xl font-semibold mb-6">Join the Waitlist</h3>
+            <form className="space-y-4">
+              <input type="text" placeholder="Your Name" className="w-full px-4 py-2 border rounded-lg" />
+              <input type="email" placeholder="Email" className="w-full px-4 py-2 border rounded-lg" />
+              <input type="tel" placeholder="Phone Number" className="w-full px-4 py-2 border rounded-lg" />
+              <button type="submit" className="bg-black text-white px-6 py-2 rounded-full w-full hover:bg-gray-900">
+                Submit
+              </button>
+            </form>
+            <button onClick={() => setShowModal(false)} className="mt-4 text-sm text-gray-600 underline">
+              Close
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
-{showVoiceModal && (
-  <VoiceRecorderModal onClose={() => setShowVoiceModal(false)} />
-)}
-
-         </main>
+      {showVoiceModal && createPortal(
+        <VoiceRecorderModal onClose={() => setShowVoiceModal(false)} />,
+        document.body
+      )}
+    </>
   );
 }
