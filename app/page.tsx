@@ -259,14 +259,67 @@ export default function Home() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center">
             <h3 className="text-2xl font-semibold mb-6">Join the Waitlist</h3>
-            <form className="space-y-4">
-              <input type="text" placeholder="Your Name" className="w-full px-4 py-2 border rounded-lg" />
-              <input type="email" placeholder="Email" className="w-full px-4 py-2 border rounded-lg" />
-              <input type="tel" placeholder="Phone Number" className="w-full px-4 py-2 border rounded-lg" />
-              <button type="submit" className="bg-black text-white px-6 py-2 rounded-full w-full hover:bg-gray-900">
-                Submit
-              </button>
-            </form>
+            <form 
+  onSubmit={async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+    };
+    
+    try {
+      const res = await fetch('https://script.google.com/macros/s/AKfycbx2T8HpaBNgNKXH3asaWYk5J6i6xJLG1OXfncikDE1BMByEN0ALwo3QG-4qc4sfgkon/exec', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.ok) {
+        alert('🎉 Successfully added to the waitlist!');
+        e.target.reset(); // Clear the form
+      } else {
+        alert('❌ Failed to join. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('❌ An unexpected error occurred.');
+    }
+  }}
+  className="space-y-4"
+>
+  <input 
+    type="text" 
+    name="name" 
+    placeholder="Your Name" 
+    className="w-full px-4 py-2 border rounded-lg" 
+    required 
+  />
+  <input 
+    type="email" 
+    name="email" 
+    placeholder="Email" 
+    className="w-full px-4 py-2 border rounded-lg" 
+    required 
+  />
+  <input 
+    type="tel" 
+    name="phone" 
+    placeholder="Phone Number" 
+    className="w-full px-4 py-2 border rounded-lg" 
+    required 
+  />
+  <button 
+    type="submit" 
+    className="bg-black text-white px-6 py-2 rounded-full w-full hover:bg-gray-900"
+  >
+    Submit
+  </button>
+</form>
+
             <button onClick={() => setShowModal(false)} className="mt-4 text-sm text-gray-600 underline">
               Close
             </button>
