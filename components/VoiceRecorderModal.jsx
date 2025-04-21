@@ -15,6 +15,9 @@ export default function VoiceRecorderModal({ onClose }) {
   const audioQueueRef = useRef([]);
   const isPlayingRef = useRef(false);
 
+  const currentSourceRef = useRef(null);
+
+
   useEffect(() => {
     if (recording) {
       startWaveform();
@@ -48,39 +51,68 @@ export default function VoiceRecorderModal({ onClose }) {
     const canvas = canvasRef.current;
     const canvasCtx = canvas.getContext("2d");
 
+    const stopAIPlayback = () => {
+      if (isPlayingRef.current) {
+        audioQueueRef.current = [];
+    
+        if (currentSourceRef.current) {
+          currentSourceRef.current.stop();
+          currentSourceRef.current.disconnect();
+          currentSourceRef.current = null;
+          console.log("👂 User interrupted — AI audio stopped.");
+        }
+    
+        isPlayingRef.current = false;
+      }
+    };
+    
+    
+
     const draw = () => {
       animationFrameRef.current = setTimeout(() => requestAnimationFrame(draw), 60);
       analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
-
+    
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
+    
       const width = canvas.width;
       const height = canvas.height;
       const middle = height / 2;
       const sliceWidth = width / dataArrayRef.current.length;
       let x = 0;
-
+    
       canvasCtx.beginPath();
-
+    
+      let maxAmplitude = 0; // ADD THIS LINE
+    
       for (let i = 0; i < dataArrayRef.current.length; i++) {
         const v = dataArrayRef.current[i] / 128.0;
         const y = middle + (v - 1.0) * middle * 0.75;
-
+    
+        if (Math.abs(v - 1.0) > maxAmplitude) {
+          maxAmplitude = Math.abs(v - 1.0);
+        }
+    
         i === 0 ? canvasCtx.moveTo(x, y) : canvasCtx.lineTo(x, y);
         x += sliceWidth;
       }
-
+    
       const gradient = canvasCtx.createLinearGradient(0, 0, canvas.width, 0);
       gradient.addColorStop(0, "#1A3A6C");
       gradient.addColorStop(0.5, "#57A0D3");
       gradient.addColorStop(1, "#F59F24");
-
+    
       canvasCtx.strokeStyle = gradient;
       canvasCtx.lineWidth = 4;
       canvasCtx.lineJoin = "round";
       canvasCtx.lineCap = "round";
       canvasCtx.stroke();
+    
+      // NEW LOGIC: Stop AI audio if user starts speaking
+      if (maxAmplitude > 0.15) { // You can tweak 0.15 to a smaller/larger value based on sensitivity
+        stopAIPlayback();
+      }
     };
+    
 
     draw();
 
@@ -104,22 +136,27 @@ export default function VoiceRecorderModal({ onClose }) {
   };
 
  // Play decoded PCM buffer (reliable and supported everywhere)
-const playNextAudio = () => {
+ const playNextAudio = () => {
   if (isPlayingRef.current || audioQueueRef.current.length === 0) return;
 
   const buffer = audioQueueRef.current.shift();
   const source = audioContextRef.current.createBufferSource();
   source.buffer = buffer;
   source.connect(audioContextRef.current.destination);
+
+  currentSourceRef.current = source; // ADD THIS LINE to track the playing source
+
   isPlayingRef.current = true;
 
   source.onended = () => {
     isPlayingRef.current = false;
+    currentSourceRef.current = null; // Clear reference after done
     playNextAudio();
   };
 
   source.start();
 };
+
 
 const startWebSocket = () => {
   const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=QToM8kQDmosNTgBrqM4Q");
