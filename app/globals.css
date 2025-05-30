@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -72,4 +72,83 @@ body {
   }
   
   
+} */
+
+
+
+@import "tailwindcss";
+
+
+:root {
+  --background: transparent;
+  --foreground: #171717;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: transparent;
+    --foreground: #ededed;
+  }
+}
+
+
+html, body, #__next {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background: transparent !important;
+}
+
+
+body {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  font-family: Arial, sans-serif;
+  color: #171717;
+}
+
+
+/* 🪄 Animations */
+@keyframes waveMove {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+.animate-wave {
+  animation: waveMove 8s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+  display: inline-flex;
+  min-width: max-content;
+}
+
+.logo-shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  height: 100%;
+  width: 75%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 125%;
+  }
+}
+

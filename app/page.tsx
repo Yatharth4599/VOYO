@@ -6,6 +6,8 @@ import VoiceRecorderModal from "../components/VoiceRecorderModal";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import VantaBackground from '../components/VantaBackground';
+
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -27,14 +29,19 @@ export default function Home() {
 
   return (
     <>
+    
       {/* Main Page Content */}
       <main className="bg-white font-sans text-gray-900 overflow-x-hidden min-h-screen relative">
+        
         
         {/* ✅ Fixed Background Blobs */}
   <div className="absolute top-0 left-0 w-full h-0 overflow-hidden -z-10 pointer-events-none">
     <div className="absolute top-[-250px] left-[-200px] w-[500px] h-[500px] rounded-full bg-[#F59F24]/20 blur-3xl" />
     <div className="absolute bottom-[-250px] right-[-200px] w-[500px] h-[500px] rounded-full bg-[#1A3A6C]/10 blur-3xl" />
   </div>
+
+      <VantaBackground/>
+
         {/* Header */}
         <header className="px-4 py-4 lg:px-6 flex flex-col md:flex-row items-center justify-between border-b border-gray-200">
           <div className="flex items-center justify-between w-full md:w-auto gap-4">
@@ -52,7 +59,7 @@ export default function Home() {
             Join Waitlist
           </button>
         </header>
-
+        
         {/* Hero Section */}
         <section className="relative px-6 pt-20 pb-24 lg:px-20 lg:pt-28 text-center bg-gradient-to-br from-[#fff8f0] via-[#fff6ea] to-[#fefcf8]">
           <div className="max-w-4xl mx-auto relative z-10">
