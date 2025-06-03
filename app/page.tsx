@@ -22,13 +22,14 @@ export default function Home() {
       </Head>
 
       <header className="flex justify-between items-center px-12 py-6">
-        <h1 className="text-2xl font-bold">voyo</h1>
+        {/* <h1 className="text-2xl font-bold">voyo</h1> */}
+        <img src="/Voyo Black Logo.png" className='w-40 h-40' alt="" />
         <nav className="space-x-8">
           <a href="#features" className="text-gray-400 hover:text-white">Features</a>
           <a href="#ecosystem" className="text-gray-400 hover:text-white">Ecosystem</a>
           <a href="#contact" className="text-gray-400 hover:text-white">Contact</a>
         </nav>
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Get in touch</button>
+        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer">Get in touch</button>
       </header>
 
       <section className="relative flex flex-col md:flex-row justify-between items-center px-12 py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
@@ -44,7 +45,7 @@ export default function Home() {
           <p className="text-gray-300 text-lg mb-8">
             Handling complex queries, boosting efficiency, and streamlining support so your business scales faster with precision.
           </p>
-          <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer">
             Get in touch
           </button>
         </motion.div>
@@ -57,7 +58,7 @@ export default function Home() {
         <h3 className="text-2xl font-semibold mb-4">Trusted by the Voyo Ecosystem</h3>
         <p className="text-gray-400 mb-6">We efficiently manage millions of AI-powered interactions monthly, at near-perfect uptime.</p>
         <div className="flex flex-wrap justify-center gap-12 py-6">
-          <span className="text-white text-xl font-bold">Zomato</span>
+          <img src="/TigerPay.png" alt="TigerPay" className="w-24 h-auto" />
           <span className="text-white text-xl font-bold">Blinkit</span>
           <span className="text-white text-xl font-bold">Hyperpure</span>
         </div>
@@ -84,7 +85,7 @@ export default function Home() {
           <h4 className="text-white text-xl font-semibold mb-2">Automated Quality Audits</h4>
           <ul className="text-gray-400 text-sm list-disc list-inside">
             <li>Greeting & Introduction</li>
-            <li className="text-red-500 line-through">Customer Sentiment</li>
+            <li>Customer Sentiment</li>
             <li>Action</li>
             <li>Closure</li>
           </ul>
@@ -129,16 +130,32 @@ export default function Home() {
 
         <div className="flex flex-col items-center justify-center text-center">
           <h3 className="text-2xl font-semibold mb-2">Fluid Integrations</h3>
-          <p className="text-gray-400 mb-6">Integrate seamlessly with tools like Freshdesk, Zoho, and more</p>
+          <p className="text-gray-400 mb-6">Integrate seamlessly with tools like Freshdesk, Zendesk, and more</p>
           <div className="relative w-full flex items-center justify-center">
             <div className="absolute animate-pulse text-orange-500 text-2xl font-bold">voyo</div>
-            <div className="grid grid-cols-3 gap-6">
-              <img src="/icons/whatsapp.png" className="w-10 h-10" alt="WhatsApp" />
-              <img src="/icons/zendesk.png" className="w-10 h-10" alt="Zendesk" />
-              <img src="/icons/salesforce.png" className="w-10 h-10" alt="Salesforce" />
-              <img src="/icons/slack.png" className="w-10 h-10" alt="Slack" />
-              <img src="/icons/zoho.png" className="w-10 h-10" alt="Zoho" />
-              <img src="/icons/freshdesk.png" className="w-10 h-10" alt="Freshdesk" />
+            <div className="grid grid-cols-3 gap-5">
+              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
+                <img src="/whatsapp.png" className="w-18 h-11" alt="WhatsApp" />
+              </div>
+
+              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
+                <img src="/zendesk.png" className="w-12 h-12" alt="Zendesk" />
+              </div>
+              
+              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
+                <img src="/salesforce.png" className="w-20 h-20" alt="Salesforce" />
+              </div>
+              
+              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
+                <img src="/slack.png" className="w-14 h-14" alt="Slack" />
+              </div>
+              
+              <img src="/" alt="" />
+
+              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
+                <img src="/freshdesk.png" className="w-15 h-15" alt="Freshdesk" />
+              </div>
+              
             </div>
           </div>
         </div>
@@ -167,7 +184,7 @@ export default function Home() {
       <section className="text-center py-24 px-12 bg-gradient-to-t from-gray-900 to-black">
         <h3 className="text-3xl font-bold mb-6">Ready to transform your business?</h3>
         <p className="text-gray-400 mb-6">Get started and see how AI can transform your customer interactions—faster, smarter, better.</p>
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold">
+        <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer">
           Get in touch
         </button>
       </section>
