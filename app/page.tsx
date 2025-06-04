@@ -1,14 +1,20 @@
 // pages/index.tsx
 'use client';
 
-import { useEffect } from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import SignupForm from '../components/SignupForm';
 
 const AnimatedSphere = dynamic(() => import('../components/AnimatedSphere'), { ssr: false });
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
   return (
     <div className="bg-black text-white min-h-screen font-sans">
       <Head>
@@ -21,6 +27,8 @@ export default function Home() {
         />
       </Head>
 
+
+
       <header className="flex justify-between items-center px-12 py-6">
         {/* <h1 className="text-2xl font-bold">voyo</h1> */}
         <img src="/Voyo Black Logo.png" className='w-40 h-40' alt="" />
@@ -29,7 +37,12 @@ export default function Home() {
           <a href="#ecosystem" className="text-gray-400 hover:text-white">Ecosystem</a>
           <a href="#contact" className="text-gray-400 hover:text-white">Contact</a>
         </nav>
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer">Get in touch</button>
+        <button
+          onClick={openModal}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer"
+        >
+          Get in touch
+        </button>
       </header>
 
       <section className="relative flex flex-col md:flex-row justify-between items-center px-12 py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
@@ -45,7 +58,10 @@ export default function Home() {
           <p className="text-gray-300 text-lg mb-8">
             Handling complex queries, boosting efficiency, and streamlining support so your business scales faster with precision.
           </p>
-          <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer">
+           <button
+            onClick={openModal}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
+          >
             Get in touch
           </button>
         </motion.div>
@@ -184,14 +200,43 @@ export default function Home() {
       <section className="text-center py-24 px-12 bg-gradient-to-t from-gray-900 to-black">
         <h3 className="text-3xl font-bold mb-6">Ready to transform your business?</h3>
         <p className="text-gray-400 mb-6">Get started and see how AI can transform your customer interactions—faster, smarter, better.</p>
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer">
+        <button
+          onClick={openModal}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
+        >
           Get in touch
         </button>
       </section>
 
+      {/* Modal */}
+      {showModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="bg-[#111] p-6 rounded relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SignupForm onClose={() => setShowModal(false)} />
+          </div>
+        </div>
+      )}
       <footer className="text-center py-6 text-gray-500 text-sm bg-black border-t border-gray-800">
         &copy; 2025 Voyo AI. All rights reserved.
       </footer>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
