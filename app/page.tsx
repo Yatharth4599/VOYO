@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import SignupForm from '../components/SignupForm';
 
+
 const AnimatedSphere = dynamic(() => import('../components/AnimatedSphere'), { ssr: false });
 
 export default function Home() {
@@ -30,20 +31,33 @@ export default function Home() {
 
 
       <header className="flex justify-between items-center px-12 py-6">
-        {/* <h1 className="text-2xl font-bold">voyo</h1> */}
-        <img src="/Voyo Black Logo.png" className='w-40 h-40' alt="" />
-        <nav className="space-x-8">
-          <a href="#features" className="text-gray-400 hover:text-white">Features</a>
-          <a href="#ecosystem" className="text-gray-400 hover:text-white">Ecosystem</a>
-          <a href="#contact" className="text-gray-400 hover:text-white">Contact</a>
-        </nav>
-        <button
-          onClick={openModal}
-          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer"
-        >
-          Get in touch
-        </button>
-      </header>
+  <img src="/Voyo Black Logo.png" className="w-40 h-40" alt="Voyo Logo" />
+  
+  <nav className="space-x-8">
+    <a href="#features" className="text-gray-400 hover:text-white">Features</a>
+    <a href="#ecosystem" className="text-gray-400 hover:text-white">Ecosystem</a>
+    <a href="#contact" className="text-gray-400 hover:text-white">Contact</a>
+  </nav>
+
+  <div className="flex gap-4">
+    <button
+      onClick={openModal}
+      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer"
+    >
+      Join
+    </button>
+
+    <a
+      href="https://calendly.com/YOUR-CALENDLY-LINK"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg cursor-pointer"
+    >
+      Schedule a Call
+    </a>
+  </div>
+</header>
+
 
       <section className="relative flex flex-col md:flex-row justify-between items-center px-12 py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
         <motion.div 
@@ -62,7 +76,7 @@ export default function Home() {
             onClick={openModal}
             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
           >
-            Get in touch
+            Join 
           </button>
         </motion.div>
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 flex justify-end items-center pointer-events-none z-0">
@@ -143,38 +157,40 @@ export default function Home() {
             </div>
           </div>
         </div>
-
         <div className="flex flex-col items-center justify-center text-center">
-          <h3 className="text-2xl font-semibold mb-2">Fluid Integrations</h3>
-          <p className="text-gray-400 mb-6">Integrate seamlessly with tools like Freshdesk, Zendesk, and more</p>
-          <div className="relative w-full flex items-center justify-center">
-            <div className="absolute animate-pulse text-orange-500 text-2xl font-bold">voyo</div>
-            <div className="grid grid-cols-3 gap-5">
-              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
-                <img src="/whatsapp.png" className="w-18 h-11" alt="WhatsApp" />
-              </div>
+  <h3 className="text-2xl font-semibold mb-2">Fluid Integrations</h3>
+  <p className="text-gray-400 mb-6">Integrate seamlessly with tools like Freshdesk, Zendesk, and more</p>
 
-              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
-                <img src="/zendesk.png" className="w-12 h-12" alt="Zendesk" />
-              </div>
-              
-              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
-                <img src="/salesforce.png" className="w-20 h-20" alt="Salesforce" />
-              </div>
-              
-              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
-                <img src="/slack.png" className="w-14 h-14" alt="Slack" />
-              </div>
-              
-              <img src="/" alt="" />
+  <div className="relative w-[320px] h-[320px] mt-10">
+    {/* Center pulse */}
+    <motion.div
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-orange-500 text-2xl font-bold"
+      animate={{ scale: [1, 1.1, 1] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      voyo
+    </motion.div>
 
-              <div className="w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center">
-                <img src="/freshdesk.png" className="w-15 h-15" alt="Freshdesk" />
-              </div>
-              
-            </div>
-          </div>
-        </div>
+    {/* Orbiting icons */}
+    {[
+      { src: "/whatsapp.png", className: "top-0 left-1/2 -translate-x-1/2" },
+      { src: "/zendesk.png", className: "top-1/2 left-0 -translate-y-1/2" },
+      { src: "/salesforce.png", className: "bottom-0 left-1/2 -translate-x-1/2" },
+      { src: "/slack.png", className: "top-1/2 right-0 -translate-y-1/2" },
+      { src: "/freshdesk.png", className: "top-[15%] right-[15%]" },
+    ].map(({ src, className }, i) => (
+      <motion.div
+        key={i}
+        className={`absolute ${className} w-16 h-16 border border-gray-300 rounded-lg flex items-center justify-center bg-[#111]`}
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 2 + i * 0.2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <img src={src} className="w-10 h-10" alt="Integration" />
+      </motion.div>
+    ))}
+  </div>
+</div>
+
       </section>
 
 
@@ -204,7 +220,7 @@ export default function Home() {
           onClick={openModal}
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
         >
-          Get in touch
+          Join 
         </button>
       </section>
 
