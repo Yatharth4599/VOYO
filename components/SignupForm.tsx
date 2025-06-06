@@ -5,8 +5,8 @@ import { useState } from 'react';
 export default function SignupForm({ onClose }: { onClose: () => void }) {
   const [formData, setFormData] = useState({
     name: '',
-    companyEmail: '',
-    phone: '',
+    email: '',
+    phonenumber: '',
     password: '',
   });
 
@@ -19,7 +19,7 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
     console.log('🚀 Submitting:', formData);
   
     try {
-      const res = await fetch('http://10.12.26.65:3000/user', {
+      const res = await fetch('http://10.12.26.69:3000/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,19 +64,19 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
           className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
         />
         <input
-          type="companyEmail"
-          name="companyEmail"
+          type="email"
+          name="email"
           placeholder="Company Email"
-          value={formData.companyEmail}
+          value={formData.email}
           onChange={handleChange}
           required
           className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
         />
         <input
           type="tel"
-          name="phone"
+          name="phonenumber"
           placeholder="Phone Number"
-          value={formData.phone}
+          value={formData.phonenumber}
           onChange={handleChange}
           required
           className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"

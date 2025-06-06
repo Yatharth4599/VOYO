@@ -1,6 +1,6 @@
 // pages/index.tsx
 'use client';
-
+import LoginForm from '../components/LoginForm';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -12,9 +12,11 @@ const AnimatedSphere = dynamic(() => import('../components/AnimatedSphere'), { s
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
-
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+  const openLoginModal = () => setShowLoginModal(true);
+  const closeLoginModal = () => setShowLoginModal(false);
 
   return (
     <div className="bg-black text-white min-h-screen font-sans">
@@ -78,6 +80,13 @@ export default function Home() {
           >
             Join 
           </button>
+          <button
+  onClick={openLoginModal}
+  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer ml-4"
+>
+  Login
+</button>
+
         </motion.div>
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 flex justify-end items-center pointer-events-none z-0">
           <AnimatedSphere />
@@ -238,6 +247,20 @@ export default function Home() {
           </div>
         </div>
       )}
+      {showLoginModal && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+    onClick={closeLoginModal}
+  >
+    <div
+      className="bg-[#111] p-6 rounded relative"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <LoginForm onClose={closeLoginModal} />
+    </div>
+  </div>
+)}
+      {/* Footer */}
       <footer className="text-center py-6 text-gray-500 text-sm bg-black border-t border-gray-800">
         &copy; 2025 Voyo AI. All rights reserved.
       </footer>
