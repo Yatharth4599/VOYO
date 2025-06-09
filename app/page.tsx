@@ -126,7 +126,7 @@ export default function Home() {
       </section>
 
       <section className="text-center py-24 px-8 bg-gradient-to-b from-gray-900 to-black">
-        <h3 className="text-4xl font-bold mb-6">The only <span className="text-orange-400">AI toolbox</span> you'll ever need</h3>
+        <h3 className="text-4xl font-bold mb-6">The only <span className="text-orange-400">AI toolbox</span> you will ever need</h3>
         <p className="text-gray-300 max-w-2xl mx-auto mb-8">
           From conversational AI agents to co-pilots, unlock endless possibilities to transform your business.
         </p>
