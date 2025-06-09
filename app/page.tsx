@@ -36,34 +36,58 @@ export default function Home() {
       </Head>
 
 
+      <header className="px-6 py-4 flex items-center justify-between bg-black border-b border-gray-800">
+  {/* Logo */}
+  <img src="/Voyo Black Logo.png" className="w-20 h-20 sm:w-28 sm:h-28" alt="Voyo Logo" />
 
-      <header className="flex justify-between items-center px-12 py-6">
-  <img src="/Voyo Black Logo.png" className="w-24 h-24 sm:w-40 sm:h-40" alt="Voyo Logo" />
-  
-  <nav className="space-x-8">
+  {/* Desktop Navigation */}
+  <nav className="hidden md:flex items-center space-x-6">
     <a href="#features" className="text-gray-400 hover:text-white">Features</a>
     <a href="#ecosystem" className="text-gray-400 hover:text-white">Ecosystem</a>
     <a href="#contact" className="text-gray-400 hover:text-white">Contact</a>
-  </nav>
-
-  <div className="flex gap-4">
     <button
       onClick={openModal}
-      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg cursor-pointer"
+      className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
     >
       Join
     </button>
-
     <a
       href="https://calendly.com/yatharthkher/15min"
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg cursor-pointer"
+      className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
     >
       Schedule a Call
     </a>
+  </nav>
+
+  {/* Mobile Menu */}
+  <div className="md:hidden">
+    <details className="relative">
+      <summary className="list-none text-white cursor-pointer text-xl font-bold">&#9776;</summary>
+      <div className="absolute right-0 mt-2 bg-[#111] border border-gray-700 rounded-md shadow-lg w-56 z-50 p-4 flex flex-col gap-3">
+        <a href="#features" className="text-gray-300 hover:text-white">Features</a>
+        <a href="#ecosystem" className="text-gray-300 hover:text-white">Ecosystem</a>
+        <a href="#contact" className="text-gray-300 hover:text-white">Contact</a>
+        <button
+          onClick={openModal}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
+        >
+          Join
+        </button>
+        <a
+          href="https://calendly.com/yatharthkher/15min"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg"
+        >
+          Schedule a Call
+        </a>
+      </div>
+    </details>
   </div>
 </header>
+
 
 
 <section className="relative flex flex-col md:flex-row justify-between items-center px-6 sm:px-12 py-16 sm:py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
