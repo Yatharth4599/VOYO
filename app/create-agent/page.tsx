@@ -1,14 +1,14 @@
-// app/create-agent/page.tsx
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FaMicrophone, FaGlobe, FaUpload, FaPaperPlane, FaCheckCircle, FaUserAlt } from 'react-icons/fa';
+import { FaMicrophone, FaUpload, FaPaperPlane, FaCheckCircle, FaUserAlt } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function CreateAgentPage() {
   const router = useRouter();
+
   const [form, setForm] = useState({
     name: '',
     language: 'hi',
@@ -16,15 +16,24 @@ export default function CreateAgentPage() {
     speed: 0.8,
     promptText: '',
     knowledgeUrl: '',
-    knowledgeFile: null,
+    knowledgeFile: null as File | null,
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showFileModal, setShowFileModal] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, files } = e.target as any;
-    setForm((prev) => ({ ...prev, [name]: files ? files[0] : value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const target = e.target;
+    const { name } = target;
+
+    if (target instanceof HTMLInputElement && target.type === 'file') {
+      setForm((prev) => ({ ...prev, [name]: target.files?.[0] ?? null }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: target.value }));
+    }
   };
 
   const handleCreate = async () => {
@@ -95,7 +104,12 @@ export default function CreateAgentPage() {
           avatar: { type: 'orb', color_1: '#2792DC', color_2: '#9CE6E6' },
         },
         data_collection: {},
-        overrides: { conversation_config_override: { tts: { voice_id: false }, agent: { language: true } } },
+        overrides: {
+          conversation_config_override: {
+            tts: { voice_id: false },
+            agent: { language: true },
+          },
+        },
         call_limits: { agent_concurrency_limit: -1, daily_limit: 100000 },
         privacy: {
           record_voice: true,
@@ -103,7 +117,10 @@ export default function CreateAgentPage() {
           delete_transcript_and_pii: true,
           delete_audio: true,
         },
-        workspace_overrides: { conversation_initiation_client_data_webhook: null, webhooks: { post_call_webhook_id: null } },
+        workspace_overrides: {
+          conversation_initiation_client_data_webhook: null,
+          webhooks: { post_call_webhook_id: null },
+        },
         safety: { is_blocked_ivc: false, is_blocked_non_ivc: false },
       },
       tags: [],
@@ -113,14 +130,21 @@ export default function CreateAgentPage() {
     try {
       const res = await fetch('http://10.12.26.69:3000/agents', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error('Failed to create agent');
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }
@@ -173,7 +197,7 @@ export default function CreateAgentPage() {
             </button>
           </div>
         </div>
-
+        
         {error && <p className="text-red-400 mt-4">{error}</p>}
 
         <div className="flex justify-end mt-8">
@@ -188,7 +212,6 @@ export default function CreateAgentPage() {
           </motion.button>
         </div>
       </div>
-
       <div className="hidden md:flex flex-col justify-between w-72 p-6 rounded-xl bg-[#121720] border border-[#2A2F45] shadow-xl z-10">
         <div>
           <h2 className="text-xl font-bold text-lime-300 mb-4">Agent Preview</h2>

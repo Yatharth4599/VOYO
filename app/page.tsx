@@ -16,7 +16,6 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
   const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
