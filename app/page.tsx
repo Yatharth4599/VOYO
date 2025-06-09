@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import SignupForm from '../components/SignupForm';
+import VoiceRecorderModal from '../components/VoiceRecorderModal';
+
 
 
 const AnimatedSphere = dynamic(() => import('../components/AnimatedSphere'), { ssr: false });
@@ -17,9 +19,13 @@ export default function Home() {
   const closeModal = () => setShowModal(false);
   const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
+  const [showAgentModal, setShowAgentModal] = useState(false);
+
 
   return (
     <div className="bg-black text-white min-h-screen font-sans">
+
+
       <Head>
         <title>Voyo | AI Agent Solutions</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,7 +39,7 @@ export default function Home() {
 
 
       <header className="flex justify-between items-center px-12 py-6">
-  <img src="/Voyo Black Logo.png" className="w-40 h-40" alt="Voyo Logo" />
+  <img src="/Voyo Black Logo.png" className="w-24 h-24 sm:w-40 sm:h-40" alt="Voyo Logo" />
   
   <nav className="space-x-8">
     <a href="#features" className="text-gray-400 hover:text-white">Features</a>
@@ -50,7 +56,7 @@ export default function Home() {
     </button>
 
     <a
-      href="https://calendly.com/YOUR-CALENDLY-LINK"
+      href="https://calendly.com/yatharthkher/15min"
       target="_blank"
       rel="noopener noreferrer"
       className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg cursor-pointer"
@@ -61,45 +67,62 @@ export default function Home() {
 </header>
 
 
-      <section className="relative flex flex-col md:flex-row justify-between items-center px-12 py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
-        <motion.div 
-          className="md:w-1/2 z-10"
-          initial={{ opacity: 0, y: 30 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-5xl font-bold leading-tight mb-6">
-            AI <span className="text-purple-400">Agents</span>, built for speed, scale, and quality
-          </h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Handling complex queries, boosting efficiency, and streamlining support so your business scales faster with precision.
-          </p>
-           <button
-            onClick={openModal}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
-          >
-            Join 
-          </button>
-          <button
-  onClick={openLoginModal}
-  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer ml-4"
+<section className="relative flex flex-col md:flex-row justify-between items-center px-6 sm:px-12 py-16 sm:py-24 bg-gradient-to-b from-black to-gray-900 overflow-hidden">
+      <motion.div 
+  className="md:w-1/2 z-10 relative"
+  initial={{ opacity: 0, y: 30 }} 
+  animate={{ opacity: 1, y: 0 }} 
+  transition={{ duration: 0.6 }}
 >
-  Login
+  <h2 className="text-5xl font-bold leading-tight mb-6">
+    AI <span className="text-purple-400">Agents</span>, built for speed, scale, and quality
+  </h2>
+  <p className="text-gray-300 text-lg mb-8">
+    Handling complex queries, boosting efficiency, and streamlining support so your business scales faster with precision.
+  </p>
+  <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+  <button
+      onClick={openModal}
+      className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
+    >
+      Join
+    </button>
+    <button
+      onClick={openLoginModal}
+      className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg text-lg font-semibold cursor-pointer"
+    >
+      Login
+    </button>
+    <button
+  onClick={() => setShowAgentModal(true)}
+  className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-3 rounded-lg text-lg shadow-lg animate-pulse"
+>
+  Agent Demo
 </button>
 
-        </motion.div>
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 flex justify-end items-center pointer-events-none z-0">
-          <AnimatedSphere />
-        </div>
+  </div>
+</motion.div>
+<div className="relative w-full md:w-1/2 flex justify-center md:justify-end items-center mt-8 md:mt-0 pointer-events-none z-0">
+  <div className="w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[480px] md:h-[480px]">
+    <AnimatedSphere />
+  </div>
+</div>
+
+
       </section>
 
       <section id="ecosystem" className="py-16 bg-black text-center">
-        <h3 className="text-2xl font-semibold mb-4">Trusted by the Voyo Ecosystem</h3>
+        <h3 className="text-2xl font-semibold mb-4">Trusted by</h3>
         <p className="text-gray-400 mb-6">We efficiently manage millions of AI-powered interactions monthly, at near-perfect uptime.</p>
         <div className="flex flex-wrap justify-center gap-12 py-6">
           <img src="/TigerPay.png" alt="TigerPay" className="w-24 h-auto" />
-          <span className="text-white text-xl font-bold">Blinkit</span>
-          <span className="text-white text-xl font-bold">Hyperpure</span>
+          <span className="text-white text-xl font-bold">Shuraa</span>
+          <img
+  src="/as-logo.png"
+  alt="as"
+  className="w-24 h-auto bg-white rounded-md p-2"
+/>
+
         </div>
       </section>
 
@@ -260,6 +283,11 @@ export default function Home() {
     </div>
   </div>
 )}
+
+{showAgentModal && (
+  <VoiceRecorderModal onClose={() => setShowAgentModal(false)} />
+)}
+
       {/* Footer */}
       <footer className="text-center py-6 text-gray-500 text-sm bg-black border-t border-gray-800">
         &copy; 2025 Voyo AI. All rights reserved.
@@ -267,15 +295,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
