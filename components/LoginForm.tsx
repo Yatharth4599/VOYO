@@ -18,7 +18,7 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
     setError('');
 
     try {
-      const response = await fetch('http://10.12.26.69:3000/login', {
+      const response = await fetch('http://10.12.26.134:3000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -65,7 +65,7 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
       {error && <p className="text-red-400 text-sm">{error}</p>}
       <button
         type="submit"
-        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold"
+        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold cursor-pointer"
       >
         Login
       </button>
