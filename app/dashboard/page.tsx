@@ -214,7 +214,7 @@ export default function Dashboard() {
               router.push('/dashboard');
               setIsMenuOpen(false);
             }}
-            className="text-lg hover:text-orange-400 text-left"
+            className="text-lg hover:text-orange-400 text-left cursor-pointer"
           >
             Agents
           </button>
@@ -223,7 +223,7 @@ export default function Dashboard() {
               router.push('/knowledge-base');
               setIsMenuOpen(false);
             }}
-            className="text-lg hover:text-orange-400 text-left"
+            className="text-lg hover:text-orange-400 text-left cursor-pointer"
           >
             Knowledge Base
           </button>
