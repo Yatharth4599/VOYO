@@ -148,7 +148,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('jwtToken');
     if (!token) return router.push('/');
 
-    fetch('http://10.12.26.134:3000/users/agents', {
+    fetch('http://10.12.26.215:3000/users/agents', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -169,7 +169,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('jwtToken');
     if (!token) return;
 
-    const res = await fetch(`http://10.12.26.66:3000/users/agents/${agentId}`, {
+    const res = await fetch(`http://10.12.26.215:3000/users/agents/${agentId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -295,4 +295,3 @@ export default function Dashboard() {
     </div>
   );
 }
-

@@ -241,7 +241,7 @@ export default function KnowledgeBasePage() {
       const token = localStorage.getItem('jwtToken');
       if (!token) return;
 
-      const res = await fetch(`http://10.12.26.134:3000/user/knowledge-base/${doc.docId}`, {
+      const res = await fetch(`http://10.12.26.215:3000/user/knowledge-base/${doc.docId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
