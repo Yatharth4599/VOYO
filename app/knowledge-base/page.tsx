@@ -73,8 +73,8 @@
 //     <div className="flex h-screen font-sans text-white bg-black overflow-hidden">
 //       {/* Sidebar */}
 //       <aside className="w-64 bg-gray-900 border-r px-4 py-6 space-y-4 border-cyan-300">
-//         <h1 className="text-xl font-bold text-orange-500">🧠 Conversational AI</h1>
-//         <nav className="space-y-2 text-purple-500 cursor-pointer">
+//         <h1 className="text-xl font-bold text-white">🧠 Conversational AI</h1>
+//         <nav className="space-y-2 text-white cursor-pointer">
 //           <div className="hover:bg-gray-100">📊 Dashboard</div>
 //           <div className="hover:bg-gray-100">👥 Agents</div>
 //           <div className="hover:bg-gray-100">📞 Call History</div>
@@ -89,20 +89,20 @@
 //       <main className="flex-1 flex relative">
 //         {/* Main Content */}
 //         <div className="flex-1 p-8 overflow-y-auto">
-//           <h2 className="text-2xl font-bold mb-6 text-orange-500">Knowledge Base</h2>
+//           <h2 className="text-2xl font-bold mb-6 text-white">Knowledge Base</h2>
 
 //           {/* Buttons */}
 //           <div className="flex gap-4 mb-6">
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-purple-500 cursor-pointer">🌐 Add URL</button>
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-purple-500 cursor-pointer">📄 Add Files</button>
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-purple-500 cursor-pointer">✍️ Create Text</button>
+//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">🌐 Add URL</button>
+//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">📄 Add Files</button>
+//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">✍️ Create Text</button>
 //           </div>
 
 //           {/* Search */}
 //           <input
 //             type="text"
 //             placeholder="Search Knowledge Base..."
-//             className="w-full p-2 mb-4 border rounded border-cyan-300 text-orange-500 bg-black"
+//             className="w-full p-2 mb-4 border rounded border-cyan-300 text-white bg-black"
 //           />
 
 //           {/* Loading */}
@@ -113,9 +113,9 @@
 //             <table className="w-full bg-black border rounded shadow-sm border-cyan-300">
 //               <thead className="text-left bg-gray-100 border-cyan-300">
 //                 <tr>
-//                   <th className="p-3 text-orange-500 bg-black">Name</th>
-//                   <th className="p-3 text-orange-500 bg-black">Created by</th>
-//                   <th className="p-3 text-orange-500 bg-black">Last updated</th>
+//                   <th className="p-3 text-white bg-black">Name</th>
+//                   <th className="p-3 text-white bg-black">Created by</th>
+//                   <th className="p-3 text-white bg-black">Last updated</th>
 //                 </tr>
 //               </thead>
 //               <tbody>
@@ -125,11 +125,11 @@
 //                     className="border-b hover:bg-gray-800 cursor-pointer border-cyan-300"
 //                     onClick={() => handleSelect(file)}
 //                   >
-//                     <td className="p-3 flex items-center gap-2 text-purple-500">
+//                     <td className="p-3 flex items-center gap-2 text-white">
 //                       📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
 //                     </td>
-//                     <td className="p-3 text-purple-500">{file.createdBy}</td>
-//                     <td className="p-3 text-purple-500">{file.updatedAt}</td>
+//                     <td className="p-3 text-white">{file.createdBy}</td>
+//                     <td className="p-3 text-white">{file.updatedAt}</td>
 //                   </tr>
 //                 ))}
 //               </tbody>
@@ -149,7 +149,7 @@
 //               className="absolute top-0 right-0 h-full w-1/2 bg-gray-900 text-black p-6 shadow-lg overflow-y-auto z-10"
 //             >
 //               <div className="flex justify-between items-center mb-4">
-//                 <h2 className="text-xl font-semibold text-orange-500">{selected.name}</h2>
+//                 <h2 className="text-xl font-semibold text-white">{selected.name}</h2>
 //                 <button
 //                   onClick={() => setSelected(null)}
 //                   className="border px-3 py-1 text-sm rounded-md hover:bg-gray-200 transition cursor-pointer"
@@ -158,7 +158,7 @@
 //                 </button>
 //               </div>
 
-//               <div className="space-y-2 text-sm text-purple-500">
+//               <div className="space-y-2 text-sm text-white">
 //                 <p><strong>Document ID:</strong> {selected.docId}</p>
 //                 <p><strong>Last updated:</strong> {selected.updatedAt}</p>
 //                 <p><strong>RAG indexes:</strong> No indexes</p>
@@ -166,7 +166,7 @@
 //               </div>
 
 //               <div className="mt-6">
-//                 <h3 className="text-md font-medium mb-1 text-orange-500">File Content</h3>
+//                 <h3 className="text-md font-medium mb-1 text-white">File Content</h3>
 //                 <div
 //                   className="p-4 rounded-md bg-gray-200 whitespace-pre-wrap text-sm"
 //                   dangerouslySetInnerHTML={{ __html: selected.content }}
@@ -272,16 +272,13 @@ export default function KnowledgeBasePage() {
   return (
     <div className="flex h-screen font-sans text-white bg-black overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 border-r px-4 py-6 space-y-4 border-cyan-300">
-        <h1 className="text-xl font-bold text-orange-500">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-purple-500 cursor-pointer">
-          <div className="hover:bg-gray-100">📊 Dashboard</div>
-          <div className="hover:bg-gray-100">👥 Agents</div>
-          <div className="hover:bg-gray-100">📞 Call History</div>
-          <div className="hover:bg-gray-100">📚 Knowledge Base</div>
-          <div className="hover:bg-gray-100">📱 Phone Numbers</div>
-          <div className="hover:bg-gray-100">📤 Outbound</div>
-          <div className="hover:bg-gray-100">⚙️ Settings</div>
+      <aside className="w-64 bg-[#181C29] border-r px-4 py-6 space-y-4 border-lime-300">
+        <h1 className="text-2xl font-bold text-lime-400">🧠 Conversational AI</h1>
+        <nav className="space-y-2 text-white cursor-pointer">
+          <div className="hover:text-lime-400">📊 Dashboard</div>
+          <div className="hover:text-lime-400">👥 Agents</div>
+          <div className="hover:text-lime-400">📞 Call History</div>
+          <div className="hover:text-lime-400">📚 Knowledge Base</div>
         </nav>
       </aside>
 
@@ -290,14 +287,14 @@ export default function KnowledgeBasePage() {
         {/* Main Content */}
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-orange-500">Knowledge Base</h2>
+            <h2 className="text-4xl font-bold text-lime-400">Knowledge Base</h2>
           </div>
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 mb-6">
             <button
               onClick={() => router.push('/create-agent')}
-              className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-purple-500 cursor-pointer"
+              className="bg-black border px-4 py-2 rounded hover:bg-gray-800 text-lime-400 cursor-pointer"
             >
               ➕ Add Knowledge Base File
             </button>
@@ -308,7 +305,7 @@ export default function KnowledgeBasePage() {
           <input
             type="text"
             placeholder="Search Knowledge Base..."
-            className="w-full p-2 mb-4 border rounded border-cyan-300 text-orange-500 bg-black"
+            className="w-full p-2 mb-4 border rounded border-lime-300 text-white bg-[#181C29]"
           />
 
           {/* Loading */}
@@ -316,12 +313,12 @@ export default function KnowledgeBasePage() {
 
           {/* File Table */}
           {!loading && (
-            <table className="w-full bg-black border rounded shadow-sm border-cyan-300">
+            <table className="w-full bg-black border rounded shadow-sm border-lime-300">
               <thead className="text-left bg-gray-100 border-cyan-300">
                 <tr>
-                  <th className="p-3 text-orange-500 bg-black">Name</th>
-                  <th className="p-3 text-orange-500 bg-black">Created by</th>
-                  <th className="p-3 text-orange-500 bg-black">Last updated</th>
+                  <th className="p-3 text-white bg-black">Name</th>
+                  <th className="p-3 text-white bg-black">Created by</th>
+                  <th className="p-3 text-white bg-black">Last updated</th>
                 </tr>
               </thead>
               <tbody>
@@ -331,11 +328,11 @@ export default function KnowledgeBasePage() {
                     className="border-b hover:bg-gray-800 cursor-pointer border-cyan-300"
                     onClick={() => handleSelect(file)}
                   >
-                    <td className="p-3 flex items-center gap-2 text-purple-500">
+                    <td className="p-3 flex items-center gap-2 text-white">
                       📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
                     </td>
-                    <td className="p-3 text-purple-500">{file.createdBy}</td>
-                    <td className="p-3 text-purple-500">{file.updatedAt}</td>
+                    <td className="p-3 text-white">{file.createdBy}</td>
+                    <td className="p-3 text-white">{file.updatedAt}</td>
                   </tr>
                 ))}
               </tbody>
@@ -356,7 +353,7 @@ export default function KnowledgeBasePage() {
               ref={detailRef}
             >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-orange-500">{selected.name}</h2>
+                <h2 className="text-xl font-semibold text-white">{selected.name}</h2>
                 <button
                   onClick={() => setSelected(null)}
                   className="border px-3 py-1 text-sm rounded-md hover:bg-gray-200 transition cursor-pointer"
@@ -365,7 +362,7 @@ export default function KnowledgeBasePage() {
                 </button>
               </div>
 
-              <div className="space-y-2 text-sm text-purple-500">
+              <div className="space-y-2 text-sm text-white">
                 <p><strong>Document ID:</strong> {selected.docId}</p>
                 <p><strong>Last updated:</strong> {selected.updatedAt}</p>
                 <p><strong>RAG indexes:</strong> No indexes</p>
@@ -373,7 +370,7 @@ export default function KnowledgeBasePage() {
               </div>
 
               <div className="mt-6">
-                <h3 className="text-md font-medium mb-1 text-orange-500">File Content</h3>
+                <h3 className="text-md font-medium mb-1 text-white">File Content</h3>
                 <div
                   className="p-4 rounded-md bg-gray-200 whitespace-pre-wrap text-sm"
                   dangerouslySetInnerHTML={{ __html: selected.content }}
