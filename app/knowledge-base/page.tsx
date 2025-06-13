@@ -186,6 +186,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link'
 
 type Doc = {
   name: string;
@@ -210,7 +211,7 @@ export default function KnowledgeBasePage() {
         const token = localStorage.getItem('jwtToken');
         if (!token) return;
 
-        const res = await fetch('http://10.12.26.134:3000/user/knowledge-base', {
+        const res = await fetch('http://3.83.195.172:3000/user/knowledge-base', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -241,7 +242,7 @@ export default function KnowledgeBasePage() {
       const token = localStorage.getItem('jwtToken');
       if (!token) return;
 
-      const res = await fetch(`http://10.12.26.215:3000/user/knowledge-base/${doc.docId}`, {
+      const res = await fetch(`http://3.83.195.172:3000/user/knowledge-base/${doc.docId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -274,11 +275,19 @@ export default function KnowledgeBasePage() {
       {/* Sidebar */}
       <aside className="w-64 bg-[#181C29] border-r px-4 py-6 space-y-4 border-lime-300">
         <h1 className="text-2xl font-bold text-lime-400">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-white cursor-pointer">
-          <div className="hover:text-lime-400">📊 Dashboard</div>
-          <div className="hover:text-lime-400">👥 Agents</div>
-          <div className="hover:text-lime-400">📞 Call History</div>
-          <div className="hover:text-lime-400">📚 Knowledge Base</div>
+        <nav className="space-y-2 text-white">
+          <Link href="/dashboard" className="block hover:text-lime-400 cursor-pointer">
+            📊 Dashboard
+          </Link>
+          <Link href="/agents" className="block hover:text-lime-400 cursor-pointer">
+            👥 Agents
+          </Link>
+          <Link href="/call-history" className="block hover:text-lime-400 cursor-pointer">
+            📞 Call History
+          </Link>
+          <Link href="/knowledge-base" className="block hover:text-lime-400 cursor-pointer">
+            📚 Knowledge Base
+          </Link>
         </nav>
       </aside>
 

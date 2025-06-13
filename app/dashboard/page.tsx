@@ -148,7 +148,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('jwtToken');
     if (!token) return router.push('/');
 
-    fetch('http://10.12.26.215:3000/users/agents', {
+    fetch('http://3.83.195.172:3000/users/agents', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
