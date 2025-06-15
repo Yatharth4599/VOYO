@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createApiUrl } from '@/lib/config';
+import { motion } from 'framer-motion';
 
 export default function SignupForm({ onClose }: { onClose: () => void }) {
   const [formData, setFormData] = useState({
@@ -10,15 +11,22 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
     phonenumber: '',
     password: '',
   });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError(''); // Clear error when user starts typing
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 Submitting:', formData);
-  
+    setError('');
+    setSuccess('');
+    setIsLoading(true);
+
     try {
       const res = await fetch(createApiUrl('/user'), {
         method: 'POST',
@@ -27,77 +35,209 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (!res.ok) {
         const err = await res.text();
-        console.error('❌ Submission failed:', err);
-        alert('Submission failed: ' + err);
+        setError(err || 'Signup failed. Please try again.');
       } else {
         const data = await res.json();
-        console.log('✅ Success:', data);
-        alert('Signup successful!');
-        onClose(); // Close modal
+        setSuccess('Account created successfully! You can now sign in.');
+        
+        // Clear form
+        setFormData({
+          name: '',
+          email: '',
+          phonenumber: '',
+          password: '',
+        });
+        
+        // Close modal after a delay
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       }
     } catch (error) {
-      console.error('❌ Network error:', error);
-      alert('Network error. Please try again later.');
+      console.error('Network error:', error);
+      setError('Network error. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md relative">
+      {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-2 right-4 text-gray-400 hover:text-white text-xl font-bold cursor-pointer"
+        className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-all duration-200 z-10"
       >
-        &times;
+        <span className="text-lg leading-none">&times;</span>
       </button>
-      <h3 className="text-white text-2xl font-bold mb-6">Sign Up</h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Company Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
-        />
-        <input
-          type="tel"
-          name="phonenumber"
-          placeholder="Phone Number"
-          value={formData.phonenumber}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 rounded bg-gray-800 text-white focus:outline-none"
-        />
-        <button
-          type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold"
+
+      {/* Header */}
+      <div className="text-center mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          Submit
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">Create your account</h3>
+          <p className="text-gray-600">Join thousands of businesses transforming with AI</p>
+        </motion.div>
+      </div>
+
+      {/* Form */}
+      <motion.form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        {/* Name Field */}
+        <div className="space-y-2">
+          <label htmlFor="name" className="text-sm font-medium text-gray-700 block">
+            Full Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your full name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Email Field */}
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
+            Work Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your work email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Phone Field */}
+        <div className="space-y-2">
+          <label htmlFor="phonenumber" className="text-sm font-medium text-gray-700 block">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="phonenumber"
+            name="phonenumber"
+            placeholder="Enter your phone number"
+            value={formData.phonenumber}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Password Field */}
+        <div className="space-y-2">
+          <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Create a secure password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Success Message */}
+        {success && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm"
+          >
+            {success}
+          </motion.div>
+        )}
+
+        {/* Submit Button */}
+        <motion.button
+          type="submit"
+          disabled={isLoading}
+          className="w-full btn-modern text-lg py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          whileHover={{ scale: isLoading ? 1 : 1.01 }}
+          whileTap={{ scale: isLoading ? 1 : 0.99 }}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span>Creating account...</span>
+            </div>
+          ) : (
+            'Create Account'
+          )}
+        </motion.button>
+
+        {/* Terms */}
+        <p className="text-xs text-gray-500 text-center leading-relaxed">
+          By creating an account, you agree to our{' '}
+          <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">
+            Terms of Service
+          </a>{' '}
+          and{' '}
+          <a href="#" className="text-orange-600 hover:text-orange-700 font-medium">
+            Privacy Policy
+          </a>
+        </p>
+      </motion.form>
+
+      {/* Divider */}
+      <div className="my-8 relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-200"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-4 bg-white text-gray-500">Already have an account?</span>
+        </div>
+      </div>
+
+      {/* Sign In Link */}
+      <div className="text-center">
+        <button
+          type="button"
+          className="text-orange-600 hover:text-orange-700 font-medium transition-colors duration-200"
+          onClick={() => {
+            // You can add logic here to switch to login form
+            onClose();
+          }}
+        >
+          Sign in to your account
         </button>
-      </form>
+      </div>
     </div>
   );
 }

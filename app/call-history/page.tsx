@@ -1858,29 +1858,29 @@ export default function CallHistoryPage() {
   }, [selected])
 
   return (
-    <div className="flex min-h-screen bg-black text-black font-sans">
+    <div className="flex min-h-screen bg-[#FFFBF3] text-gray-900 font-sans">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-lime-400 p-5 text-sm space-y-6 bg-[#181C29]">
-        <h1 className="text-2xl font-bold text-lime-400">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-white">
-          <Link href="/dashboard" className="block hover:text-lime-400 cursor-pointer">
+      <aside className="w-64 border-r border-gray-200 p-5 text-sm space-y-6 bg-white">
+        <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
+        <nav className="space-y-2 text-gray-700">
+          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📊 Dashboard
           </Link>
-          <Link href="/agents" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/agents" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             👥 Agents
           </Link>
-          <Link href="/call-history" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">
             📞 Call History
           </Link>
-          <Link href="/knowledge-base" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📚 Knowledge Base
           </Link>
         </nav>
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-8 relative text-white">
-        <h1 className="text-2xl font-bold mb-6 text-lime-400">Call history</h1>
+      <main className="flex-1 p-8 relative text-gray-900">
+        <h1 className="text-4xl font-bold mb-6 text-gray-900">Call history</h1>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-6 relative z-10">
@@ -1891,12 +1891,12 @@ export default function CallHistoryPage() {
                 closeAllDropdowns()
                 setShowDateAfter(prev => !prev)
               }}
-              className="text-xs border border-lime-400 rounded-full px-4 py-1 hover:bg-gray-800 cursor-pointer"
+              className="text-sm border border-gray-200 rounded-full px-4 py-2 hover:bg-gray-50 cursor-pointer bg-white text-gray-700 transition-all duration-200 shadow-sm"
             >
               + Date After{dateAfter ? ` | ${dateAfter.toLocaleDateString('en-US')}` : ''}
             </button>
             {showDateAfter && (
-              <div className="absolute mt-2 bg-black p-2 rounded shadow-xl z-50">
+              <div className="absolute mt-2 bg-white p-4 rounded-lg shadow-xl z-50 border border-gray-200">
                 <DatePicker
                   selected={dateAfter}
                   onChange={date => {
@@ -1916,12 +1916,12 @@ export default function CallHistoryPage() {
                 closeAllDropdowns()
                 setShowDateBefore(prev => !prev)
               }}
-              className="text-xs border border-lime-400 rounded-full px-4 py-1 hover:bg-gray-800 cursor-pointer"
+              className="text-sm border border-gray-200 rounded-full px-4 py-2 hover:bg-gray-50 cursor-pointer bg-white text-gray-700 transition-all duration-200 shadow-sm"
             >
               + Date Before{dateBefore ? ` | ${dateBefore.toLocaleDateString('en-US')}` : ''}
             </button>
             {showDateBefore && (
-              <div className="absolute mt-2 bg-black p-2 rounded shadow-xl z-50">
+              <div className="absolute mt-2 bg-white p-4 rounded-lg shadow-xl z-50 border border-gray-200">
                 <DatePicker
                   selected={dateBefore}
                   onChange={date => {
@@ -1941,12 +1941,12 @@ export default function CallHistoryPage() {
                 closeAllDropdowns()
                 setShowStatusDropdown(prev => !prev)
               }}
-              className="text-xs border border-lime-400 rounded-full px-4 py-1 hover:bg-gray-800 cursor-pointer"
+              className="text-sm border border-gray-200 rounded-full px-4 py-2 hover:bg-gray-50 cursor-pointer bg-white text-gray-700 transition-all duration-200 shadow-sm"
             >
               + Evaluation{statusFilter ? ` | ${statusFilter}` : ''}
             </button>
             {showStatusDropdown && (
-              <div className="absolute mt-2 bg-black p-2 rounded shadow-xl z-50 w-40">
+              <div className="absolute mt-2 bg-white p-2 rounded-lg shadow-xl z-50 w-40 border border-gray-200">
                 {['Successful', 'Error', 'Unknown', 'Clear'].map(option => (
                   <div
                     key={option}
@@ -1954,7 +1954,7 @@ export default function CallHistoryPage() {
                       setStatusFilter(option === 'Clear' ? null : option)
                       setShowStatusDropdown(false)
                     }}
-                    className="cursor-pointer text-sm text-white hover:bg-gray-800 px-2 py-1 rounded"
+                    className="cursor-pointer text-sm text-gray-700 hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                   >
                     {option}
                   </div>
@@ -1970,12 +1970,12 @@ export default function CallHistoryPage() {
                 closeAllDropdowns()
                 setShowAgentDropdown(prev => !prev)
               }}
-              className="text-xs border border-lime-400 rounded-full px-4 py-1 hover:bg-gray-800 cursor-pointer"
+              className="text-sm border border-gray-200 rounded-full px-4 py-2 hover:bg-gray-50 cursor-pointer bg-white text-gray-700 transition-all duration-200 shadow-sm"
             >
               + Agent{agentFilter ? ` | ${agentFilter}` : ''}
             </button>
             {showAgentDropdown && (
-              <div className="absolute mt-2 bg-black p-2 rounded shadow-xl z-50 w-40">
+              <div className="absolute mt-2 bg-white p-2 rounded-lg shadow-xl z-50 w-40 border border-gray-200">
                 {uniqueAgents.map(agent => (
                   <div
                     key={agent}
@@ -1983,7 +1983,7 @@ export default function CallHistoryPage() {
                       setAgentFilter(agent)
                       setShowAgentDropdown(false)
                     }}
-                    className="cursor-pointer text-sm text-white hover:bg-gray-800 px-2 py-1 rounded"
+                    className="cursor-pointer text-sm text-gray-700 hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                   >
                     {agent}
                   </div>
@@ -1993,7 +1993,7 @@ export default function CallHistoryPage() {
                     setAgentFilter(null)
                     setShowAgentDropdown(false)
                   }}
-                  className="cursor-pointer text-sm text-white hover:bg-gray-800 px-2 py-1 rounded"
+                  className="cursor-pointer text-sm text-gray-700 hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                 >
                   Clear
                 </div>
@@ -2011,49 +2011,53 @@ export default function CallHistoryPage() {
                 setAgentFilter(null)
                 closeAllDropdowns()
               }}
-              className="text-xs border border-red-500 text-red-400 rounded-full px-4 py-1 hover:bg-red-900 cursor-pointer"
+              className="text-sm border border-red-200 text-red-600 rounded-full px-4 py-2 hover:bg-red-50 cursor-pointer bg-white transition-all duration-200 shadow-sm"
             >
               ✖ Clear All Filters
             </button>
           )}
         </div>
 
-        {/* Table Head */}
-        <div className="grid grid-cols-5 text-sm text-gray-500 font-semibold border-b pb-2">
-          <span>Date</span>
-          <span>Agent</span>
-          <span>Duration</span>
-          <span>Messages</span>
-          <span>Evaluation result</span>
-        </div>
-
-        {/* Table Rows */}
+        {/* Table */}
         {loading ? (
-          <p className="text-lime-400 mt-4">Loading call history...</p>
+          <div className="text-gray-600 mt-4 text-center">Loading call history...</div>
         ) : filteredData.length === 0 ? (
-          <p className="text-red-400 mt-4">No calls match your filters.</p>
+          <div className="text-gray-500 mt-4 text-center">No calls match your filters.</div>
         ) : (
-          <div className="divide-y">
-            {filteredData.map((call, i) => (
-              <div
-                key={i}
-                className="grid grid-cols-5 text-sm py-3 items-center text-lime-400 hover:bg-gray-800 cursor-pointer"
-                onClick={() => {
-                  setSelected(call)
-                  setActiveTab('overview')
-                }}
-              >
-                <span>{call.date}</span>
-                <span>{call.agent}</span>
-                <span>{call.duration}</span>
-                <span>{call.messages}</span>
-                <div className="flex justify-center">
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusBadgeClasses(call.status)}`}>
-                    {call.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+          <div className="modern-card overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="p-4 text-left text-sm font-semibold text-gray-900">Date</th>
+                  <th className="p-4 text-left text-sm font-semibold text-gray-900">Agent</th>
+                  <th className="p-4 text-left text-sm font-semibold text-gray-900">Duration</th>
+                  <th className="p-4 text-left text-sm font-semibold text-gray-900">Messages</th>
+                  <th className="p-4 text-center text-sm font-semibold text-gray-900">Evaluation result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((call, i) => (
+                  <tr
+                    key={i}
+                    className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                    onClick={() => {
+                      setSelected(call)
+                      setActiveTab('overview')
+                    }}
+                  >
+                    <td className="p-4 text-gray-800">{call.date}</td>
+                    <td className="p-4 text-gray-800">{call.agent}</td>
+                    <td className="p-4 text-gray-800">{call.duration}</td>
+                    <td className="p-4 text-gray-800">{call.messages}</td>
+                    <td className="p-4 text-center">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(call.status)}`}>
+                        {call.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 
@@ -2067,13 +2071,13 @@ export default function CallHistoryPage() {
               exit={{ x: '100%', opacity: 0 }}
               transition={{ duration: 0.3 }}
               ref={detailRef}
-              className="fixed top-0 right-0 h-full w-3/4 bg-[#181C29] text-white p-6 z-50 shadow-xl overflow-y-auto"
+              className="fixed top-0 right-0 h-full w-3/4 bg-white text-gray-900 p-6 z-50 shadow-2xl overflow-y-auto border-l border-gray-200"
             >
               {/* Close button */}
               <div className="mb-4">
                 <button
                   onClick={() => setSelected(null)}
-                  className="border border-lime-400 px-3 py-1 text-sm rounded-md hover:bg-gray-700 transition cursor-pointer float-right"
+                  className="border border-gray-200 px-3 py-1 text-sm rounded-md hover:bg-gray-50 transition-colors cursor-pointer float-right text-gray-700"
                 >
                   Close
                 </button>
@@ -2081,7 +2085,7 @@ export default function CallHistoryPage() {
 
               {/* Right Divider: Position this precisely at the boundary */}
               <div
-                className="border-r border-lime-400 absolute top-0 bottom-0"
+                className="border-r border-gray-200 absolute top-0 bottom-0"
                 style={{ right: '20rem', width: '1px' }}
               ></div>
 
@@ -2093,8 +2097,8 @@ export default function CallHistoryPage() {
                 >
                   <div className="mt-2 mb-4">
                     <div className="flex items-center justify-between">
-                      <p className="text-lg font-semibold">Conversation with {selected.agent}</p>
-                      <p className="text-sm text-gray-400 ml-4">{selected.convoId || 'xyz-123-abc'}</p>
+                      <p className="text-lg font-semibold text-gray-900">Conversation with {selected.agent}</p>
+                      <p className="text-sm text-gray-500 ml-4">{selected.convoId || 'xyz-123-abc'}</p>
                     </div>
                   </div>
 
@@ -2102,28 +2106,28 @@ export default function CallHistoryPage() {
                     controls
                     loop
                     preload="auto"
-                    className="mt-4 w-full max-w-md rounded-md bg-gray-800"
+                    className="mt-4 w-full max-w-md rounded-lg border border-gray-200"
                   >
                     <source src="/call-audio.mp3" type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
 
                   {/* Tab buttons */}
-                  <div className="mt-50 mb-6 flex space-x-10">
+                  <div className="mt-8 mb-6 flex space-x-10">
                     <button
-                      className={`cursor-pointer ${activeTab === 'overview' ? 'text-lime-400' : ''}`}
+                      className={`cursor-pointer transition-colors duration-200 ${activeTab === 'overview' ? 'text-orange-600 font-medium' : 'text-gray-600 hover:text-gray-800'}`}
                       onClick={() => setActiveTab('overview')}
                     >
                       Overview
                     </button>
                     <button
-                      className={`cursor-pointer ${activeTab === 'transcription' ? 'text-lime-400' : ''}`}
+                      className={`cursor-pointer transition-colors duration-200 ${activeTab === 'transcription' ? 'text-orange-600 font-medium' : 'text-gray-600 hover:text-gray-800'}`}
                       onClick={() => setActiveTab('transcription')}
                     >
                       Transcription
                     </button>
                     <button
-                      className={`cursor-pointer ${activeTab === 'client' ? 'text-lime-400' : ''}`}
+                      className={`cursor-pointer transition-colors duration-200 ${activeTab === 'client' ? 'text-orange-600 font-medium' : 'text-gray-600 hover:text-gray-800'}`}
                       onClick={() => setActiveTab('client')}
                     >
                       Client Data
@@ -2135,10 +2139,10 @@ export default function CallHistoryPage() {
                     {activeTab === 'overview' && (
                       <>
                         {/* Summary */}
-                        <div className="border-t border-lime-400 pt-6">
-                          <p className="text-lg font-bold">Summary</p>
+                        <div className="border-t border-gray-200 pt-6">
+                          <p className="text-lg font-bold text-gray-900">Summary</p>
                           <br />
-                          <p>
+                          <p className="text-gray-700 leading-relaxed">
                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla atque incidunt magni autem
                             recusandae dolore? Itaque inventore consequatur, iste iusto perferendis corrupti? Quae architecto
                             dolores veritatis molestiae facilis minus modi impedit in alias suscipit placeat nam velit, error,
@@ -2148,9 +2152,9 @@ export default function CallHistoryPage() {
                         </div>
 
                         {/* Call Status */}
-                        <div className="border-t border-lime-400 mt-10 mb-5 pt-6">
+                        <div className="border-t border-gray-200 mt-10 mb-5 pt-6">
                           <div className="flex items-center justify-between">
-                            <p className="text-lg font-bold">Call Status</p>
+                            <p className="text-lg font-bold text-gray-900">Call Status</p>
                             <span className="bg-green-100 text-green-700 px-3 py-[3px] rounded-full text-sm leading-none">
                               {selected.status}
                             </span>
@@ -2158,13 +2162,13 @@ export default function CallHistoryPage() {
                         </div>
 
                         {/* SECOND vertical line below Call Status */}
-                        <div className="border-t border-lime-400 pt-6"></div>
+                        <div className="border-t border-gray-200 pt-6"></div>
                       </>
                     )}
 
                     {activeTab === 'transcription' && (
-                      <div className="border-t border-lime-400 mt-4 pt-6">
-                        <p className="text-lg font-bold mb-4">Full Transcription</p>
+                      <div className="border-t border-gray-200 mt-4 pt-6">
+                        <p className="text-lg font-bold mb-4 text-gray-900">Full Transcription</p>
 
                         <div className="space-y-4">
                           {selected.transcription?.map((line, index) => (
@@ -2175,8 +2179,8 @@ export default function CallHistoryPage() {
                               <div
                                 className={`max-w-[70%] px-4 py-2 rounded-lg text-sm shadow-md ${
                                   line.speaker === 'User'
-                                    ? 'bg-lime-500 text-black'
-                                    : 'bg-gray-700 text-white'
+                                    ? 'bg-orange-500 text-white'
+                                    : 'bg-gray-100 text-gray-800 border border-gray-200'
                                 }`}
                               >
                                 <p className="font-semibold mb-1">{line.speaker}</p>
@@ -2189,10 +2193,10 @@ export default function CallHistoryPage() {
                     )}
 
                     {activeTab === 'client' && (
-                      <div className="border-t border-lime-400 mt-4 pt-6">
-                        <div className="bg-gray-600 text-gray-300 rounded-lg p-6 border border-lime-400">
-                          <p className="text-2xl text-center font-medium mb-1">No client data</p>
-                          <p className="text-sm text-center text-gray-200">
+                      <div className="border-t border-gray-200 mt-4 pt-6">
+                        <div className="bg-gray-50 text-gray-600 rounded-lg p-6 border border-gray-200">
+                          <p className="text-2xl text-center font-medium mb-1 text-gray-700">No client data</p>
+                          <p className="text-sm text-center text-gray-600">
                             This conversation did not receive any client data. When sent, client overrides, custom LLM body, and dynamic
                             variables will be shown here.
                           </p>
@@ -2211,9 +2215,9 @@ export default function CallHistoryPage() {
                     marginLeft: '1rem', // space from left content
                   }}
                 >
-                  <p className="text-lg">Meta Data</p>
-                  <p className="text-sm text-gray-400 mt-2">Date: Today, 9:09 AM</p>
-                  <p className="text-sm text-gray-400">Connection duration: 0:54</p>
+                  <p className="text-lg text-gray-900">Meta Data</p>
+                  <p className="text-sm text-gray-600 mt-2">Date: Today, 9:09 AM</p>
+                  <p className="text-sm text-gray-600">Connection duration: 0:54</p>
                   {/* Removed price preview line to avoid layout shifts */}
                 </div>
               </div>

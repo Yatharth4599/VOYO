@@ -3,20 +3,24 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createApiUrl } from '@/lib/config';
+import { motion } from 'framer-motion';
 
 export default function LoginForm({ onClose }: { onClose: () => void }) {
-  const router = useRouter(); // ✅ Now it's correctly inside the component
+  const router = useRouter();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError(''); // Clear error when user starts typing
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       const response = await fetch(createApiUrl('/login'), {
@@ -33,43 +37,143 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
       }
 
       localStorage.setItem('jwtToken', result.token);
-      onClose(); // Close modal
-
-      router.push('/dashboard'); // ✅ Redirect after login
+      onClose();
+      router.push('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
       setError('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-80">
-      <h3 className="text-xl font-semibold text-white mb-4">Login</h3>
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-        className="w-full px-4 py-2 rounded bg-gray-800 text-white placeholder-gray-400"
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-        className="w-full px-4 py-2 rounded bg-gray-800 text-white placeholder-gray-400"
-      />
-      {error && <p className="text-red-400 text-sm">{error}</p>}
+    <div className="w-full max-w-md relative">
+      {/* Close button */}
       <button
-        type="submit"
-        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold cursor-pointer"
+        onClick={onClose}
+        className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-all duration-200 z-10"
       >
-        Login
+        <span className="text-lg leading-none">&times;</span>
       </button>
-    </form>
+
+      {/* Header */}
+      <div className="text-center mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="text-2xl font-semibold text-gray-900 mb-2">Welcome back</h3>
+          <p className="text-gray-600">Sign in to your account to continue</p>
+        </motion.div>
+      </div>
+
+      {/* Form */}
+      <motion.form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        {/* Email Field */}
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
+            Email address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Password Field */}
+        <div className="space-y-2">
+          <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+          />
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Submit Button */}
+        <motion.button
+          type="submit"
+          disabled={isLoading}
+          className="w-full btn-modern text-lg py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          whileHover={{ scale: isLoading ? 1 : 1.01 }}
+          whileTap={{ scale: isLoading ? 1 : 0.99 }}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span>Signing in...</span>
+            </div>
+          ) : (
+            'Sign In'
+          )}
+        </motion.button>
+
+        {/* Forgot Password */}
+        <div className="text-center">
+          <button
+            type="button"
+            className="text-sm text-orange-600 hover:text-orange-700 font-medium transition-colors duration-200"
+          >
+            Forgot your password?
+          </button>
+        </div>
+      </motion.form>
+
+      {/* Divider */}
+      <div className="my-8 relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-200"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-4 bg-white text-gray-500">Don't have an account?</span>
+        </div>
+      </div>
+
+      {/* Sign Up Link */}
+      <div className="text-center">
+        <button
+          type="button"
+          className="text-orange-600 hover:text-orange-700 font-medium transition-colors duration-200"
+          onClick={() => {
+            // You can add logic here to switch to signup form
+            onClose();
+          }}
+        >
+          Create a new account
+        </button>
+      </div>
+    </div>
   );
 }
