@@ -31,7 +31,7 @@
 
 //         const data = await res.json();
 
-//         const formatted = data.documents.map((doc: any) => ({
+//         const formatted = data.documents.map((doc: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
 //           name: doc.name,
 //           size: `${(doc.metadata.size_bytes / 1024).toFixed(1)} kB`,
 //           createdBy: doc.access_info.creator_name,
@@ -185,8 +185,8 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link'
+import Link from 'next/link';
+import { createApiUrl } from '@/lib/config';
 
 type Doc = {
   name: string;
@@ -201,40 +201,87 @@ export default function KnowledgeBasePage() {
   const [docs, setDocs] = useState<Doc[]>([]);
   const [selected, setSelected] = useState<Doc | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
-  // Fetch docs
+  // Fetch docs function
+  const fetchDocs = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('jwtToken');
+      if (!token) return;
+
+      const res = await fetch(createApiUrl('/user/knowledge-base'), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      const formatted = data.documents.map((doc: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
+        name: doc.name,
+        size: `${(doc.metadata.size_bytes / 1024).toFixed(1)} kB`,
+        createdBy: doc.access_info.creator_name,
+        updatedAt: new Date(doc.metadata.last_updated_at_unix_secs * 1000).toLocaleString(),
+        docId: doc.id,
+        content: '',
+      }));
+
+      setDocs(formatted);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching documents:', err);
+      setLoading(false);
+    }
+  };
+
+  // Fetch docs on component mount
   useEffect(() => {
-    const fetchDocs = async () => {
-      try {
-        const token = localStorage.getItem('jwtToken');
-        if (!token) return;
-
-        const res = await fetch('http://3.83.195.172:3000/user/knowledge-base', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const data = await res.json();
-        const formatted = data.documents.map((doc: any) => ({
-          name: doc.name,
-          size: `${(doc.metadata.size_bytes / 1024).toFixed(1)} kB`,
-          createdBy: doc.access_info.creator_name,
-          updatedAt: new Date(doc.metadata.last_updated_at_unix_secs * 1000).toLocaleString(),
-          docId: doc.id,
-          content: '',
-        }));
-
-        setDocs(formatted);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching documents:', err);
-        setLoading(false);
-      }
-    };
-
     fetchDocs();
   }, []);
+
+  // Upload file to knowledge base
+  const handleFileUpload = async () => {
+    if (!uploadFile) return;
+
+    try {
+      setUploading(true);
+      setUploadError(null);
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        setUploadError('Authentication required');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', uploadFile);
+
+      const res = await fetch(createApiUrl('/user/knowledge-base/file'), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (res.ok) {
+        // Refresh the documents list
+        await fetchDocs();
+        setShowUploadModal(false);
+        setUploadFile(null);
+        setUploadError(null);
+      } else {
+        const errorText = await res.text();
+        setUploadError(`Upload failed: ${errorText || res.statusText}`);
+      }
+    } catch (err) {
+      console.error('Error uploading file:', err);
+      setUploadError('Network error occurred while uploading');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   // Fetch selected doc content
   const handleSelect = async (doc: Doc) => {
@@ -242,7 +289,7 @@ export default function KnowledgeBasePage() {
       const token = localStorage.getItem('jwtToken');
       if (!token) return;
 
-      const res = await fetch(`http://3.83.195.172:3000/user/knowledge-base/${doc.docId}`, {
+      const res = await fetch(createApiUrl(`/user/knowledge-base/${doc.docId}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -302,7 +349,11 @@ export default function KnowledgeBasePage() {
           {/* Buttons */}
           <div className="flex justify-end gap-4 mb-6">
             <button
-              onClick={() => router.push('/create-agent')}
+              onClick={() => {
+                setShowUploadModal(true);
+                setUploadFile(null);
+                setUploadError(null);
+              }}
               className="bg-black border px-4 py-2 rounded hover:bg-gray-800 text-lime-400 cursor-pointer"
             >
               ➕ Add Knowledge Base File
@@ -385,6 +436,84 @@ export default function KnowledgeBasePage() {
                   dangerouslySetInnerHTML={{ __html: selected.content }}
                 />
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Upload Modal */}
+        <AnimatePresence>
+          {showUploadModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50"
+              onClick={() => setShowUploadModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-[#181C29] rounded-lg p-6 max-w-md w-full mx-4 border border-lime-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-bold text-lime-400">Upload Knowledge Base File</h3>
+                  <button
+                    onClick={() => setShowUploadModal(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-2">
+                      Select a text file (.txt)
+                    </label>
+                    <input
+                      type="file"
+                      accept=".txt"
+                      onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                      className="w-full p-2 border border-lime-300 rounded bg-black text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-lime-400 file:text-black file:cursor-pointer hover:file:bg-lime-300"
+                    />
+                  </div>
+
+                  {uploadFile && (
+                    <div className="p-3 bg-gray-800 rounded border border-lime-300">
+                      <p className="text-sm text-white">
+                        <strong>Selected:</strong> {uploadFile.name}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        Size: {(uploadFile.size / 1024).toFixed(1)} KB
+                      </p>
+                    </div>
+                  )}
+
+                  {uploadError && (
+                    <div className="p-3 bg-red-900 border border-red-500 rounded">
+                      <p className="text-sm text-red-200">{uploadError}</p>
+                    </div>
+                  )}
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={() => setShowUploadModal(false)}
+                      className="flex-1 px-4 py-2 border border-gray-500 text-gray-300 rounded hover:bg-gray-800 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleFileUpload}
+                      disabled={!uploadFile || uploading}
+                      className="flex-1 px-4 py-2 bg-lime-400 text-black rounded hover:bg-lime-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {uploading ? 'Uploading...' : 'Upload'}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

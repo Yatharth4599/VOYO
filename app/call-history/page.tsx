@@ -1703,6 +1703,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Link from 'next/link'
+import { createApiUrl } from '@/lib/config'
 
 type TranscriptionLine = {
   speaker: string
@@ -1752,7 +1753,7 @@ export default function CallHistoryPage() {
           return
         }
 
-        const res = await fetch('http://3.83.195.172:3000/user/conversations/', {
+        const res = await fetch(createApiUrl('/user/conversations/'), {
           headers: { Authorization: `Bearer ${token}` },
         })
 
@@ -1762,7 +1763,7 @@ export default function CallHistoryPage() {
 
         const data = await res.json()
         // Map the API conversation data to Call type for your UI
-        const formattedCalls: Call[] = data.conversations.map((conv: any) => {
+        const formattedCalls: Call[] = data.conversations.map((conv: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           // Format Unix timestamp to readable date string
           const dateObj = new Date(conv.start_time_unix_secs * 1000)
           const dateStr = dateObj.toLocaleString('en-US', {

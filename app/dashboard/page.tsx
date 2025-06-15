@@ -123,7 +123,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Edit, Trash2 } from 'lucide-react';
+import { createApiUrl } from '@/lib/config';
 
 interface Agent {
   agent_id: string;
@@ -148,7 +149,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('jwtToken');
     if (!token) return router.push('/');
 
-    fetch('http://3.83.195.172:3000/users/agents', {
+    fetch(createApiUrl('/users/agents'), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -169,7 +170,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('jwtToken');
     if (!token) return;
 
-    const res = await fetch(`http://10.12.26.215:3000/users/agents/${agentId}`, {
+    const res = await fetch(createApiUrl(`/users/agents/${agentId}`), {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -282,12 +283,20 @@ export default function Dashboard() {
                   Created: {new Date(agent.created_at_unix_secs * 1000).toLocaleString()}
                 </p>
               </div>
-              <button
-                onClick={() => handleDelete(agent.agent_id)}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg cursor-pointer"
-              >
-                Delete
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => router.push(`/create-agent?id=${agent.agent_id}`)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2"
+                >
+                  <Edit size={16} /> Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(agent.agent_id)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2"
+                >
+                  <Trash2 size={16} /> Delete
+                </button>
+              </div>
             </motion.div>
           ))}
         </motion.div>

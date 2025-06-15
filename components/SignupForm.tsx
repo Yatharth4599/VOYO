@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createApiUrl } from '@/lib/config';
 
 export default function SignupForm({ onClose }: { onClose: () => void }) {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
     console.log('🚀 Submitting:', formData);
   
     try {
-      const res = await fetch('http://10.12.26.69:3000/user', {
+      const res = await fetch(createApiUrl('/user'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

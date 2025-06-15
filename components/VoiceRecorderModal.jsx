@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-export default function VoiceRecorderModal({ onClose }) {
+export default function VoiceRecorderModal({ onClose, agentId }) {
   const [recording, setRecording] = useState(false);
   const canvasRef = useRef(null);
   const socketRef = useRef(null);
@@ -28,7 +28,13 @@ export default function VoiceRecorderModal({ onClose }) {
     }
   }, [recording]);
 
-  const startTalking = () => setRecording(true);
+  const startTalking = () => {
+    if (!agentId) {
+      console.error("No agent ID provided");
+      return;
+    }
+    setRecording(true);
+  };
 
   const stopWaveform = () => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
@@ -97,9 +103,9 @@ export default function VoiceRecorderModal({ onClose }) {
       }
     
       const gradient = canvasCtx.createLinearGradient(0, 0, canvas.width, 0);
-      gradient.addColorStop(0, "#1A3A6C");
-      gradient.addColorStop(0.5, "#57A0D3");
-      gradient.addColorStop(1, "#F59F24");
+      gradient.addColorStop(0, "#9ae600");
+      gradient.addColorStop(0.5, "#8cd500");
+      gradient.addColorStop(1, "#7bc000");
     
       canvasCtx.strokeStyle = gradient;
       canvasCtx.lineWidth = 4;
@@ -159,7 +165,7 @@ export default function VoiceRecorderModal({ onClose }) {
 
 
 const startWebSocket = () => {
-  const socket = new WebSocket("wss://api.elevenlabs.io/v1/convai/conversation?agent_id=QToM8kQDmosNTgBrqM4Q");
+  const socket = new WebSocket(`wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentId}`);
   socketRef.current = socket;
 
   socket.onopen = () => {
@@ -168,7 +174,7 @@ const startWebSocket = () => {
         type: "conversation_initiation_client_data",
         conversation_config_override: {
           agent: {
-            agent_id: "QToM8kQDmosNTgBrqM4Q"
+            agent_id: agentId
           }
         }
       })
@@ -217,35 +223,40 @@ const startWebSocket = () => {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-        <h3 className="text-2xl font-bold text-[#1A3A6C] mb-4">
-          {recording ? "Talking to Agent..." : "Talk to Agent – Your AI Companion"}
+      <div className="bg-[#121720] border border-[#2A2F45] rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <h3 className="text-2xl font-bold text-[#9ae600] mb-4">
+          {recording ? "Talking to Agent..." : "Talk to Your AI Agent"}
         </h3>
         <canvas
           ref={canvasRef}
           width={300}
           height={100}
-          className="mx-auto bg-gray-100 rounded-lg mb-4"
+          className="mx-auto bg-[#181D2B] rounded-lg mb-4"
         />
         {!recording ? (
           <button
             onClick={startTalking}
-            className="bg-[#F59F24] text-white font-semibold px-6 py-2 rounded-full hover:bg-[#e08a00] transition"
+            disabled={!agentId}
+            className={`font-semibold px-6 py-2 rounded-full transition ${
+              agentId 
+                ? 'bg-[#9ae600] text-black hover:bg-[#8cd500]' 
+                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+            }`}
           >
-            Start Talking
+            {agentId ? 'Start Talking' : 'No Agent Available'}
           </button>
         ) : (
           <button
             onClick={() => setRecording(false)}
-            className="bg-[#e08a00] text-white font-semibold px-6 py-2 rounded-full hover:bg-[#c46c00] transition"
+            className="bg-[#9ae600] text-black font-semibold px-6 py-2 rounded-full hover:bg-[#8cd500] transition"
           >
             Stop
           </button>
         )}
-        <p className="text-xs text-[#666] mt-3">You’re chatting live with Agent</p>
+        <p className="text-xs text-gray-400 mt-3">You’re chatting live with Agent</p>
         <button
           onClick={onClose}
-          className="mt-4 text-sm text-[#1A3A6C] underline"
+          className="mt-4 text-sm text-[#9ae600] underline hover:text-[#8cd500] transition"
         >
           Close
         </button>
