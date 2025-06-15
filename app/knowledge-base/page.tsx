@@ -318,21 +318,21 @@ export default function KnowledgeBasePage() {
   }, [selected]);
 
   return (
-    <div className="flex h-screen font-sans text-white bg-black overflow-hidden">
+    <div className="flex h-screen font-sans text-gray-900 bg-[#FFFBF3] overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#181C29] border-r px-4 py-6 space-y-4 border-lime-300">
-        <h1 className="text-2xl font-bold text-lime-400">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-white">
-          <Link href="/dashboard" className="block hover:text-lime-400 cursor-pointer">
+      <aside className="w-64 bg-white border-r px-4 py-6 space-y-4 border-gray-200">
+        <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
+        <nav className="space-y-2 text-gray-700">
+          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📊 Dashboard
           </Link>
-          <Link href="/agents" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/agents" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             👥 Agents
           </Link>
-          <Link href="/call-history" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📞 Call History
           </Link>
-          <Link href="/knowledge-base" className="block hover:text-lime-400 cursor-pointer">
+          <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">
             📚 Knowledge Base
           </Link>
         </nav>
@@ -343,7 +343,7 @@ export default function KnowledgeBasePage() {
         {/* Main Content */}
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-4xl font-bold text-lime-400">Knowledge Base</h2>
+            <h2 className="text-4xl font-bold text-gray-900">Knowledge Base</h2>
           </div>
 
           {/* Buttons */}
@@ -354,7 +354,7 @@ export default function KnowledgeBasePage() {
                 setUploadFile(null);
                 setUploadError(null);
               }}
-              className="bg-black border px-4 py-2 rounded hover:bg-gray-800 text-lime-400 cursor-pointer"
+              className="bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-gray-700 cursor-pointer transition-all duration-200 shadow-sm"
             >
               ➕ Add Knowledge Base File
             </button>
@@ -365,38 +365,40 @@ export default function KnowledgeBasePage() {
           <input
             type="text"
             placeholder="Search Knowledge Base..."
-            className="w-full p-2 mb-4 border rounded border-lime-300 text-white bg-[#181C29]"
+            className="w-full p-3 mb-4 border rounded-lg border-gray-200 text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
           />
 
           {/* Loading */}
-          {loading && <div className="text-white mt-10 text-center">Loading files...</div>}
+          {loading && <div className="text-gray-600 mt-10 text-center">Loading files...</div>}
 
           {/* File Table */}
           {!loading && (
-            <table className="w-full bg-black border rounded shadow-sm border-lime-300">
-              <thead className="text-left bg-gray-100 border-cyan-300">
-                <tr>
-                  <th className="p-3 text-white bg-black">Name</th>
-                  <th className="p-3 text-white bg-black">Created by</th>
-                  <th className="p-3 text-white bg-black">Last updated</th>
-                </tr>
-              </thead>
-              <tbody>
-                {docs.map((file, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b hover:bg-gray-800 cursor-pointer border-cyan-300"
-                    onClick={() => handleSelect(file)}
-                  >
-                    <td className="p-3 flex items-center gap-2 text-white">
-                      📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
-                    </td>
-                    <td className="p-3 text-white">{file.createdBy}</td>
-                    <td className="p-3 text-white">{file.updatedAt}</td>
+            <div className="modern-card overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="p-4 text-left text-sm font-semibold text-gray-900">Name</th>
+                    <th className="p-4 text-left text-sm font-semibold text-gray-900">Created by</th>
+                    <th className="p-4 text-left text-sm font-semibold text-gray-900">Last updated</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {docs.map((file, idx) => (
+                    <tr
+                      key={idx}
+                      className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                      onClick={() => handleSelect(file)}
+                    >
+                      <td className="p-4 flex items-center gap-2 text-gray-900">
+                        📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
+                      </td>
+                      <td className="p-4 text-gray-700">{file.createdBy}</td>
+                      <td className="p-4 text-gray-700">{file.updatedAt}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
@@ -409,30 +411,30 @@ export default function KnowledgeBasePage() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="absolute top-0 right-0 h-full w-1/2 bg-gray-900 text-black p-6 shadow-lg overflow-y-auto z-10"
+              className="absolute top-0 right-0 h-full w-1/2 bg-white text-gray-900 p-6 shadow-2xl overflow-y-auto z-10 border-l border-gray-200"
               ref={detailRef}
             >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-white">{selected.name}</h2>
+                <h2 className="text-xl font-semibold text-gray-900">{selected.name}</h2>
                 <button
                   onClick={() => setSelected(null)}
-                  className="border px-3 py-1 text-sm rounded-md hover:bg-gray-200 transition cursor-pointer"
+                  className="border border-gray-200 px-3 py-1 text-sm rounded-md hover:bg-gray-50 transition-colors cursor-pointer text-gray-700"
                 >
                   Close
                 </button>
               </div>
 
-              <div className="space-y-2 text-sm text-white">
-                <p><strong>Document ID:</strong> {selected.docId}</p>
-                <p><strong>Last updated:</strong> {selected.updatedAt}</p>
-                <p><strong>RAG indexes:</strong> No indexes</p>
-                <p><strong>Dependent agents:</strong> No dependent agents</p>
+              <div className="space-y-2 text-sm text-gray-700">
+                <p><strong className="text-gray-900">Document ID:</strong> {selected.docId}</p>
+                <p><strong className="text-gray-900">Last updated:</strong> {selected.updatedAt}</p>
+                <p><strong className="text-gray-900">RAG indexes:</strong> No indexes</p>
+                <p><strong className="text-gray-900">Dependent agents:</strong> No dependent agents</p>
               </div>
 
               <div className="mt-6">
-                <h3 className="text-md font-medium mb-1 text-white">File Content</h3>
+                <h3 className="text-md font-medium mb-1 text-gray-900">File Content</h3>
                 <div
-                  className="p-4 rounded-md bg-gray-200 whitespace-pre-wrap text-sm"
+                  className="p-4 rounded-lg bg-gray-50 whitespace-pre-wrap text-sm border border-gray-200 text-gray-800"
                   dangerouslySetInnerHTML={{ __html: selected.content }}
                 />
               </div>
@@ -454,14 +456,14 @@ export default function KnowledgeBasePage() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-[#181C29] rounded-lg p-6 max-w-md w-full mx-4 border border-lime-300"
+                className="bg-white rounded-lg p-6 max-w-md w-full mx-4 border border-gray-200 shadow-xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold text-lime-400">Upload Knowledge Base File</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Upload Knowledge Base File</h3>
                   <button
                     onClick={() => setShowUploadModal(false)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     ✕
                   </button>
@@ -469,23 +471,23 @@ export default function KnowledgeBasePage() {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-white mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Select a text file (.txt)
                     </label>
                     <input
                       type="file"
                       accept=".txt"
                       onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-                      className="w-full p-2 border border-lime-300 rounded bg-black text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-lime-400 file:text-black file:cursor-pointer hover:file:bg-lime-300"
+                      className="w-full p-2 border border-gray-200 rounded-lg bg-white text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-500 file:text-white file:cursor-pointer hover:file:bg-orange-600 transition-colors"
                     />
                   </div>
 
                   {uploadFile && (
-                    <div className="p-3 bg-gray-800 rounded border border-lime-300">
-                      <p className="text-sm text-white">
+                    <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <p className="text-sm text-gray-900">
                         <strong>Selected:</strong> {uploadFile.name}
                       </p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-600">
                         Size: {(uploadFile.size / 1024).toFixed(1)} KB
                       </p>
                     </div>
@@ -500,14 +502,14 @@ export default function KnowledgeBasePage() {
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={() => setShowUploadModal(false)}
-                      className="flex-1 px-4 py-2 border border-gray-500 text-gray-300 rounded hover:bg-gray-800 transition-colors"
+                      className="flex-1 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleFileUpload}
                       disabled={!uploadFile || uploading}
-                      className="flex-1 px-4 py-2 bg-lime-400 text-black rounded hover:bg-lime-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {uploading ? 'Uploading...' : 'Upload'}
                     </button>

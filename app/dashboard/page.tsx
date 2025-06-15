@@ -182,11 +182,11 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) return <div className="text-white text-center mt-20">Loading...</div>;
-  if (error) return <div className="text-red-500 text-center mt-20">{error}</div>;
+  if (loading) return <div className="text-gray-800 text-center mt-20">Loading...</div>;
+  if (error) return <div className="text-red-600 text-center mt-20">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans px-8 py-12 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-tr from-[#FAF8F3] to-[#F5F2EA] text-gray-800 font-sans px-8 py-12 relative overflow-hidden">
 
       {/* Backdrop */}
       {isMenuOpen && (
@@ -201,12 +201,12 @@ export default function Dashboard() {
         initial={{ x: -250 }}
         animate={{ x: isMenuOpen ? 0 : -250 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-0 left-0 w-64 h-full bg-[#121212] z-50 shadow-lg p-6 pt-8"
+        className="fixed top-0 left-0 w-64 h-full bg-white/95 backdrop-blur-md border-r border-gray-200 z-50 shadow-xl p-6 pt-8"
       >
          <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Menu</h2>
+          <h2 className="text-2xl font-bold text-amber-600">Menu</h2>
           <button onClick={() => setIsMenuOpen(false)}>
-            <X size={24} className="text-white cursor-pointer" />
+            <X size={24} className="text-gray-700 cursor-pointer" />
           </button>
         </div>
         <nav className="flex flex-col gap-6 mt-8">
@@ -215,7 +215,7 @@ export default function Dashboard() {
               router.push('/dashboard');
               setIsMenuOpen(false);
             }}
-            className="text-lg hover:text-orange-400 text-left cursor-pointer"
+            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
           >
             Agents
           </button>
@@ -224,7 +224,7 @@ export default function Dashboard() {
               router.push('/knowledge-base');
               setIsMenuOpen(false);
             }}
-            className="text-lg hover:text-orange-400 text-left cursor-pointer"
+            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
           >
             Knowledge Base
           </button>
@@ -235,15 +235,15 @@ export default function Dashboard() {
       <div className="flex items-center gap-4 mb-10 relative z-40">
         <button
           onClick={() => setIsMenuOpen(true)}
-          className="text-white focus:outline-none cursor-pointer hover:bg-orange-500"
+          className="text-gray-700 focus:outline-none cursor-pointer hover:text-amber-600 transition-colors"
         >
           <Menu size={28} />
         </button>
         <Image src="/Voyo Black Logo.png" alt="Voyo Logo" width={60} height={60} />
-        <h1 className="text-3xl font-bold">Your Agents</h1>
+        <h1 className="text-3xl font-bold text-amber-700">Your Agents</h1>
         <button
           onClick={() => router.push('/create-agent')}
-          className="ml-auto bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer"
+          className="ml-auto bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer shadow-md transition-all"
         >
           Create New Agent
         </button>
@@ -259,7 +259,7 @@ export default function Dashboard() {
           <p className="text-lg mb-6">No agents found. Start by creating one!</p>
           <button
             onClick={() => router.push('/create-agent')}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
+            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md transition-all"
           >
             Create New Agent
           </button>
@@ -274,25 +274,25 @@ export default function Dashboard() {
           {agents.map((agent) => (
             <motion.div
               key={agent.agent_id}
-              className="bg-[#1a1a1a] rounded-xl p-6 flex justify-between items-center shadow-md hover:shadow-orange-400/20 transition-all"
+              className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-6 flex justify-between items-center shadow-md hover:shadow-amber-400/20 transition-all"
               whileHover={{ scale: 1.01 }}
             >
               <div>
-                <h3 className="text-xl font-semibold">{agent.name}</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="text-xl font-semibold text-gray-800">{agent.name}</h3>
+                <p className="text-sm text-gray-600">
                   Created: {new Date(agent.created_at_unix_secs * 1000).toLocaleString()}
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => router.push(`/create-agent?id=${agent.agent_id}`)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2"
+                  className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2 shadow-sm transition-all"
                 >
                   <Edit size={16} /> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(agent.agent_id)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg cursor-pointer flex items-center gap-2 shadow-sm transition-all"
                 >
                   <Trash2 size={16} /> Delete
                 </button>
