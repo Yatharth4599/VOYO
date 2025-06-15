@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createApiUrl } from '@/lib/config';
 
 export default function LoginForm({ onClose }: { onClose: () => void }) {
   const router = useRouter(); // ✅ Now it's correctly inside the component
@@ -18,7 +19,7 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
     setError('');
 
     try {
-      const response = await fetch('http://3.83.195.172:3000/login', {
+      const response = await fetch(createApiUrl('/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
