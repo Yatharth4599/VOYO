@@ -228,6 +228,33 @@ export default function Dashboard() {
           >
             Knowledge Base
           </button>
+          <button
+            onClick={() => {
+              router.push('/call-history');
+              setIsMenuOpen(false);
+            }}
+            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
+          >
+            Call History
+          </button>
+          <button
+            onClick={() => {
+              router.push('/phone-numbers');
+              setIsMenuOpen(false);
+            }}
+            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
+          >
+            Phone Numbers
+          </button>
+          <button
+            onClick={() => {
+              router.push('/');
+              setIsMenuOpen(false);
+            }}
+            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
+          >
+            Dashboard
+          </button>
         </nav>
       </motion.div>
 

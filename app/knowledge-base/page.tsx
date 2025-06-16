@@ -323,10 +323,10 @@ export default function KnowledgeBasePage() {
       <aside className="w-64 bg-white border-r px-4 py-6 space-y-4 border-gray-200">
         <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
         <nav className="space-y-2 text-gray-700">
-          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
+          <Link href="/" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📊 Dashboard
           </Link>
-          <Link href="/agents" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
+          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             👥 Agents
           </Link>
           <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
@@ -334,6 +334,9 @@ export default function KnowledgeBasePage() {
           </Link>
           <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">
             📚 Knowledge Base
+          </Link>
+          <Link href="/phone-numbers" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
+            📱 Phone Numbers
           </Link>
         </nav>
       </aside>

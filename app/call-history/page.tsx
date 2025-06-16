@@ -1863,10 +1863,10 @@ export default function CallHistoryPage() {
       <aside className="w-64 border-r border-gray-200 p-5 text-sm space-y-6 bg-white">
         <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
         <nav className="space-y-2 text-gray-700">
-          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
+          <Link href="/" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             📊 Dashboard
           </Link>
-          <Link href="/agents" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
+          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
             👥 Agents
           </Link>
           <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">

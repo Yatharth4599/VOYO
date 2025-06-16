@@ -606,9 +606,11 @@ export default function CreateAgentPage() {
             </button>
           </div>
           <ul className="space-y-4">
-            <li><a href="/dashboard" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Dashboard</a></li>
-            <li><a href="/agents" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Agents</a></li>
+            <li><a href="/" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Dashboard</a></li>
+            <li><a href="/dashboard" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Agents</a></li>
             <li><a href="/knowledge-base" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Knowledge Base</a></li>
+            <li><a href="/call-history" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Call History</a></li>
+            <li><a href="/phone-numbers" className="block text-lg text-gray-700 hover:text-amber-600 transition-colors">Phone Numbers</a></li>
           </ul>
         </motion.div>
       )}
