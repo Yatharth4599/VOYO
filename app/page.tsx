@@ -44,7 +44,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <img src="/Voyo Black Logo.png" className="w-12 h-12" alt="Voyo Logo" />
+            <img src="/logo-voyo-removebg-preview.png" className="w-20 h-20" alt="Voyo Logo" />
             <span className="text-xl font-semibold text-gray-900">VOYO</span>
           </motion.div>
 

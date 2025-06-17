@@ -39,7 +39,7 @@ export default function NavigationLayout({
             currentPage={currentPage} 
             onMenuToggle={setIsMenuOpen}
           />
-          <Image src="/Voyo Black Logo.png" alt="Voyo Logo" width={60} height={60} />
+          <Image src="/logo-voyo-removebg-preview.png" alt="Voyo Logo" width={90} height={60} />
           <h1 className="text-3xl font-bold text-amber-700">{title}</h1>
           {showCreateButton && onCreateClick && (
             <button

@@ -337,21 +337,6 @@ export default function KnowledgeBasePage() {
       <div className="flex-1 flex relative">
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto">
-          {/* Buttons */}
-          <div className="flex justify-end gap-4 mb-6">
-            <button
-              onClick={() => {
-                setShowUploadModal(true);
-                setUploadFile(null);
-                setUploadError(null);
-              }}
-              className="bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-gray-700 cursor-pointer transition-all duration-200 shadow-sm"
-            >
-              ➕ Add Knowledge Base File
-            </button>
-          </div>
-
-
           {/* Search */}
           <input
             type="text"
