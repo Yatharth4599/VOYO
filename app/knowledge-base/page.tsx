@@ -185,8 +185,8 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import { createApiUrl } from '@/lib/config';
+import NavigationLayout from '@/components/NavigationLayout';
 
 type Doc = {
   name: string;
@@ -210,6 +210,8 @@ export default function KnowledgeBasePage() {
   // Fetch docs function
   const fetchDocs = async () => {
     try {
+      if (typeof window === 'undefined') return;
+      
       setLoading(true);
       const token = localStorage.getItem('jwtToken');
       if (!token) return;
@@ -244,6 +246,7 @@ export default function KnowledgeBasePage() {
   // Upload file to knowledge base
   const handleFileUpload = async () => {
     if (!uploadFile) return;
+    if (typeof window === 'undefined') return;
 
     try {
       setUploading(true);
@@ -286,6 +289,8 @@ export default function KnowledgeBasePage() {
   // Fetch selected doc content
   const handleSelect = async (doc: Doc) => {
     try {
+      if (typeof window === 'undefined') return;
+      
       const token = localStorage.getItem('jwtToken');
       if (!token) return;
 
@@ -318,37 +323,20 @@ export default function KnowledgeBasePage() {
   }, [selected]);
 
   return (
-    <div className="flex h-screen font-sans text-gray-900 bg-[#FFFBF3] overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r px-4 py-6 space-y-4 border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-gray-700">
-          <Link href="/" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📊 Dashboard
-          </Link>
-          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            👥 Agents
-          </Link>
-          <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📞 Call History
-          </Link>
-          <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">
-            📚 Knowledge Base
-          </Link>
-          <Link href="/phone-numbers" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📱 Phone Numbers
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main + Detail */}
-      <main className="flex-1 flex relative">
+    <NavigationLayout 
+      title="Knowledge Base" 
+      currentPage="/knowledge-base"
+      showCreateButton={true}
+      onCreateClick={() => {
+        setShowUploadModal(true);
+        setUploadFile(null);
+        setUploadError(null);
+      }}
+      createButtonText="➕ Add Knowledge Base File"
+    >
+      <div className="flex-1 flex relative">
         {/* Main Content */}
-        <div className="flex-1 p-8 overflow-y-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-4xl font-bold text-gray-900">Knowledge Base</h2>
-          </div>
-
+        <div className="flex-1 overflow-y-auto">
           {/* Buttons */}
           <div className="flex justify-end gap-4 mb-6">
             <button
@@ -522,7 +510,7 @@ export default function KnowledgeBasePage() {
             </motion.div>
           )}
         </AnimatePresence>
-      </main>
-    </div>
+      </div>
+    </NavigationLayout>
   );
 }

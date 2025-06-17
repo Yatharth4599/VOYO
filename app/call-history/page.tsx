@@ -1702,8 +1702,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import Link from 'next/link'
 import { createApiUrl } from '@/lib/config'
+import NavigationLayout from '@/components/NavigationLayout'
 
 type TranscriptionLine = {
   speaker: string
@@ -1746,6 +1746,8 @@ export default function CallHistoryPage() {
   useEffect(() => {
     const fetchCalls = async () => {
       try {
+        if (typeof window === 'undefined') return;
+        
         const token = localStorage.getItem('jwtToken')
         if (!token) {
           console.warn('No JWT token found')
@@ -1858,29 +1860,11 @@ export default function CallHistoryPage() {
   }, [selected])
 
   return (
-    <div className="flex min-h-screen bg-[#FFFBF3] text-gray-900 font-sans">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-gray-200 p-5 text-sm space-y-6 bg-white">
-        <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
-        <nav className="space-y-2 text-gray-700">
-          <Link href="/" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📊 Dashboard
-          </Link>
-          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            👥 Agents
-          </Link>
-          <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200 text-orange-600 font-medium">
-            📞 Call History
-          </Link>
-          <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📚 Knowledge Base
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 p-8 relative text-gray-900">
-        <h1 className="text-4xl font-bold mb-6 text-gray-900">Call history</h1>
+    <NavigationLayout 
+      title="Call History" 
+      currentPage="/call-history"
+    >
+      <div className="flex-1 relative text-gray-900">
 
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-6 relative z-10">
@@ -2224,10 +2208,8 @@ export default function CallHistoryPage() {
             </motion.div>
           )}
         </AnimatePresence>
-
-
-      </main>
-    </div>
+      </div>
+    </NavigationLayout>
   )
 }
 

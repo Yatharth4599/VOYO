@@ -94,7 +94,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Plus, MoreHorizontal } from 'lucide-react'
-import Link from 'next/link'
+import NavigationLayout from '@/components/NavigationLayout'
 
 type PhoneEntry = {
   name: string;
@@ -152,69 +152,41 @@ export default function PhoneNumbersPage() {
 
 
   return (
-    <div className="flex min-h-screen font-sans text-gray-900">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r p-6 space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">🧠 Conversational AI</h1>
-        <nav className="space-y-3 text-sm font-medium">
-          <Link href="/" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📊 Dashboard
-          </Link>
-          <Link href="/dashboard" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            👥 Agents
-          </Link>
-          <Link href="/call-history" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📞 Call History
-          </Link>
-          <Link href="/knowledge-base" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-            📚 Knowledge Base
-          </Link>
-          <Link href="/phone-numbers" className="block hover:text-orange-600 cursor-pointer transition-colors duration-200">
-          📱 Phone Numbers
-          </Link>
-        </nav>
-      </aside>
+    <NavigationLayout 
+      title="Phone Numbers" 
+      currentPage="/phone-numbers"
+      showCreateButton={true}
+      onCreateClick={() => setDropdownOpen(!dropdownOpen)}
+      createButtonText="Import Number"
+    >
+      <div className="flex-1 relative">
+        <div className="mb-6">
+          <p className="text-gray-500">Import and manage your phone numbers</p>
+        </div>
 
-      {/* Main */}
-      <main className="flex-1 p-10 relative">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">Phone numbers</h1>
-            <p className="text-gray-500">Import and manage your phone numbers</p>
-          </div>
-
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 cursor-pointer"
-            >
-              <Plus size={16} />
-              Import number
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setDropdownOpen(false)
-                    alert('Importing from Twilio...')
-                  }}
-                >
-                  From Twilio
-                </div>
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setDropdownOpen(false)
-                    alert('Importing from SIP Trunk...')
-                  }}
-                >
-                  From SIP Trunk
-                </div>
+        <div className="relative" ref={dropdownRef}>
+          {dropdownOpen && (
+            <div className="absolute right-0 top-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setDropdownOpen(false)
+                  alert('Importing from Twilio...')
+                }}
+              >
+                From Twilio
               </div>
-            )}
-          </div>
+              <div
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setDropdownOpen(false)
+                  alert('Importing from SIP Trunk...')
+                }}
+              >
+                From SIP Trunk
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Table */}
@@ -285,7 +257,7 @@ export default function PhoneNumbersPage() {
           )}
 
         </div>
-      </main>
-    </div>
+      </div>
+    </NavigationLayout>
   )
 }

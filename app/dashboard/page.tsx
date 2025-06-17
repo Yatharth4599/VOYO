@@ -123,8 +123,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Menu, X, Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { createApiUrl } from '@/lib/config';
+import NavigationLayout from '@/components/NavigationLayout';
 
 interface Agent {
   agent_id: string;
@@ -142,12 +143,16 @@ export default function Dashboard() {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const token = localStorage.getItem('jwtToken');
-    if (!token) return router.push('/');
+    if (!token) {
+      router.push('/');
+      return;
+    }
 
     fetch(createApiUrl('/users/agents'), {
       headers: {
@@ -164,7 +169,7 @@ export default function Dashboard() {
         setError('Failed to fetch agents');
         setLoading(false);
       });
-  }, [router]);
+  }, []);
 
   const handleDelete = async (agentId: string) => {
     const token = localStorage.getItem('jwtToken');
@@ -186,95 +191,13 @@ export default function Dashboard() {
   if (error) return <div className="text-red-600 text-center mt-20">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#FAF8F3] to-[#F5F2EA] text-gray-800 font-sans px-8 py-12 relative overflow-hidden">
-
-      {/* Backdrop */}
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black bg-opacity-50"
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <motion.div
-        initial={{ x: -250 }}
-        animate={{ x: isMenuOpen ? 0 : -250 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-0 left-0 w-64 h-full bg-white/95 backdrop-blur-md border-r border-gray-200 z-50 shadow-xl p-6 pt-8"
-      >
-         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-amber-600">Menu</h2>
-          <button onClick={() => setIsMenuOpen(false)}>
-            <X size={24} className="text-gray-700 cursor-pointer" />
-          </button>
-        </div>
-        <nav className="flex flex-col gap-6 mt-8">
-          <button
-            onClick={() => {
-              router.push('/dashboard');
-              setIsMenuOpen(false);
-            }}
-            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
-          >
-            Agents
-          </button>
-          <button
-            onClick={() => {
-              router.push('/knowledge-base');
-              setIsMenuOpen(false);
-            }}
-            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
-          >
-            Knowledge Base
-          </button>
-          <button
-            onClick={() => {
-              router.push('/call-history');
-              setIsMenuOpen(false);
-            }}
-            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
-          >
-            Call History
-          </button>
-          <button
-            onClick={() => {
-              router.push('/phone-numbers');
-              setIsMenuOpen(false);
-            }}
-            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
-          >
-            Phone Numbers
-          </button>
-          <button
-            onClick={() => {
-              router.push('/');
-              setIsMenuOpen(false);
-            }}
-            className="text-lg text-gray-700 hover:text-amber-600 text-left cursor-pointer transition-colors"
-          >
-            Dashboard
-          </button>
-        </nav>
-      </motion.div>
-
-      {/* Top Navbar */}
-      <div className="flex items-center gap-4 mb-10 relative z-40">
-        <button
-          onClick={() => setIsMenuOpen(true)}
-          className="text-gray-700 focus:outline-none cursor-pointer hover:text-amber-600 transition-colors"
-        >
-          <Menu size={28} />
-        </button>
-        <Image src="/Voyo Black Logo.png" alt="Voyo Logo" width={60} height={60} />
-        <h1 className="text-3xl font-bold text-amber-700">Your Agents</h1>
-        <button
-          onClick={() => router.push('/create-agent')}
-          className="ml-auto bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer shadow-md transition-all"
-        >
-          Create New Agent
-        </button>
-      </div>
+    <NavigationLayout 
+      title="Your Agents" 
+      currentPage="/dashboard"
+      showCreateButton={true}
+      onCreateClick={() => router.push('/create-agent')}
+      createButtonText="Create New Agent"
+    >
 
       {/* Agent Content */}
       {agents.length === 0 ? (
@@ -328,6 +251,6 @@ export default function Dashboard() {
           ))}
         </motion.div>
       )}
-    </div>
+    </NavigationLayout>
   );
 }
