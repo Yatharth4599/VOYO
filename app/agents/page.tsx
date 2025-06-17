@@ -193,7 +193,7 @@ export default function Dashboard() {
   return (
     <NavigationLayout 
       title="Your Agents" 
-      currentPage="/dashboard"
+      currentPage="/agents"
       showCreateButton={true}
       onCreateClick={() => router.push('/create-agent')}
       createButtonText="Create New Agent"
