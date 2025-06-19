@@ -15,11 +15,11 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
   const router = useRouter();
 
   const menuItems = [
+    { name: 'Dashboard', path: '/dashboard' },
     { name: 'Agents', path: '/agents' },
     { name: 'Knowledge Base', path: '/knowledge-base' },
     { name: 'Call History', path: '/call-history' },
     { name: 'Phone Numbers', path: '/phone-numbers' },
-    { name: 'Dashboard', path: '/' },
   ];
 
   const toggleMenu = (open: boolean) => {

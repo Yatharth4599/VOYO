@@ -624,6 +624,1287 @@
 //   );
 // }
 
+// 'use client';
+
+// import { useState, useRef, useEffect } from 'react';
+// import { motion } from 'framer-motion';
+// import { Line } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+// } from 'chart.js';
+
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
+
+// export default function Dashboard() {
+//   const agents = [
+//     { name: 'New agent', calls: 41, minutes: 56, llmCost: 0.97, credits: 24964 },
+//     { name: 'Kurumba', calls: 38, minutes: 35, llmCost: 0.25, credits: 15811 },
+//     { name: 'Tupac the great', calls: 14, minutes: 4, llmCost: 0.051, credits: 1737 },
+//   ];
+
+//   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+//   const [dropdownOpen, setDropdownOpen] = useState(false);
+//   const [activeStat, setActiveStat] = useState<string | null>(null);
+
+//   const dropdownRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     function handleClickOutside(event: MouseEvent) {
+//       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+//         setDropdownOpen(false);
+//       }
+//     }
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, []);
+
+//   const filteredAgents = selectedAgent
+//     ? agents.filter(agent => agent.name === selectedAgent)
+//     : agents;
+
+//   const labels = [
+//     'May 18', 'May 20', 'May 22', 'May 24', 'May 26', 'May 28', 'May 30',
+//     'Jun 01', 'Jun 03', 'Jun 05', 'Jun 07', 'Jun 09', 'Jun 11', 'Jun 13', 'Jun 15'
+//   ];
+
+//   const defaultCallsData = [5, 18, 4, 7, 19, 5, 2, 1, 3, 4, 7, 6, 9, 17, 0];
+
+//   const generateStatData = () => {
+//     if (!activeStat) return defaultCallsData;
+
+//     switch (activeStat) {
+//       case 'calls':
+//         return filteredAgents.length
+//           ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.calls, 0) * (i / (labels.length / 2))))
+//           : defaultCallsData;
+//       case 'minutes':
+//         return filteredAgents.length
+//           ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) * (i / (labels.length / 2))))
+//           : defaultCallsData;
+//       case 'credits':
+//         return filteredAgents.length
+//           ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.credits, 0) * (i / (labels.length / 2))))
+//           : defaultCallsData;
+//       case 'llmCost':
+//         return filteredAgents.length
+//           ? labels.map((_, i) => Number(((filteredAgents.reduce((sum, a) => sum + a.llmCost, 0)) * (i / (labels.length / 2))).toFixed(2)))
+//           : defaultCallsData;
+//       case 'averageCost': {
+//         const totalCalls = filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//         const totalCredits = filteredAgents.reduce((sum, a) => sum + a.credits, 0);
+//         const avgCost = totalCalls === 0 ? 0 : totalCredits / totalCalls;
+//         return labels.map((_, i) => Number((avgCost * (i / (labels.length / 2))).toFixed(2)));
+//       }
+//       case 'averageLlmCost': {
+//         const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//         const totalLlmCost = filteredAgents.reduce((sum, a) => sum + a.llmCost, 0);
+//         const avgLlm = totalMinutes === 0 ? 0 : totalLlmCost / totalMinutes;
+//         return labels.map((_, i) => Number((avgLlm * (i / (labels.length / 2))).toFixed(3)));
+//       }
+//       default:
+//         return defaultCallsData;
+//     }
+//   };
+
+//   const lineData = {
+//     labels,
+//     datasets: [
+//       {
+//         label: activeStat
+//           ? {
+//               calls: 'Number of Calls',
+//               minutes: 'Average Duration (min)',
+//               credits: 'Total Credits',
+//               llmCost: 'Total LLM Cost ($)',
+//               averageCost: 'Average Cost (credits/call)',
+//               averageLlmCost: 'Average LLM Cost ($/min)',
+//             }[activeStat] || ''
+//           : 'Number of Calls',
+//         data: generateStatData(),
+//         fill: false,
+//         borderColor: '#000',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+//   const areaData = {
+//     labels,
+//     datasets: [
+//       {
+//         label: 'Success Rate',
+//         data: [1, 1, 0.95, 1, 0.8, 1, 1, 0.6, 0.9, 1, 1, 0.7, 1, 1, 0.2],
+//         backgroundColor: 'rgba(34,197,94,0.6)',
+//         fill: true,
+//         borderColor: 'rgba(34,197,94,1)',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+//   const handleStatClick = (stat: string) => {
+//     if (activeStat === stat) {
+//       setActiveStat(null);
+//     } else {
+//       setActiveStat(stat);
+//     }
+//   };
+
+//   return (
+//     <div className="p-8 text-sm font-sans">
+//       <div className="flex gap-4 items-center">
+//         <span className="px-2 py-1 rounded-full text-xs flex items-center gap-2 border rounded-xl">
+//           <span className="relative flex size-3">
+//             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+//             <span className="relative inline-flex size-3 rounded-full bg-black"></span>
+//           </span>
+//           Active calls: 0
+//         </span>
+//       </div>
+
+//       <header className="mt-8 flex justify-between items-center">
+//         <div>
+//           <h5 className="text-gray-500">My Workspace</h5>
+//           <h2 className="text-3xl font-semibold">Good morning, User</h2>
+//         </div>
+//         <div className="relative" ref={dropdownRef}>
+//           <button
+//             onClick={() => setDropdownOpen(!dropdownOpen)}
+//             className="border rounded-lg px-4 py-2 flex items-center gap-2 bg-white"
+//           >
+//             {selectedAgent || 'All Agents'}
+//             <svg
+//               className={`w-4 h-4 transition-transform duration-200 ${
+//                 dropdownOpen ? 'rotate-180' : ''
+//               }`}
+//               fill="none"
+//               stroke="currentColor"
+//               strokeWidth={2}
+//               viewBox="0 0 24 24"
+//             >
+//               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+//             </svg>
+//           </button>
+
+//           {dropdownOpen && (
+//             <motion.ul
+//               initial={{ opacity: 0, y: -10 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -10 }}
+//               className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+//             >
+//               <li
+//                 key="all"
+//                 className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
+//                   selectedAgent === null ? 'font-semibold bg-gray-200' : ''
+//                 }`}
+//                 onClick={() => {
+//                   setSelectedAgent(null);
+//                   setDropdownOpen(false);
+//                   setActiveStat(null);
+//                 }}
+//               >
+//                 All Agents
+//               </li>
+//               {agents.map(agent => (
+//                 <li
+//                   key={agent.name}
+//                   className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
+//                     selectedAgent === agent.name ? 'font-semibold bg-gray-200' : ''
+//                   }`}
+//                   onClick={() => {
+//                     setSelectedAgent(agent.name);
+//                     setDropdownOpen(false);
+//                     setActiveStat(null);
+//                   }}
+//                 >
+//                   {agent.name}
+//                 </li>
+//               ))}
+//             </motion.ul>
+//           )}
+//         </div>
+//       </header>
+
+//       <div className="flex flex-nowrap gap-2 mt-8 ml-30 overflow-x-auto">
+//         <div
+//           onClick={() => handleStatClick('calls')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[150px] cursor-pointer select-none ${
+//             activeStat === 'calls' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Number of calls</p>
+//           <p className="font-semibold text-3xl">
+//             {filteredAgents.reduce((sum, a) => sum + a.calls, 0)}
+//           </p>
+//         </div>
+
+//         <div
+//           onClick={() => handleStatClick('minutes')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[150px] cursor-pointer select-none ${
+//             activeStat === 'minutes' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Average duration</p>
+//           <p className="font-semibold text-3xl">
+//             {filteredAgents.length === 0
+//               ? 0
+//               : Math.floor(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) / filteredAgents.length)}
+//             :00
+//           </p>
+//         </div>
+
+//         <div
+//           onClick={() => handleStatClick('credits')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[230px] cursor-pointer select-none ${
+//             activeStat === 'credits' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Total cost</p>
+//           <p className="font-semibold text-3xl">
+//             {filteredAgents.reduce((sum, a) => sum + a.credits, 0).toLocaleString()}{' '}
+//             <span className="text-base font-normal">credits</span>
+//           </p>
+//         </div>
+
+//         <div
+//           onClick={() => handleStatClick('averageCost')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[234px] cursor-pointer select-none ${
+//             activeStat === 'averageCost' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Average cost</p>
+//           <p className="font-semibold text-3xl">
+//             {filteredAgents.reduce((sum, a) => sum + a.calls, 0) === 0
+//               ? 0
+//               : Math.floor(
+//                   filteredAgents.reduce((sum, a) => sum + a.credits, 0) /
+//                     filteredAgents.reduce((sum, a) => sum + a.calls, 0)
+//                 ).toLocaleString()}{' '}
+//             <span className="text-base font-normal">credits/call</span>
+//           </p>
+//         </div>
+
+//         <div
+//           onClick={() => handleStatClick('llmCost')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[210px] cursor-pointer select-none ${
+//             activeStat === 'llmCost' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Total LLM cost</p>
+//           <p className="font-semibold text-3xl">
+//             $
+//             {filteredAgents
+//               .reduce((sum, a) => sum + a.llmCost, 0)
+//               .toFixed(2)}{' '}
+//             <span className="text-base font-normal">USD</span>
+//           </p>
+//         </div>
+
+//         <div
+//           onClick={() => handleStatClick('averageLlmCost')}
+//           className={`border border-gray-400 rounded-xl p-3 w-[200px] cursor-pointer select-none ${
+//             activeStat === 'averageLlmCost' ? 'bg-gray-200 font-semibold' : ''
+//           }`}
+//         >
+//           <p className="text-gray-500">Average LLM cost</p>
+//           <p className="font-semibold text-3xl">
+//             $
+//             {filteredAgents.reduce((sum, a) => sum + a.minutes, 0) === 0
+//               ? 0
+//               : (
+//                   filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) /
+//                   filteredAgents.reduce((sum, a) => sum + a.minutes, 0)
+//                 ).toFixed(3)}{' '}
+//             <span className="text-base font-normal">/min</span>
+//           </p>
+//         </div>
+//       </div>
+
+//       <div className="mt-8">
+//         <div className="h-[500px] w-full ml-[200px]">
+//           <Line data={lineData} options={{ responsive: true }} />
+//         </div>
+//       </div>
+
+//       <div className="mt-8">
+//         <h3 className="text-xl font-semibold mb-2">Overall Success Rate</h3>
+//         <div className="h-[500px] w-full ml-[200px]">
+//           <Line data={areaData} options={{ responsive: true }} />
+//         </div>
+//       </div>
+
+//       <div className="grid grid-cols-2 mt-8 gap-8">
+//         <div>
+//           <h3 className="font-semibold">Most called agents</h3>
+//           <table className="w-full text-left mt-2">
+//             <thead>
+//               <tr className="text-gray-500">
+//                 <th>Agent name</th>
+//                 <th>Calls</th>
+//                 <th>Minutes</th>
+//                 <th>LLM Cost</th>
+//                 <th>Credits</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {filteredAgents.map((a, i) => (
+//                 <tr key={i} className="border-t">
+//                   <td>{a.name}</td>
+//                   <td>{a.calls}</td>
+//                   <td>{a.minutes}</td>
+//                   <td>${a.llmCost.toFixed(3)}</td>
+//                   <td>{a.credits.toLocaleString()}</td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+
+//         <div>
+//           <h3 className="font-semibold">Language</h3>
+//           <div className="mt-2">
+//             <div className="mb-2">
+//               <div className="flex justify-between">
+//                 <span>Hindi</span>
+//                 <span>57.9%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '58%' }}></div>
+//               </div>
+//             </div>
+//             <div>
+//               <div className="flex justify-between">
+//                 <span>English</span>
+//                 <span>42.1%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '42%' }}></div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+// 'use client';
+
+// import { useState, useRef, useEffect } from 'react';
+// import { motion } from 'framer-motion';
+// import { Line } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+// } from 'chart.js';
+
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
+
+// export default function Dashboard() {
+//   const agents = [
+//     { name: 'New agent', calls: 41, minutes: 56, llmCost: 0.97, credits: 24964 },
+//     { name: 'Kurumba', calls: 38, minutes: 35, llmCost: 0.25, credits: 15811 },
+//     { name: 'Tupac the great', calls: 14, minutes: 4, llmCost: 0.051, credits: 1737 },
+//   ];
+
+//   const timeOptions = ['Last day', 'Last week', 'Last month'];
+
+//   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+//   const [agentDropdownOpen, setAgentDropdownOpen] = useState(false);
+
+//   const [selectedTime, setSelectedTime] = useState('Last month');
+//   const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
+
+//   const [activeStat, setActiveStat] = useState<string | null>(null);
+
+//   const agentDropdownRef = useRef<HTMLDivElement>(null);
+//   const timeDropdownRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     function handleClickOutside(event: MouseEvent) {
+//       if (
+//         agentDropdownRef.current &&
+//         !agentDropdownRef.current.contains(event.target as Node)
+//       ) {
+//         setAgentDropdownOpen(false);
+//       }
+//       if (
+//         timeDropdownRef.current &&
+//         !timeDropdownRef.current.contains(event.target as Node)
+//       ) {
+//         setTimeDropdownOpen(false);
+//       }
+//     }
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, []);
+
+//   const filteredAgents = selectedAgent
+//     ? agents.filter(agent => agent.name === selectedAgent)
+//     : agents;
+
+//   const labels = [
+//     'May 18', 'May 20', 'May 22', 'May 24', 'May 26', 'May 28', 'May 30',
+//     'Jun 01', 'Jun 03', 'Jun 05', 'Jun 07', 'Jun 09', 'Jun 11', 'Jun 13', 'Jun 15'
+//   ];
+
+//   const defaultCallsData = [5, 18, 4, 7, 19, 5, 2, 1, 3, 4, 7, 6, 9, 17, 0];
+
+//   const generateStatData = () => {
+//     if (!activeStat) return defaultCallsData;
+
+//     switch (activeStat) {
+//       case 'calls':
+//         return labels.map((_, i) =>
+//           Math.round(
+//             filteredAgents.reduce((sum, a) => sum + a.calls, 0) * (i / (labels.length / 2))
+//           )
+//         );
+//       case 'minutes':
+//         return labels.map((_, i) =>
+//           Math.round(
+//             filteredAgents.reduce((sum, a) => sum + a.minutes, 0) * (i / (labels.length / 2))
+//           )
+//         );
+//       case 'credits':
+//         return labels.map((_, i) =>
+//           Math.round(
+//             filteredAgents.reduce((sum, a) => sum + a.credits, 0) * (i / (labels.length / 2))
+//           )
+//         );
+//       case 'llmCost':
+//         return labels.map((_, i) =>
+//           Number(
+//             (
+//               filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) *
+//               (i / (labels.length / 2))
+//             ).toFixed(2)
+//           )
+//         );
+//       case 'averageCost':
+//         const avgCost =
+//           filteredAgents.reduce((sum, a) => sum + a.calls, 0) === 0
+//             ? 0
+//             : filteredAgents.reduce((sum, a) => sum + a.credits, 0) /
+//               filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//         return labels.map((_, i) =>
+//           Number((avgCost * (i / (labels.length / 2))).toFixed(2))
+//         );
+//       case 'averageLlmCost':
+//         const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//         const avgLlm =
+//           totalMinutes === 0
+//             ? 0
+//             : filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) / totalMinutes;
+//         return labels.map((_, i) =>
+//           Number((avgLlm * (i / (labels.length / 2))).toFixed(3))
+//         );
+//       default:
+//         return defaultCallsData;
+//     }
+//   };
+
+//   const lineData = {
+//     labels,
+//     datasets: [
+//       {
+//         label:
+//           {
+//             calls: 'Number of Calls',
+//             minutes: 'Average Duration (min)',
+//             credits: 'Total Credits',
+//             llmCost: 'Total LLM Cost ($)',
+//             averageCost: 'Average Cost per Call',
+//             averageLlmCost: 'Average LLM Cost per Min',
+//           }[activeStat || 'calls'] || 'Number of Calls',
+//         data: generateStatData(),
+//         fill: false,
+//         borderColor: '#000',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+//   const areaData = {
+//     labels,
+//     datasets: [
+//       {
+//         label: 'Success Rate',
+//         data: [1, 1, 0.95, 1, 0.8, 1, 1, 0.6, 0.9, 1, 1, 0.7, 1, 1, 0.2],
+//         backgroundColor: 'rgba(34,197,94,0.6)',
+//         fill: true,
+//         borderColor: 'rgba(34,197,94,1)',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+//   const handleStatClick = (stat: string) => {
+//     setActiveStat(prev => (prev === stat ? null : stat));
+//   };
+
+//   return (
+//     <div className="p-8 text-sm font-sans">
+//       <div className="flex gap-4 items-center">
+//         <span className="px-2 py-1 rounded-full text-xs flex items-center gap-2 border rounded-xl">
+//           <span className="relative flex size-3">
+//             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+//             <span className="relative inline-flex size-3 rounded-full bg-black"></span>
+//           </span>
+//           Active calls: 0
+//         </span>
+//     </div>
+//     <div className="p-8 text-sm font-sans">
+//       <header className="flex justify-between items-center">
+//         <div>
+//           <h5 className="text-gray-500">My Workspace</h5>
+//           <h2 className="text-3xl font-semibold">Good morning, User</h2>
+//         </div>
+
+//         <div className="flex gap-4">
+//           <div className="relative" ref={agentDropdownRef}>
+//             <button
+//               onClick={() => setAgentDropdownOpen(!agentDropdownOpen)}
+//               className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
+//             >
+//               {selectedAgent || 'All Agents'}
+//               <svg
+//                 className={`w-4 h-4 transition-transform ${
+//                   agentDropdownOpen ? 'rotate-180' : ''
+//                 }`}
+//                 fill="none"
+//                 stroke="currentColor"
+//                 strokeWidth={2}
+//                 viewBox="0 0 24 24"
+//               >
+//                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+//               </svg>
+//             </button>
+//             {agentDropdownOpen && (
+//               <motion.ul
+//                 initial={{ opacity: 0, y: -10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+//               >
+//                 <li
+//                   className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                   onClick={() => {
+//                     setSelectedAgent(null);
+//                     setAgentDropdownOpen(false);
+//                     setActiveStat(null);
+//                   }}
+//                 >
+//                   All Agents
+//                 </li>
+//                 {agents.map(agent => (
+//                   <li
+//                     key={agent.name}
+//                     className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                     onClick={() => {
+//                       setSelectedAgent(agent.name);
+//                       setAgentDropdownOpen(false);
+//                       setActiveStat(null);
+//                     }}
+//                   >
+//                     {agent.name}
+//                   </li>
+//                 ))}
+//               </motion.ul>
+//             )}
+//           </div>
+
+//           <div className="relative" ref={timeDropdownRef}>
+//             <button
+//               onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
+//               className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
+//             >
+//               {selectedTime}
+//               <svg
+//                 className={`w-4 h-4 transition-transform ${
+//                   timeDropdownOpen ? 'rotate-180' : ''
+//                 }`}
+//                 fill="none"
+//                 stroke="currentColor"
+//                 strokeWidth={2}
+//                 viewBox="0 0 24 24"
+//               >
+//                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+//               </svg>
+//             </button>
+//             {timeDropdownOpen && (
+//               <motion.ul
+//                 initial={{ opacity: 0, y: -10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+//               >
+//                 {timeOptions.map(option => (
+//                   <li
+//                     key={option}
+//                     className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                     onClick={() => {
+//                       setSelectedTime(option);
+//                       setTimeDropdownOpen(false);
+//                     }}
+//                   >
+//                     {option}
+//                   </li>
+//                 ))}
+//               </motion.ul>
+//             )}
+//           </div>
+//         </div>
+//       </header>
+
+//       <div className="mt-8 flex flex-wrap gap-4 ml-30">
+//         {[
+//           { label: 'Number of calls', key: 'calls' },
+//           { label: 'Avg Duration', key: 'minutes' },
+//           { label: 'Total cost', key: 'credits' },
+//           { label: 'Average cost', key: 'averageCost' },
+//           { label: 'Total LLM Cost', key: 'llmCost' },
+//           { label: 'Average LLM Cost', key: 'averageLlmCost' },
+//         ].map(stat => {
+//           const value = (() => {
+//             if (selectedTime === 'Last day') {
+//               switch (stat.key) {
+//                 case 'credits':
+//                   return '0 credits';
+//                 case 'llmCost':
+//                   return '$0.00';
+//                 case 'averageCost':
+//                   return '0.00 credits/call';
+//                 case 'averageLlmCost':
+//                   return '$0.000';
+//                 case 'minutes':
+//                   return '0m 0s';
+//                 default:
+//                   return 0;
+//               }
+//             }
+
+//             switch (stat.key) {
+//               case 'calls':
+//                 return filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//               case 'minutes':
+//                 const totalMins = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//                 const avg = totalMins / (filteredAgents.length || 1);
+//                 const mins = Math.floor(avg);
+//                 const secs = Math.round((avg - mins) * 60);
+//                 return `${mins}m ${secs}s`;
+//               case 'credits':
+//                 return `${filteredAgents.reduce((sum, a) => sum + a.credits, 0).toLocaleString()} credits`;
+//               case 'llmCost':
+//                 return `$${filteredAgents.reduce((sum, a) => sum + a.llmCost, 0).toFixed(2)}`;
+//               case 'averageCost':
+//                 const totalCalls = filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//                 const totalCredits = filteredAgents.reduce((sum, a) => sum + a.credits, 0);
+//                 const avgCost = totalCalls ? (totalCredits / totalCalls).toFixed(2) : '0.00';
+//                 return `${avgCost} credits/call`;
+//               case 'averageLlmCost':
+//                 const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//                 const totalLlm = filteredAgents.reduce((sum, a) => sum + a.llmCost, 0);
+//                 return `$${totalMinutes ? (totalLlm / totalMinutes).toFixed(3) : '0.000'}`;
+//               default:
+//                 return 0;
+//             }
+//           })();
+
+//           return (
+//             <div
+//               key={stat.key}
+//               className={`cursor-pointer px-6 py-3 rounded-xl border shadow-sm transition-all duration-200 flex flex-col items-center text-sm ${
+//                 activeStat === stat.key
+//                   ? 'bg-black text-white'
+//                   : 'hover:bg-gray-100 text-black'
+//               }`}
+//               onClick={() => handleStatClick(stat.key)}
+//             >
+//               <div>{stat.label}</div>
+//               <div className="font-bold text-lg">{value}</div>
+              
+//             </div>
+//           );
+//         })}
+//       </div>
+
+
+//       {/* 📈 Chart Section */}
+//       <div className="mt-8 ml-30">
+//         {selectedTime === 'Last day' ? (
+//           <div className="h-[250px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500">
+//             <h3 className="text-lg font-semibold">No metrics</h3>
+//             <p>There are no metrics for the specified period.</p>
+//           </div>
+//         ) : (
+//           <div className="h-[300px] w-full">
+//             <Line
+//               data={lineData}
+//               options={{
+//                 responsive: true,
+//                 scales: {
+//                   x: {
+//                     grid: {
+//                       display: false, // 👈 Removes vertical lines
+//                     },
+//                   },
+//                   y: {
+//                     grid: {
+//                       color: 'rgba(0,0,0,0.05)', // Optional: keep soft horizontal lines
+//                     },
+//                   },
+//                 },
+//               }}
+//             />
+//           </div>
+//         )}
+//       </div>
+
+//     <div className="mt-12 ml-30">
+//       <h3 className="text-xl font-semibold mb-2">Overall Success Rate</h3>
+//       {selectedTime === 'Last day' ? (
+//         <div className="h-[200px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500">
+//           <h3 className="text-lg font-semibold">No metrics</h3>
+//           <p>There are no metrics for the specified period.</p>
+//         </div>
+//       ) : (
+//         <div className="h-[300px] w-full">
+//           <Line
+//             data={areaData}
+//             options={{
+//               responsive: true,
+//               scales: {
+//                 x: {
+//                   grid: {
+//                     display: false,
+//                   },
+//                 },
+//                 y: {
+//                   grid: {
+//                     color: 'rgba(0,0,0,0.05)',
+//                   },
+//                 },
+//               },
+//             }}
+//           />
+//         </div>
+//       )}
+//     </div>
+
+//               <div className="grid grid-cols-2 mt-8 gap-8">
+//         <div>
+//           <div className="flex justify-between">
+//             <h3 className="text-xl font-semibold mb-2">Most called agents</h3>
+//             <button className="text-[13px] border rounded-xl p-1 hover:bg-gray-50 cursor-pointer">See All Agents</button>
+//           </div>
+//           <div className="w-full text-left mt-3 border-separate border-spacing-y-4">
+//             <table className="w-full text-left mt-2">
+//               <thead>
+//                 <tr className="text-gray-500 border-b">
+//                   <th>Agent name</th>
+//                   <th>Number of calls</th>
+//                   <th>Call Minutes</th>
+//                   <th>LLM Cost</th>
+//                   <th>Credits Spent</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {filteredAgents.map((a, i) => (
+//                   <tr key={i} className="hover:bg-gray-50 cursor-pointer">
+//                     <td className="p-3 font-bold">{a.name}</td>
+//                     <td className="p-3">{a.calls}</td>
+//                     <td className="p-3">{a.minutes}</td>
+//                     <td className="p-3">${a.llmCost.toFixed(3)}</td>
+//                     <td className="p-3">{a.credits.toLocaleString()}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         </div>
+
+//         <div>
+//           <h3 className="text-xl font-semibold mb-2">Language</h3>
+//           <div className="mt-3">
+//             <div className="mb-2">
+//               <div className="flex justify-between">
+//                 <span>Hindi</span>
+//                 <span>57.9%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '58%' }}></div>
+//               </div>
+//             </div>
+//             <div>
+//               <div className="flex justify-between">
+//                 <span>English</span>
+//                 <span>42.1%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '42%' }}></div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+//   </div>
+// );
+// }
+
+
+
+
+// 'use client';
+
+// import { useState, useRef, useEffect } from 'react';
+// import { motion } from 'framer-motion';
+// import { Line } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+// } from 'chart.js';
+
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
+
+// export default function Dashboard() {
+//   const agents = [
+//     { name: 'New agent', calls: 41, minutes: 56, llmCost: 0.97, credits: 24964 },
+//     { name: 'Kurumba', calls: 38, minutes: 35, llmCost: 0.25, credits: 15811 },
+//     { name: 'Tupac the great', calls: 14, minutes: 4, llmCost: 0.051, credits: 1737 },
+//   ];
+
+//   const timeOptions = ['Last day', 'Last week', 'Last month'];
+
+//   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+//   const [agentDropdownOpen, setAgentDropdownOpen] = useState(false);
+//   const [selectedTime, setSelectedTime] = useState('Last month');
+//   const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
+//   const [activeStat, setActiveStat] = useState<string | null>(null);
+
+//   const agentDropdownRef = useRef<HTMLDivElement>(null);
+//   const timeDropdownRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     function handleClickOutside(event: MouseEvent) {
+//       if (agentDropdownRef.current && !agentDropdownRef.current.contains(event.target as Node)) {
+//         setAgentDropdownOpen(false);
+//       }
+//       if (timeDropdownRef.current && !timeDropdownRef.current.contains(event.target as Node)) {
+//         setTimeDropdownOpen(false);
+//       }
+//     }
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, []);
+
+//   const filteredAgents = selectedAgent
+//     ? agents.filter(agent => agent.name === selectedAgent)
+//     : agents;
+
+//   const labels = [
+//     'May 18', 'May 20', 'May 22', 'May 24', 'May 26', 'May 28', 'May 30',
+//     'Jun 01', 'Jun 03', 'Jun 05', 'Jun 07', 'Jun 09', 'Jun 11', 'Jun 13', 'Jun 15'
+//   ];
+
+//   const defaultCallsData = [5, 18, 4, 7, 19, 5, 2, 1, 3, 4, 7, 6, 9, 17, 0];
+
+//   const generateStatData = () => {
+//     if (!activeStat) return defaultCallsData;
+//     switch (activeStat) {
+//       case 'calls':
+//         return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.calls, 0) * (i / (labels.length / 2))));
+//       case 'minutes':
+//         return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) * (i / (labels.length / 2))));
+//       case 'credits':
+//         return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.credits, 0) * (i / (labels.length / 2))));
+//       case 'llmCost':
+//         return labels.map((_, i) => Number((filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) * (i / (labels.length / 2))).toFixed(2)));
+//       case 'averageCost':
+//         const avgCost = filteredAgents.reduce((sum, a) => sum + a.calls, 0) === 0
+//           ? 0
+//           : filteredAgents.reduce((sum, a) => sum + a.credits, 0) / filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//         return labels.map((_, i) => Number((avgCost * (i / (labels.length / 2))).toFixed(2)));
+//       case 'averageLlmCost':
+//         const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//         const avgLlm = totalMinutes === 0 ? 0 : filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) / totalMinutes;
+//         return labels.map((_, i) => Number((avgLlm * (i / (labels.length / 2))).toFixed(3)));
+//       default:
+//         return defaultCallsData;
+//     }
+//   };
+
+//   const lineData = {
+//     labels,
+//     datasets: [
+//       {
+//         label: {
+//           calls: 'Number of Calls',
+//           minutes: 'Average Duration (min)',
+//           credits: 'Total Credits',
+//           llmCost: 'Total LLM Cost ($)',
+//           averageCost: 'Average Cost per Call',
+//           averageLlmCost: 'Average LLM Cost per Min',
+//         }[activeStat || 'calls'] || 'Number of Calls',
+//         data: generateStatData(),
+//         fill: false,
+//         borderColor: '#000',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+  
+
+//   const areaData = {
+//     labels,
+//     datasets: [
+//       {
+//         label: 'Success Rate',
+//         data: [1, 1, 0.95, 1, 0.8, 1, 1, 0.6, 0.9, 1, 1, 0.7, 1, 1, 0.2],
+//         backgroundColor: 'rgba(34,197,94,0.6)',
+//         fill: true,
+//         borderColor: 'rgba(34,197,94,1)',
+//         tension: 0.3,
+//       },
+//     ],
+//   };
+
+//   const handleStatClick = (stat: string) => {
+//     setActiveStat(prev => (prev === stat ? null : stat));
+//   };
+
+//   return (
+//      <div className="p-8 text-sm font-sans">
+//       <div className="flex gap-4 items-center">
+//         <span className="px-2 py-1 rounded-full text-xs flex items-center gap-2 border rounded-xl">
+//           <span className="relative flex size-3">
+//             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black opacity-75"></span>
+//             <span className="relative inline-flex size-3 rounded-full bg-black"></span>
+//           </span>
+//           Active calls: 0
+//         </span>
+//     </div>
+//     <div className="p-8 text-sm font-sans">
+//       <header className="flex justify-between items-center">
+//         <div>
+//           <h5 className="text-gray-500">My Workspace</h5>
+//           <h2 className="text-3xl font-semibold">Good morning, User</h2>
+//         </div>
+
+//         <div className="flex gap-4">
+//           <div className="relative" ref={agentDropdownRef}>
+//             <button
+//               onClick={() => setAgentDropdownOpen(!agentDropdownOpen)}
+//               className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
+//             >
+//               {selectedAgent || 'All Agents'}
+//               <svg
+//                 className={`w-4 h-4 transition-transform ${
+//                   agentDropdownOpen ? 'rotate-180' : ''
+//                 }`}
+//                 fill="none"
+//                 stroke="currentColor"
+//                 strokeWidth={2}
+//                 viewBox="0 0 24 24"
+//               >
+//                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+//               </svg>
+//             </button>
+//             {agentDropdownOpen && (
+//               <motion.ul
+//                 initial={{ opacity: 0, y: -10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+//               >
+//                 <li
+//                   className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                   onClick={() => {
+//                     setSelectedAgent(null);
+//                     setAgentDropdownOpen(false);
+//                     setActiveStat(null);
+//                   }}
+//                 >
+//                   All Agents
+//                 </li>
+//                 {agents.map(agent => (
+//                   <li
+//                     key={agent.name}
+//                     className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                     onClick={() => {
+//                       setSelectedAgent(agent.name);
+//                       setAgentDropdownOpen(false);
+//                       setActiveStat(null);
+//                     }}
+//                   >
+//                     {agent.name}
+//                   </li>
+//                 ))}
+//               </motion.ul>
+//             )}
+//           </div>
+
+//           <div className="relative" ref={timeDropdownRef}>
+//             <button
+//               onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
+//               className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
+//             >
+//               {selectedTime}
+//               <svg
+//                 className={`w-4 h-4 transition-transform ${
+//                   timeDropdownOpen ? 'rotate-180' : ''
+//                 }`}
+//                 fill="none"
+//                 stroke="currentColor"
+//                 strokeWidth={2}
+//                 viewBox="0 0 24 24"
+//               >
+//                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+//               </svg>
+//             </button>
+//             {timeDropdownOpen && (
+//               <motion.ul
+//                 initial={{ opacity: 0, y: -10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+//               >
+//                 {timeOptions.map(option => (
+//                   <li
+//                     key={option}
+//                     className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+//                     onClick={() => {
+//                       setSelectedTime(option);
+//                       setTimeDropdownOpen(false);
+//                     }}
+//                   >
+//                     {option}
+//                   </li>
+//                 ))}
+//               </motion.ul>
+//             )}
+//           </div>
+//         </div>
+//       </header>
+
+//       <div className="mt-8 flex flex-wrap gap-4 ml-30">
+//         {[
+//           { label: 'Number of calls', key: 'calls' },
+//           { label: 'Avg Duration', key: 'minutes' },
+//           { label: 'Total cost', key: 'credits' },
+//           { label: 'Average cost', key: 'averageCost' },
+//           { label: 'Total LLM Cost', key: 'llmCost' },
+//           { label: 'Average LLM Cost', key: 'averageLlmCost' },
+//         ].map(stat => {
+//           const value = (() => {
+//             if (selectedTime === 'Last day') {
+//               switch (stat.key) {
+//                 case 'credits':
+//                   return '0 credits';
+//                 case 'llmCost':
+//                   return '$0.00';
+//                 case 'averageCost':
+//                   return '0.00 credits/call';
+//                 case 'averageLlmCost':
+//                   return '$0.000';
+//                 case 'minutes':
+//                   return '0m 0s';
+//                 default:
+//                   return 0;
+//               }
+//             }
+
+//             switch (stat.key) {
+//               case 'calls':
+//                 return filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//               case 'minutes':
+//                 const totalMins = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//                 const avg = totalMins / (filteredAgents.length || 1);
+//                 const mins = Math.floor(avg);
+//                 const secs = Math.round((avg - mins) * 60);
+//                 return `${mins}m ${secs}s`;
+//               case 'credits':
+//                 return `${filteredAgents.reduce((sum, a) => sum + a.credits, 0).toLocaleString()} credits`;
+//               case 'llmCost':
+//                 return `$${filteredAgents.reduce((sum, a) => sum + a.llmCost, 0).toFixed(2)}`;
+//               case 'averageCost':
+//                 const totalCalls = filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+//                 const totalCredits = filteredAgents.reduce((sum, a) => sum + a.credits, 0);
+//                 const avgCost = totalCalls ? (totalCredits / totalCalls).toFixed(2) : '0.00';
+//                 return `${avgCost} credits/call`;
+//               case 'averageLlmCost':
+//                 const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+//                 const totalLlm = filteredAgents.reduce((sum, a) => sum + a.llmCost, 0);
+//                 return `$${totalMinutes ? (totalLlm / totalMinutes).toFixed(3) : '0.000'}`;
+//               default:
+//                 return 0;
+//             }
+//           })();
+
+//           return (
+//             <div
+//               key={stat.key}
+//               className={`cursor-pointer px-6 py-3 rounded-xl border shadow-sm transition-all duration-200 flex flex-col items-center text-sm ${
+//                 activeStat === stat.key
+//                   ? 'bg-black text-white'
+//                   : 'hover:bg-gray-100 text-black'
+//               }`}
+//               onClick={() => handleStatClick(stat.key)}
+//             >
+//               <div>{stat.label}</div>
+//               <div className="font-bold text-lg">{value}</div>
+              
+//             </div>
+//           );
+//         })}
+//       </div>
+
+
+//       {/* 📈 Chart Section */}
+//       <div className="mt-8 ml-80">
+//         {selectedTime === 'Last day' ? (
+//           <div className="h-[250px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500">
+//             <h3 className="text-lg font-semibold">No metrics</h3>
+//             <p>There are no metrics for the specified period.</p>
+//           </div>
+//         ) : (
+//           <div className="h-[300px] w-full">
+//             <Line
+//               data={lineData}
+//               options={{
+//                 responsive: true,
+//                 scales: {
+//                   x: {
+//                     grid: {
+//                       display: false, // 👈 Removes vertical lines
+//                     },
+//                   },
+//                   y: {
+//                     grid: {
+//                       color: 'rgba(0,0,0,0.05)', // Optional: keep soft horizontal lines
+//                     },
+//                   },
+//                 },
+//               }}
+//             />
+//           </div>
+//         )}
+//       </div>
+
+//     <div className="mt-12 ml-80">
+//       <h3 className="text-xl font-semibold mb-2">Overall Success Rate</h3>
+//       {selectedTime === 'Last day' ? (
+//         <div className="h-[200px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500">
+//           <h3 className="text-lg font-semibold">No metrics</h3>
+//           <p>There are no metrics for the specified period.</p>
+//         </div>
+//       ) : (
+//         <div className="h-[300px] w-full">
+//           <Line
+//             data={areaData}
+//             options={{
+//               responsive: true,
+//               scales: {
+//                 x: {
+//                   grid: {
+//                     display: false,
+//                   },
+//                 },
+//                 y: {
+//                   grid: {
+//                     color: 'rgba(0,0,0,0.05)',
+//                   },
+//                 },
+//               },
+//             }}
+//           />
+//         </div>
+//       )}
+//     </div>
+
+//               <div className="grid grid-cols-2 mt-8 gap-8">
+//         <div>
+//           <div className="flex justify-between">
+//             <h3 className="text-xl font-semibold mb-2">Most called agents</h3>
+//             <button className="text-[13px] border rounded-xl p-1 hover:bg-gray-50 cursor-pointer">See All Agents</button>
+//           </div>
+//           <div className="w-full text-left mt-3 border-separate border-spacing-y-4">
+//             <table className="w-full text-left mt-2">
+//               <thead>
+//                 <tr className="text-gray-500 border-b">
+//                   <th>Agent name</th>
+//                   <th>Number of calls</th>
+//                   <th>Call Minutes</th>
+//                   <th>LLM Cost</th>
+//                   <th>Credits Spent</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {filteredAgents.map((a, i) => (
+//                   <tr key={i} className="hover:bg-gray-50 cursor-pointer">
+//                     <td className="p-3 font-bold">{a.name}</td>
+//                     <td className="p-3">{a.calls}</td>
+//                     <td className="p-3">{a.minutes}</td>
+//                     <td className="p-3">${a.llmCost.toFixed(3)}</td>
+//                     <td className="p-3">{a.credits.toLocaleString()}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         </div>
+
+//         <div>
+//           <h3 className="text-xl font-semibold mb-2">Language</h3>
+//           <div className="mt-3">
+//             <div className="mb-2">
+//               <div className="flex justify-between">
+//                 <span>Hindi</span>
+//                 <span>57.9%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '58%' }}></div>
+//               </div>
+//             </div>
+//             <div>
+//               <div className="flex justify-between">
+//                 <span>English</span>
+//                 <span>42.1%</span>
+//               </div>
+//               <div className="bg-gray-200 h-2 rounded-full">
+//                 <div className="bg-black h-2 rounded-full" style={{ width: '42%' }}></div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+//   );
+// }
+
+
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -638,6 +1919,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import NavigationLayout from '@/components/NavigationLayout';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
 
@@ -646,18 +1928,43 @@ export default function Dashboard() {
     { name: 'New agent', calls: 41, minutes: 56, llmCost: 0.97, credits: 24964 },
     { name: 'Kurumba', calls: 38, minutes: 35, llmCost: 0.25, credits: 15811 },
     { name: 'Tupac the great', calls: 14, minutes: 4, llmCost: 0.051, credits: 1737 },
+    { name: 'Test1', calls: 23, minutes: 6, llmCost: 0.011, credits: 1257 },
+    { name: 'Test2', calls: 15, minutes: 4, llmCost: 0.037, credits: 1734 },
+    { name: 'Test3', calls: 16, minutes: 3, llmCost: 0.013, credits: 1223 },
   ];
 
-  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activeStat, setActiveStat] = useState<string | null>(null);
+  const timeOptions = ['Last day', 'Last week', 'Last month'];
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const languageDataMap: Record<string, Record<string, number>> = {
+  'Last day': {}, // no data
+  'Last week': {
+    Hindi: 63.2,
+    English: 36.8,
+  },
+  'Last month': {
+    Hindi: 57.9,
+    English: 42.1,
+  },};
+
+
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+  const [agentDropdownOpen, setAgentDropdownOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState('Last month');
+  const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
+  const [activeStat, setActiveStat] = useState<string | null>(null);
+  const [showAllAgents, setShowAllAgents] = useState(false);
+
+
+  const agentDropdownRef = useRef<HTMLDivElement>(null);
+  const timeDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
+      if (agentDropdownRef.current && !agentDropdownRef.current.contains(event.target as Node)) {
+        setAgentDropdownOpen(false);
+      }
+      if (timeDropdownRef.current && !timeDropdownRef.current.contains(event.target as Node)) {
+        setTimeDropdownOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -668,45 +1975,42 @@ export default function Dashboard() {
     ? agents.filter(agent => agent.name === selectedAgent)
     : agents;
 
-  const labels = [
-    'May 18', 'May 20', 'May 22', 'May 24', 'May 26', 'May 28', 'May 30',
-    'Jun 01', 'Jun 03', 'Jun 05', 'Jun 07', 'Jun 09', 'Jun 11', 'Jun 13', 'Jun 15'
-  ];
+  const getDynamicLabels = () => {
+  if (selectedTime === 'Last day') {
+    return ['00:00', '06:00', '12:00', '18:00', '23:59'];
+  } else if (selectedTime === 'Last week') {
+    return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  } else {
+    return [
+      'May 18', 'May 20', 'May 22', 'May 24', 'May 26',
+      'May 28', 'May 30', 'Jun 01', 'Jun 03', 'Jun 05',
+      'Jun 07', 'Jun 09', 'Jun 11', 'Jun 13', 'Jun 15'
+    ];}};
+
+  const labels = getDynamicLabels();
 
   const defaultCallsData = [5, 18, 4, 7, 19, 5, 2, 1, 3, 4, 7, 6, 9, 17, 0];
 
   const generateStatData = () => {
     if (!activeStat) return defaultCallsData;
-
     switch (activeStat) {
       case 'calls':
-        return filteredAgents.length
-          ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.calls, 0) * (i / (labels.length / 2))))
-          : defaultCallsData;
+        return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.calls, 0) * (i / (labels.length / 2))));
       case 'minutes':
-        return filteredAgents.length
-          ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) * (i / (labels.length / 2))))
-          : defaultCallsData;
+        return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) * (i / (labels.length / 2))));
       case 'credits':
-        return filteredAgents.length
-          ? labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.credits, 0) * (i / (labels.length / 2))))
-          : defaultCallsData;
+        return labels.map((_, i) => Math.round(filteredAgents.reduce((sum, a) => sum + a.credits, 0) * (i / (labels.length / 2))));
       case 'llmCost':
-        return filteredAgents.length
-          ? labels.map((_, i) => Number(((filteredAgents.reduce((sum, a) => sum + a.llmCost, 0)) * (i / (labels.length / 2))).toFixed(2)))
-          : defaultCallsData;
-      case 'averageCost': {
-        const totalCalls = filteredAgents.reduce((sum, a) => sum + a.calls, 0);
-        const totalCredits = filteredAgents.reduce((sum, a) => sum + a.credits, 0);
-        const avgCost = totalCalls === 0 ? 0 : totalCredits / totalCalls;
+        return labels.map((_, i) => Number((filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) * (i / (labels.length / 2))).toFixed(2)));
+      case 'averageCost':
+        const avgCost = filteredAgents.reduce((sum, a) => sum + a.calls, 0) === 0
+          ? 0
+          : filteredAgents.reduce((sum, a) => sum + a.credits, 0) / filteredAgents.reduce((sum, a) => sum + a.calls, 0);
         return labels.map((_, i) => Number((avgCost * (i / (labels.length / 2))).toFixed(2)));
-      }
-      case 'averageLlmCost': {
+      case 'averageLlmCost':
         const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
-        const totalLlmCost = filteredAgents.reduce((sum, a) => sum + a.llmCost, 0);
-        const avgLlm = totalMinutes === 0 ? 0 : totalLlmCost / totalMinutes;
+        const avgLlm = totalMinutes === 0 ? 0 : filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) / totalMinutes;
         return labels.map((_, i) => Number((avgLlm * (i / (labels.length / 2))).toFixed(3)));
-      }
       default:
         return defaultCallsData;
     }
@@ -716,16 +2020,14 @@ export default function Dashboard() {
     labels,
     datasets: [
       {
-        label: activeStat
-          ? {
-              calls: 'Number of Calls',
-              minutes: 'Average Duration (min)',
-              credits: 'Total Credits',
-              llmCost: 'Total LLM Cost ($)',
-              averageCost: 'Average Cost (credits/call)',
-              averageLlmCost: 'Average LLM Cost ($/min)',
-            }[activeStat] || ''
-          : 'Number of Calls',
+        label: {
+          calls: 'Number of Calls',
+          minutes: 'Average Duration (min)',
+          credits: 'Total Credits',
+          llmCost: 'Total LLM Cost ($)',
+          averageCost: 'Average Cost per Call',
+          averageLlmCost: 'Average LLM Cost per Min',
+        }[activeStat || 'calls'] || 'Number of Calls',
         data: generateStatData(),
         fill: false,
         borderColor: '#000',
@@ -733,6 +2035,8 @@ export default function Dashboard() {
       },
     ],
   };
+
+  
 
   const areaData = {
     labels,
@@ -749,15 +2053,14 @@ export default function Dashboard() {
   };
 
   const handleStatClick = (stat: string) => {
-    if (activeStat === stat) {
-      setActiveStat(null);
-    } else {
-      setActiveStat(stat);
-    }
+    setActiveStat(prev => (prev === stat ? null : stat));
   };
 
   return (
-    <div className="p-8 text-sm font-sans">
+    <NavigationLayout
+    title="Dashboard" 
+    currentPage="/dashboard">
+     <div className="p-8 text-sm font-sans">
       <div className="flex gap-4 items-center">
         <span className="px-2 py-1 rounded-full text-xs flex items-center gap-2 border rounded-xl">
           <span className="relative flex size-3">
@@ -766,233 +2069,312 @@ export default function Dashboard() {
           </span>
           Active calls: 0
         </span>
-      </div>
-
-      <header className="mt-8 flex justify-between items-center">
+    </div>
+    <div className="p-8 text-sm font-sans">
+      <header className="flex justify-between items-center">
         <div>
           <h5 className="text-gray-500">My Workspace</h5>
           <h2 className="text-3xl font-semibold">Good morning, User</h2>
         </div>
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="border rounded-lg px-4 py-2 flex items-center gap-2 bg-white"
-          >
-            {selectedAgent || 'All Agents'}
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${
-                dropdownOpen ? 'rotate-180' : ''
-              }`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
 
-          {dropdownOpen && (
-            <motion.ul
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+        <div className="flex gap-4">
+          <div className="relative" ref={agentDropdownRef}>
+            <button
+              onClick={() => setAgentDropdownOpen(!agentDropdownOpen)}
+              className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
             >
-              <li
-                key="all"
-                className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
-                  selectedAgent === null ? 'font-semibold bg-gray-200' : ''
+              {selectedAgent || 'All Agents'}
+              <svg
+                className={`w-4 h-4 transition-transform ${
+                  agentDropdownOpen ? 'rotate-180' : ''
                 }`}
-                onClick={() => {
-                  setSelectedAgent(null);
-                  setDropdownOpen(false);
-                  setActiveStat(null);
-                }}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
               >
-                All Agents
-              </li>
-              {agents.map(agent => (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {agentDropdownOpen && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+              >
                 <li
-                  key={agent.name}
-                  className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
-                    selectedAgent === agent.name ? 'font-semibold bg-gray-200' : ''
-                  }`}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100"
                   onClick={() => {
-                    setSelectedAgent(agent.name);
-                    setDropdownOpen(false);
+                    setSelectedAgent(null);
+                    setAgentDropdownOpen(false);
                     setActiveStat(null);
                   }}
                 >
-                  {agent.name}
+                  All Agents
                 </li>
-              ))}
-            </motion.ul>
-          )}
+                {agents.map(agent => (
+                  <li
+                    key={agent.name}
+                    className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setSelectedAgent(agent.name);
+                      setAgentDropdownOpen(false);
+                      setActiveStat(null);
+                    }}
+                  >
+                    {agent.name}
+                  </li>
+                ))}
+              </motion.ul>
+            )}
+          </div>
+
+          <div className="relative" ref={timeDropdownRef}>
+            <button
+              onClick={() => setTimeDropdownOpen(!timeDropdownOpen)}
+              className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
+            >
+              {selectedTime}
+              <svg
+                className={`w-4 h-4 transition-transform ${
+                  timeDropdownOpen ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {timeDropdownOpen && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+              >
+                {timeOptions.map(option => (
+                  <li
+                    key={option}
+                    className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                    onClick={() => {
+                      setSelectedTime(option);
+                      setTimeDropdownOpen(false);
+                    }}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </motion.ul>
+            )}
+          </div>
         </div>
       </header>
 
-      <div className="flex flex-nowrap gap-2 mt-8 ml-30 overflow-x-auto">
-        <div
-          onClick={() => handleStatClick('calls')}
-          className={`border border-gray-400 rounded-xl p-3 w-[150px] cursor-pointer select-none ${
-            activeStat === 'calls' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Number of calls</p>
-          <p className="font-semibold text-3xl">
-            {filteredAgents.reduce((sum, a) => sum + a.calls, 0)}
-          </p>
-        </div>
+      <div className="mt-8 flex flex-wrap gap-4 ml-30">
+        {[
+          { label: 'Number of calls', key: 'calls' },
+          { label: 'Avg Duration', key: 'minutes' },
+          { label: 'Total cost', key: 'credits' },
+          { label: 'Average cost', key: 'averageCost' },
+          { label: 'Total LLM Cost', key: 'llmCost' },
+          { label: 'Average LLM Cost', key: 'averageLlmCost' },
+        ].map(stat => {
+          const value = (() => {
+            if (selectedTime === 'Last day') {
+              switch (stat.key) {
+                case 'credits':
+                  return '0 credits';
+                case 'llmCost':
+                  return '$0.00';
+                case 'averageCost':
+                  return '0.00 credits/call';
+                case 'averageLlmCost':
+                  return '$0.000';
+                case 'minutes':
+                  return '0m 0s';
+                default:
+                  return 0;
+              }
+            }
 
-        <div
-          onClick={() => handleStatClick('minutes')}
-          className={`border border-gray-400 rounded-xl p-3 w-[150px] cursor-pointer select-none ${
-            activeStat === 'minutes' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Average duration</p>
-          <p className="font-semibold text-3xl">
-            {filteredAgents.length === 0
-              ? 0
-              : Math.floor(filteredAgents.reduce((sum, a) => sum + a.minutes, 0) / filteredAgents.length)}
-            :00
-          </p>
-        </div>
+            switch (stat.key) {
+              case 'calls':
+                return filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+              case 'minutes':
+                const totalMins = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+                const avg = totalMins / (filteredAgents.length || 1);
+                const mins = Math.floor(avg);
+                const secs = Math.round((avg - mins) * 60);
+                return `${mins}m ${secs}s`;
+              case 'credits':
+                return `${filteredAgents.reduce((sum, a) => sum + a.credits, 0).toLocaleString()} credits`;
+              case 'llmCost':
+                return `$${filteredAgents.reduce((sum, a) => sum + a.llmCost, 0).toFixed(2)}`;
+              case 'averageCost':
+                const totalCalls = filteredAgents.reduce((sum, a) => sum + a.calls, 0);
+                const totalCredits = filteredAgents.reduce((sum, a) => sum + a.credits, 0);
+                const avgCost = totalCalls ? (totalCredits / totalCalls).toFixed(2) : '0.00';
+                return `${avgCost} credits/call`;
+              case 'averageLlmCost':
+                const totalMinutes = filteredAgents.reduce((sum, a) => sum + a.minutes, 0);
+                const totalLlm = filteredAgents.reduce((sum, a) => sum + a.llmCost, 0);
+                return `$${totalMinutes ? (totalLlm / totalMinutes).toFixed(3) : '0.000'}`;
+              default:
+                return 0;
+            }
+          })();
 
-        <div
-          onClick={() => handleStatClick('credits')}
-          className={`border border-gray-400 rounded-xl p-3 w-[230px] cursor-pointer select-none ${
-            activeStat === 'credits' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Total cost</p>
-          <p className="font-semibold text-3xl">
-            {filteredAgents.reduce((sum, a) => sum + a.credits, 0).toLocaleString()}{' '}
-            <span className="text-base font-normal">credits</span>
-          </p>
-        </div>
-
-        <div
-          onClick={() => handleStatClick('averageCost')}
-          className={`border border-gray-400 rounded-xl p-3 w-[234px] cursor-pointer select-none ${
-            activeStat === 'averageCost' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Average cost</p>
-          <p className="font-semibold text-3xl">
-            {filteredAgents.reduce((sum, a) => sum + a.calls, 0) === 0
-              ? 0
-              : Math.floor(
-                  filteredAgents.reduce((sum, a) => sum + a.credits, 0) /
-                    filteredAgents.reduce((sum, a) => sum + a.calls, 0)
-                ).toLocaleString()}{' '}
-            <span className="text-base font-normal">credits/call</span>
-          </p>
-        </div>
-
-        <div
-          onClick={() => handleStatClick('llmCost')}
-          className={`border border-gray-400 rounded-xl p-3 w-[210px] cursor-pointer select-none ${
-            activeStat === 'llmCost' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Total LLM cost</p>
-          <p className="font-semibold text-3xl">
-            $
-            {filteredAgents
-              .reduce((sum, a) => sum + a.llmCost, 0)
-              .toFixed(2)}{' '}
-            <span className="text-base font-normal">USD</span>
-          </p>
-        </div>
-
-        <div
-          onClick={() => handleStatClick('averageLlmCost')}
-          className={`border border-gray-400 rounded-xl p-3 w-[200px] cursor-pointer select-none ${
-            activeStat === 'averageLlmCost' ? 'bg-gray-200 font-semibold' : ''
-          }`}
-        >
-          <p className="text-gray-500">Average LLM cost</p>
-          <p className="font-semibold text-3xl">
-            $
-            {filteredAgents.reduce((sum, a) => sum + a.minutes, 0) === 0
-              ? 0
-              : (
-                  filteredAgents.reduce((sum, a) => sum + a.llmCost, 0) /
-                  filteredAgents.reduce((sum, a) => sum + a.minutes, 0)
-                ).toFixed(3)}{' '}
-            <span className="text-base font-normal">/min</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <div className="h-[500px] w-full ml-[200px]">
-          <Line data={lineData} options={{ responsive: true }} />
-        </div>
-      </div>
-
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-2">Overall Success Rate</h3>
-        <div className="h-[500px] w-full ml-[200px]">
-          <Line data={areaData} options={{ responsive: true }} />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 mt-8 gap-8">
-        <div>
-          <h3 className="font-semibold">Most called agents</h3>
-          <table className="w-full text-left mt-2">
-            <thead>
-              <tr className="text-gray-500">
-                <th>Agent name</th>
-                <th>Calls</th>
-                <th>Minutes</th>
-                <th>LLM Cost</th>
-                <th>Credits</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAgents.map((a, i) => (
-                <tr key={i} className="border-t">
-                  <td>{a.name}</td>
-                  <td>{a.calls}</td>
-                  <td>{a.minutes}</td>
-                  <td>${a.llmCost.toFixed(3)}</td>
-                  <td>{a.credits.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div>
-          <h3 className="font-semibold">Language</h3>
-          <div className="mt-2">
-            <div className="mb-2">
-              <div className="flex justify-between">
-                <span>Hindi</span>
-                <span>57.9%</span>
-              </div>
-              <div className="bg-gray-200 h-2 rounded-full">
-                <div className="bg-black h-2 rounded-full" style={{ width: '58%' }}></div>
-              </div>
+          return (
+            <div
+              key={stat.key}
+              className={`cursor-pointer px-6 py-3 rounded-xl border shadow-sm transition-all duration-200 flex flex-col items-center text-sm ${
+                activeStat === stat.key
+                  ? 'bg-black text-white'
+                  : 'hover:bg-gray-100 text-black'
+              }`}
+              onClick={() => handleStatClick(stat.key)}
+            >
+              <div>{stat.label}</div>
+              <div className="font-bold text-lg">{value}</div>
+              
             </div>
-            <div>
-              <div className="flex justify-between">
-                <span>English</span>
-                <span>42.1%</span>
-              </div>
-              <div className="bg-gray-200 h-2 rounded-full">
-                <div className="bg-black h-2 rounded-full" style={{ width: '42%' }}></div>
-              </div>
+          );
+        })}
+      </div>
+
+
+      {/* 📈 Chart Section */}
+      <div className="mt-8 ml-80">
+        {selectedTime === 'Last day' ? (
+          <div className="h-[250px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500 ml-[-200]">
+            <h3 className="text-lg font-semibold">No metrics</h3>
+            <p>There are no metrics for the specified period.</p>
+          </div>
+        ) : (
+          <div className="h-[300px] w-full">
+            <Line
+              data={lineData}
+              options={{
+                responsive: true,
+                scales: {
+                  x: {
+                    grid: {
+                      display: false, // 👈 Removes vertical lines
+                    },
+                  },
+                  y: {
+                    grid: {
+                      color: 'rgba(0,0,0,0.05)', // Optional: keep soft horizontal lines
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+        )}
+      </div>
+
+    <div className="mt-12 ml-80">
+      <h3 className="text-xl font-semibold mb-2">Overall Success Rate</h3>
+      {selectedTime === 'Last day' ? (
+        <div className="h-[200px] w-full text-center flex flex-col justify-center items-center border border-dashed rounded-xl text-gray-500 ml-[-200]">
+          <h3 className="text-lg font-semibold">No metrics</h3>
+          <p>There are no metrics for the specified period.</p>
+        </div>
+      ) : (
+        <div className="h-[300px] w-full">
+          <Line
+            data={areaData}
+            options={{
+              responsive: true,
+              scales: {
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                },
+                y: {
+                  grid: {
+                    color: 'rgba(0,0,0,0.05)',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+      )}
+    </div>
+
+     {selectedTime !== 'Last day' && (
+        <div className="grid grid-cols-2 mt-8 gap-8">
+          {/* Most called agents */}
+          <div>
+            <div className="flex justify-between">
+              <h3 className="text-xl font-semibold mb-2">Most called agents</h3>
+              <button
+                className="text-[13px] border rounded-xl p-1 hover:bg-gray-50 cursor-pointer"
+                onClick={() => setShowAllAgents(prev => !prev)}
+              >
+                {showAllAgents ? 'Collapse' : 'See All Agents'}
+              </button>
+            </div>
+            <div className="w-full text-left mt-3 border-separate border-spacing-y-4">
+              <table className="w-full text-left mt-2">
+                <thead>
+                  <tr className="text-gray-500 border-b">
+                    <th>Agent name</th>
+                    <th>Number of calls</th>
+                    <th>Call Minutes</th>
+                    <th>LLM Cost</th>
+                    <th>Credits Spent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(showAllAgents ? filteredAgents : filteredAgents.slice(0, 3)).map((a, i) => (
+                    <tr key={i} className="hover:bg-gray-50 cursor-pointer">
+                      <td className="p-3 font-bold">{a.name}</td>
+                      <td className="p-3">{a.calls}</td>
+                      <td className="p-3">{a.minutes}</td>
+                      <td className="p-3">${a.llmCost.toFixed(3)}</td>
+                      <td className="p-3">{a.credits.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
+
+          {/* Language Section */}
+          {Object.keys(languageDataMap[selectedTime]).length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Language</h3>
+              <div className="mt-3">
+                {Object.entries(languageDataMap[selectedTime]).map(([lang, percent]) => (
+                  <div key={lang} className="mb-2">
+                    <div className="flex justify-between">
+                      <span>{lang}</span>
+                      <span>{percent.toFixed(1)}%</span>
+                    </div>
+                    <div className="bg-gray-200 h-2 rounded-full">
+                      <motion.div
+                        key={`${lang}-${percent}`} // unique to time change
+                        className="bg-black h-2 rounded-full"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percent}%` }}
+                        transition={{ duration: 0.6, ease: 'easeOut' }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
-      </div>
+      )}
     </div>
+  </div>
+  </NavigationLayout>
   );
 }
-
-
