@@ -574,6 +574,25 @@ export default function CreateAgentPage() {
     // They can continue editing or start talking to the agent
   };
 
+  const handlePromptPreset = (type: 'sales' | 'call' | 'service') => {
+  let preset = '';
+
+  switch (type) {
+    case 'sales':
+      preset = `You're a persuasive, upbeat AI sales agent. Your job is to greet the user warmly, identify their needs quickly, and pitch products or services that fit perfectly. Always be helpful, never pushy.`;
+      break;
+    case 'call':
+      preset = `You’re a calm and professional AI working in a call center. Your job is to resolve customer queries, route them to the right department, or handle complaints with empathy and clarity.`;
+      break;
+    case 'service':
+      preset = `You're a friendly, supportive AI customer service rep. Your goal is to assist users with troubleshooting, provide helpful info, and make them feel heard and valued.`;
+      break;
+  }
+
+  setForm(prev => ({ ...prev, promptText: preset }));
+};
+
+
   // Show loading state while agent data is being fetched in edit mode
   if (isEditMode && loadingAgent) {
     return (
@@ -737,8 +756,37 @@ export default function CreateAgentPage() {
         </div>
 
         <div>
-          <label className="text-sm text-gray-600 block mb-1 font-medium">System Prompt</label>
-          <textarea name="promptText" value={form.promptText} onChange={handleChange} rows={6} className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm transition-all resize-none" />
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm text-gray-600 font-medium">System Prompt</label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handlePromptPreset('sales')}
+                className="text-sm border rounded-xl p-2 bg-amber-500 text-white hover:bg-amber-600 cursor-pointer"
+              >
+                Sales
+              </button>
+              <button
+                onClick={() => handlePromptPreset('call')}
+                className="text-sm border rounded-xl p-2 bg-amber-500 text-white hover:bg-amber-600 cursor-pointer"
+              >
+                Call Center
+              </button>
+              <button
+                onClick={() => handlePromptPreset('service')}
+                className="text-sm border rounded-xl p-2 bg-amber-500 text-white hover:bg-amber-600 cursor-pointer"
+              >
+                Service
+              </button>
+            </div>
+          </div>
+
+          <textarea
+            name="promptText"
+            value={form.promptText}
+            onChange={handleChange}
+            rows={6}
+            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-sm transition-all resize-none"
+          />
         </div>
 
         <div>
