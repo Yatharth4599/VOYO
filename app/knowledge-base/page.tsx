@@ -334,7 +334,7 @@ export default function KnowledgeBasePage() {
       }}
       createButtonText="➕ Add Knowledge Base File"
     >
-      <div className="flex-1 flex relative">
+      <div className="flex-1 flex relative h-screen overflow-hidden">
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto">
           {/* Search */}
@@ -379,44 +379,6 @@ export default function KnowledgeBasePage() {
         </div>
 
         {/* Slide-in Detail View */}
-        <AnimatePresence>
-          {selected && (
-            <motion.div
-              key="detail"
-              initial={{ x: '100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '100%', opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute top-0 right-0 h-full w-1/2 bg-white text-gray-900 p-6 shadow-2xl overflow-y-auto z-10 border-l border-gray-200"
-              ref={detailRef}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">{selected.name}</h2>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="border border-gray-200 px-3 py-1 text-sm rounded-md hover:bg-gray-50 transition-colors cursor-pointer text-gray-700"
-                >
-                  Close
-                </button>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-700">
-                <p><strong className="text-gray-900">Document ID:</strong> {selected.docId}</p>
-                <p><strong className="text-gray-900">Last updated:</strong> {selected.updatedAt}</p>
-                <p><strong className="text-gray-900">RAG indexes:</strong> No indexes</p>
-                <p><strong className="text-gray-900">Dependent agents:</strong> No dependent agents</p>
-              </div>
-
-              <div className="mt-6">
-                <h3 className="text-md font-medium mb-1 text-gray-900">File Content</h3>
-                <div
-                  className="p-4 rounded-lg bg-gray-50 whitespace-pre-wrap text-sm border border-gray-200 text-gray-800"
-                  dangerouslySetInnerHTML={{ __html: selected.content }}
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Upload Modal */}
         <AnimatePresence>
@@ -496,6 +458,45 @@ export default function KnowledgeBasePage() {
           )}
         </AnimatePresence>
       </div>
+
+        <AnimatePresence>
+          {selected && (
+            <motion.div
+              key="detail"
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed top-0 right-0 h-screen w-1/2 bg-white text-gray-900 p-6 shadow-2xl overflow-y-auto z-[999] border-l border-gray-200"
+              ref={detailRef}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">{selected.name}</h2>
+                <button
+                  onClick={() => setSelected(null)}
+                  className="border border-gray-200 px-3 py-1 text-sm rounded-md hover:bg-gray-50 transition-colors cursor-pointer text-gray-700"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="space-y-2 text-sm text-gray-700">
+                <p><strong className="text-gray-900">Document ID:</strong> {selected.docId}</p>
+                <p><strong className="text-gray-900">Last updated:</strong> {selected.updatedAt}</p>
+                <p><strong className="text-gray-900">RAG indexes:</strong> No indexes</p>
+                <p><strong className="text-gray-900">Dependent agents:</strong> No dependent agents</p>
+              </div>
+
+              <div className="mt-6">
+                <h3 className="text-md font-medium mb-1 text-gray-900">File Content</h3>
+                <div
+                  className="p-4 rounded-lg bg-gray-50 whitespace-pre-wrap text-sm border border-gray-200 text-gray-800"
+                  dangerouslySetInnerHTML={{ __html: selected.content }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
     </NavigationLayout>
   );
 }

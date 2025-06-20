@@ -371,15 +371,15 @@ export default function PhoneNumbersPage() {
         </AnimatePresence>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="modern-card overflow-x-auto">
           <table className="min-w-full text-left text-sm">
-            <thead className="text-gray-500 border-b">
+            <thead className="bg-gray-50 text-gray-500 border-b">
               <tr>
-                <th className="py-3">Name</th>
-                <th className="py-3">Phone number</th>
-                <th className="py-3">Assigned agent</th>
-                <th className="py-3">Provider</th>
-                <th className="py-3"></th>
+                <th className="p-4 text-left text-sm font-semibold text-gray-900">Name</th>
+                <th className="p-4 text-left text-sm font-semibold text-gray-900">Phone number</th>
+                <th className="p-4 text-left text-sm font-semibold text-gray-900">Assigned agent</th>
+                <th className="p-4 text-left text-sm font-semibold text-gray-900">Provider</th>
+                <th className="p-4 text-left text-sm font-semibold text-gray-900"></th>
               </tr>
             </thead>
             <tbody>
@@ -387,20 +387,20 @@ export default function PhoneNumbersPage() {
                 <tr
                   key={i}
                   onClick={() => handleRowClick(entry)}
-                  className="border-b hover:bg-gray-50 cursor-pointer"
+                  className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
                 >
-                  <td className="py-4">{entry.name}</td>
-                  <td className="py-4">{entry.number}</td>
-                  <td className="py-4 flex items-center gap-1">
+                  <td className="p-4 text-gray-800">{entry.name}</td>
+                  <td className="p-4 text-gray-800">{entry.number}</td>
+                  <td className="p-4 text-gray-800">
                     {entry.agent}
                     <span className="text-xs">↗</span>
                   </td>
-                  <td className="py-4">
+                  <td className="p-4 text-gray-800">
                     <span className="bg-gray-100 px-2 py-0.5 rounded-full text-xs">
                       {entry.provider}
                     </span>
                   </td>
-                  <td className="py-4">
+                  <td className="p-4 text-gray-800">
                     <MoreHorizontal
                       size={18}
                       className="cursor-pointer text-gray-500 hover:bg-gray-200"

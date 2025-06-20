@@ -52,7 +52,7 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-all duration-200 z-10"
+        className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-all duration-200 z-10 cursor-pointer"
       >
         <span className="text-lg leading-none">&times;</span>
       </button>
@@ -157,7 +157,7 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
           <div className="w-full border-t border-gray-200"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-4 bg-white text-gray-500">Don't have an account?</span>
+          <span className="px-4 bg-[#faf6e8f6] text-gray-500">Don't have an account?</span>
         </div>
       </div>
 

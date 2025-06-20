@@ -4,6 +4,7 @@ import { ReactNode, useState } from 'react';
 import Image from 'next/image';
 import BurgerMenu from './BurgerMenu';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface NavigationLayoutProps {
   children: ReactNode;
@@ -28,7 +29,7 @@ export default function NavigationLayout({
     <div className="min-h-screen bg-gradient-to-tr from-[#FAF8F3] to-[#F5F2EA] text-gray-800 font-sans">
       {/* Main Content Area */}
       <div 
-        className="px-8 py-12 relative overflow-hidden transition-all duration-300 ease-in-out"
+        className="px-8 py-12 relative transition-all duration-300 ease-in-out"
         style={{
           marginLeft: isMenuOpen ? '256px' : '0px'
         }}
@@ -39,7 +40,9 @@ export default function NavigationLayout({
             currentPage={currentPage} 
             onMenuToggle={setIsMenuOpen}
           />
-          <Image src="/logo-voyo-removebg-preview.png" alt="Voyo Logo" width={90} height={60} />
+          <Link href={'/'}>
+           <Image src="/logo-voyo-removebg-preview.png" alt="Voyo Logo" width={90} height={60} className="cursor-pointer"/>
+          </Link>
           <h1 className="text-3xl font-bold text-amber-700">{title}</h1>
           {showCreateButton && onCreateClick && (
             <button

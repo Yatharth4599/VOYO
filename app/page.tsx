@@ -45,7 +45,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <img src="/logo-voyo-removebg-preview.png" className="w-20 h-20" alt="Voyo Logo" />
-            <span className="text-xl font-semibold text-gray-900">VOYO</span>
+            {/* <span className="text-xl font-semibold text-gray-900">VOYO</span> */}
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -634,7 +634,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <img src="/Voyo Black Logo.png" className="w-8 h-8" alt="Voyo Logo" />
+              <img src="/logo-voyo-removebg-preview.png" className="w-8 h-8" alt="Voyo Logo" />
               <span className="text-lg font-semibold text-gray-900">VOYO</span>
             </div>
 
@@ -656,7 +656,7 @@ export default function Home() {
       {/* Modals */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50"
           onClick={() => setShowModal(false)}
         >
           <div
@@ -670,7 +670,7 @@ export default function Home() {
 
       {showLoginModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50"
           onClick={closeLoginModal}
         >
           <div

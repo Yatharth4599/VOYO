@@ -849,10 +849,10 @@ export default function Agents() {
                   <h2 className="text-2xl font-bold mb-6 text-gray-800">Get Phone Number</h2>
                   <div className="flex flex-col gap-4">
                     <button
-                      onClick={() => window.open('https://example.com/get-number', '_blank')}
+                      onClick={() => window.open('https://www.du.ae/siptrunk', '_blank')}
                       className="bg-orange-600 hover:bg-orange-700 text-white py-3 px-6 rounded-xl font-semibold transition cursor-pointer"
                     >
-                      Link to Get Number
+                      Get Number
                     </button>
                   </div>
                 </>
