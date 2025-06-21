@@ -67,6 +67,7 @@ export default function Dashboard() {
 
   const getDateRange = (timeOption: string) => {
     const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 1); // Set to tomorrow to include today's data
     const startDate = new Date();
     
     switch (timeOption) {
@@ -115,6 +116,10 @@ export default function Dashboard() {
         ]);
         setCurrentUser(userData);
         setAgents(agentsData);
+        // Set first agent as default selection
+        if (agentsData.length > 0 && !selectedAgent) {
+          setSelectedAgent(agentsData[0].name);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch initial data');
       }
@@ -346,7 +351,7 @@ export default function Dashboard() {
                 onClick={() => setAgentDropdownOpen(!agentDropdownOpen)}
                 className="border rounded-lg px-4 py-2 flex items-center gap-2 cursor-pointer"
               >
-                {selectedAgent || 'All Agents'}
+                {selectedAgent || (agents.length > 0 ? agents[0].name : 'No Agents')}
                 <svg
                   className={`w-4 h-4 transition-transform ${
                     agentDropdownOpen ? 'rotate-180' : ''
@@ -365,16 +370,6 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   className="absolute right-0 mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
                 >
-                  <li
-                    className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                    onClick={() => {
-                      setSelectedAgent(null);
-                      setAgentDropdownOpen(false);
-                      setActiveStat(null);
-                    }}
-                  >
-                    All Agents
-                  </li>
                   {agents.map(agent => (
                     <li
                       key={agent.name}
@@ -451,9 +446,9 @@ export default function Dashboard() {
               case 'calls':
                 return metrics.total_calls || 0;
               case 'minutes':
-                const avgDuration = metrics.average_duration || 0;
-                const mins = Math.floor(avgDuration);
-                const secs = Math.round((avgDuration - mins) * 60);
+                const avgDurationInSeconds = metrics.average_duration || 0;
+                const mins = Math.floor(avgDurationInSeconds / 60);
+                const secs = Math.round(avgDurationInSeconds % 60);
                 return `${mins}m ${secs}s`;
               default:
                 return 0;
