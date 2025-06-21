@@ -261,6 +261,22 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [countryCode, setCountryCode] = useState('+971'); // Default to UAE
 
+  const validatePassword = (password: string) => {
+    const minLength = password.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return {
+      isValid: minLength && hasUpperCase && hasLowerCase && hasSpecialChar,
+      errors: {
+        minLength,
+        hasUpperCase,
+        hasLowerCase,
+        hasSpecialChar
+      }
+    };
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -273,6 +289,20 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
     setError('');
     setSuccess('');
     setIsLoading(true);
+
+    // Validate password
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      const errorMessages = [];
+      if (!passwordValidation.errors.minLength) errorMessages.push('at least 8 characters');
+      if (!passwordValidation.errors.hasUpperCase) errorMessages.push('one uppercase letter');
+      if (!passwordValidation.errors.hasLowerCase) errorMessages.push('one lowercase letter');
+      if (!passwordValidation.errors.hasSpecialChar) errorMessages.push('one special character');
+      
+      setError(`Password must contain ${errorMessages.join(', ')}.`);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch(createApiUrl('/user'), {
@@ -421,6 +451,27 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
             required
             className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
           />
+          {formData.password && (
+            <div className="mt-2 text-xs space-y-1">
+              <div className="text-gray-600">Password must contain:</div>
+              <div className={`flex items-center space-x-1 ${formData.password.length >= 8 ? 'text-green-600' : 'text-red-500'}`}>
+                <span>{formData.password.length >= 8 ? '✓' : '✗'}</span>
+                <span>At least 8 characters</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-red-500'}`}>
+                <span>{/[A-Z]/.test(formData.password) ? '✓' : '✗'}</span>
+                <span>One uppercase letter</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${/[a-z]/.test(formData.password) ? 'text-green-600' : 'text-red-500'}`}>
+                <span>{/[a-z]/.test(formData.password) ? '✓' : '✗'}</span>
+                <span>One lowercase letter</span>
+              </div>
+              <div className={`flex items-center space-x-1 ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-green-600' : 'text-red-500'}`}>
+                <span>{/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? '✓' : '✗'}</span>
+                <span>One special character</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Error Message */}

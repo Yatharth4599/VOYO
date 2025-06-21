@@ -32,13 +32,13 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
       const result = await response.json();
 
       if (!response.ok || !result.token) {
-        setError(result.message || 'Login failed');
+        setError(result.error || 'Incorrect Email address or Password');
         return;
       }
 
       localStorage.setItem('jwtToken', result.token);
       onClose();
-      router.push('/dashboard');
+      router.push('/agents');
     } catch (err) {
       console.error('Login error:', err);
       setError('Something went wrong. Please try again.');
