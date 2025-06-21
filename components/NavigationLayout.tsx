@@ -3,7 +3,6 @@
 import { ReactNode, useState } from 'react';
 import Image from 'next/image';
 import BurgerMenu from './BurgerMenu';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 interface NavigationLayoutProps {

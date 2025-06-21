@@ -320,7 +320,7 @@ export default function SignupForm({ onClose }: { onClose: () => void }) {
         const err = await res.text();
         setError(err || 'Signup failed. Please try again.');
       } else {
-        const data = await res.json();
+        await res.json();
         setSuccess('Account created successfully! You can now sign in.');
         
         // Clear form

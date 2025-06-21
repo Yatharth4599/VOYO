@@ -116,8 +116,8 @@ export default function Dashboard() {
         ]);
         setCurrentUser(userData);
         setAgents(agentsData);
-        // Set first agent as default selection
-        if (agentsData.length > 0 && !selectedAgent) {
+        // Set first agent as default selection on initial load
+        if (agentsData.length > 0) {
           setSelectedAgent(agentsData[0].name);
         }
       } catch (err) {
@@ -182,9 +182,6 @@ export default function Dashboard() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredAgents = selectedAgent
-    ? agents.filter(agent => agent.name === selectedAgent)
-    : agents;
 
   const getDynamicLabels = () => {
     if (dailyMetrics && dailyMetrics.length > 0) {

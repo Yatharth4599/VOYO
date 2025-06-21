@@ -1765,7 +1765,7 @@
 
 //         const data = await res.json()
 //         // Map the API conversation data to Call type for your UI
-//         const formattedCalls: Call[] = data.conversations.map((conv: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+//         const formattedCalls: Call[] = data.conversations.map((conv: ConversationData) => { // eslint-disable-line @typescript-eslint/no-explicit-any
 //           // Format Unix timestamp to readable date string
 //           const dateObj = new Date(conv.start_time_unix_secs * 1000)
 //           const dateStr = dateObj.toLocaleString('en-US', {
@@ -2283,7 +2283,7 @@
 //         }
 
 //         const data = await res.json()
-//         const formattedCalls: Call[] = data.conversations.map((conv: any) => {
+//         const formattedCalls: Call[] = data.conversations.map((conv: ConversationData) => {
 //           const dateObj = new Date(conv.start_time_unix_secs * 1000)
 //           const dateStr = dateObj.toLocaleString('en-US', {
 //             month: 'short',
@@ -2708,6 +2708,40 @@ type TranscriptionLine = {
   text: string
 }
 
+type TranscriptLine = {
+  role: string
+  message: string
+}
+
+type CallDetails = {
+  transcript?: TranscriptLine[]
+  analysis?: {
+    transcript_summary?: string
+    call_successful?: boolean
+    [key: string]: unknown
+  }
+  metadata?: {
+    start_time_unix_secs?: number
+    call_duration_secs?: number
+    [key: string]: unknown
+  }
+  [key: string]: unknown
+}
+
+type ConversationData = {
+  start_time_unix_secs: number
+  agent: { name: string }
+  agent_name: string
+  duration_seconds: number
+  call_duration_secs: number
+  call_successful: boolean
+  status?: string
+  message_count: number
+  conversation_id: string
+  inbound_phone_number: string
+  [key: string]: unknown
+}
+
 type Call = {
   date: string
   agent: string
@@ -2741,7 +2775,7 @@ export default function CallHistoryPage() {
 
   const [startDate, endDate] = dateRange
 
-  const [callDetails, setCallDetails] = useState<any>(null)
+  const [callDetails, setCallDetails] = useState<CallDetails | null>(null)
   const [detailsLoading, setDetailsLoading] = useState(false)
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null)
@@ -2769,7 +2803,7 @@ export default function CallHistoryPage() {
         }
 
         const data = await res.json()
-        const formattedCalls: Call[] = data.conversations.map((conv: any) => {
+        const formattedCalls: Call[] = data.conversations.map((conv: ConversationData) => {
           const dateObj = new Date(conv.start_time_unix_secs * 1000)
           const dateStr = dateObj.toLocaleString('en-US', {
             month: 'short',
@@ -2784,7 +2818,7 @@ export default function CallHistoryPage() {
           const seconds = conv.call_duration_secs % 60
           const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`
 
-          let statusText = conv.call_successful || conv.status || 'Unknown'
+          let statusText = conv.status || (conv.call_successful ? 'Successful' : 'Failed')
           statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1).toLowerCase()
 
           return {
@@ -3134,10 +3168,14 @@ export default function CallHistoryPage() {
                             <p className="text-lg font-bold text-gray-900">Call Status</p>
                             <span
                               className={`px-3 py-[3px] rounded-full text-sm leading-none ${getStatusBadgeClasses(
-                                callDetails?.analysis?.call_successful || selected.status
+                                callDetails?.analysis?.call_successful !== undefined 
+                                  ? (callDetails.analysis.call_successful ? 'Successful' : 'Failed')
+                                  : selected.status
                               )}`}
                             >
-                              {callDetails?.analysis?.call_successful || selected.status}
+                              {callDetails?.analysis?.call_successful !== undefined 
+                                ? (callDetails.analysis.call_successful ? 'Successful' : 'Failed')
+                                : selected.status}
                             </span>
                           </div>
                         </div>
@@ -3155,7 +3193,7 @@ export default function CallHistoryPage() {
                           <p className="text-sm text-gray-500">Loading transcription...</p>
                         ) : callDetails?.transcript?.length ? (
                           <div className="space-y-3">
-                            {callDetails.transcript.map((line: any, index: number) => (
+                            {callDetails.transcript.map((line: TranscriptLine, index: number) => (
                               <div key={index} className="text-sm">
                                 <span className="font-semibold capitalize text-gray-800">
                                   {line.role}:

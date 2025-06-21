@@ -125,23 +125,23 @@ export interface AgentDetails {
       max_duration_seconds: number;
       client_events: string[];
     };
-    language_presets: Record<string, any>;
+    language_presets: Record<string, unknown>;
     agent: {
       first_message: string;
       language: string;
       dynamic_variables: {
-        dynamic_variable_placeholders: Record<string, any>;
+        dynamic_variable_placeholders: Record<string, unknown>;
       };
       prompt: {
         prompt: string;
         llm: string;
         temperature: number;
         max_tokens: number;
-        tools: any[];
+        tools: unknown[];
         mcp_server_ids: string[];
         native_mcp_server_ids: string[];
-        knowledge_base: any[];
-        custom_llm: any;
+        knowledge_base: unknown[];
+        custom_llm: unknown;
         ignore_default_personality: boolean;
         rag: {
           enabled: boolean;
@@ -160,7 +160,7 @@ export interface AgentDetails {
       shareable_token: string | null;
     };
     evaluation: {
-      criteria: any[];
+      criteria: unknown[];
     };
     widget: {
       variant: string;
@@ -197,14 +197,14 @@ export interface AgentDetails {
       mic_muting_enabled: boolean;
       transcript_enabled: boolean;
       text_input_enabled: boolean;
-      text_contents: Record<string, any>;
-      styles: Record<string, any>;
+      text_contents: Record<string, unknown>;
+      styles: Record<string, unknown>;
       language_selector: boolean;
       supports_text_only: boolean;
       custom_avatar_path: string | null;
-      language_presets: Record<string, any>;
+      language_presets: Record<string, unknown>;
     };
-    data_collection: Record<string, any>;
+    data_collection: Record<string, unknown>;
     overrides: {
       conversation_config_override: {
         tts: {
@@ -296,10 +296,10 @@ export interface KnowledgeDocument {
   name: string;
   created_at_unix: number;
   description?: string;
-  metadata?: any;
+  metadata?: unknown;
   type: 'file' | 'url' | 'text';
   supported_usages?: string[];
-  access_info?: any;
+  access_info?: unknown;
 }
 
 export interface KnowledgeBaseResponse {

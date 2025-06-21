@@ -1,19 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FaBars, FaMicrophone, FaPaperPlane, FaCheckCircle, FaUserAlt, FaTimes, FaPlay, FaPause, FaSave } from 'react-icons/fa';
+import { FaBars, FaMicrophone, FaPaperPlane, FaUserAlt, FaTimes, FaPlay, FaPause, FaSave } from 'react-icons/fa';
 import VoiceRecorderModal from '@/components/VoiceRecorderModal';
-import Image from 'next/image';
 import { createApiUrl } from '@/lib/config';
 import { fetchLanguages, fetchVoices, fetchAgentDetails, updateAgent, fetchUserKnowledgeBase, Language, Voice, AgentDetails, KnowledgeDocument } from '@/lib/api';
-
-interface KnowledgeBaseItem {
-  id?: string;
-  title: string;
-  content: string;
-}
 
 interface AgentKnowledgeItem {
   type: string;
@@ -22,7 +15,7 @@ interface AgentKnowledgeItem {
   usage_mode: string;
 }
 
-export default function CreateAgentPage() {
+function CreateAgentPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const agentId = searchParams.get('id');
@@ -57,7 +50,7 @@ export default function CreateAgentPage() {
   const [originalAgentData, setOriginalAgentData] = useState<AgentDetails | null>(null);
   const [knowledgeDocuments, setKnowledgeDocuments] = useState<KnowledgeDocument[]>([]);
   const [loadingKnowledge, setLoadingKnowledge] = useState(false);
-  const [existingKnowledgeBase, setExistingKnowledgeBase] = useState<any[]>([]);
+  const [existingKnowledgeBase, setExistingKnowledgeBase] = useState<AgentKnowledgeItem[]>([]);
   const [createdAgentId, setCreatedAgentId] = useState<string | null>(null);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
 
@@ -80,6 +73,14 @@ export default function CreateAgentPage() {
       }
     }
   };
+
+  // Filter voices by selected language
+  const filterVoicesByLanguage = useCallback((selectedLanguage: string, voicesList: Voice[] = voices) => {
+    const filtered = voicesList.filter(voice => 
+      voice.verified_languages.some(lang => lang.language === selectedLanguage)
+    );
+    setFilteredVoices(filtered);
+  }, [voices]);
 
   // Load languages, voices, and agent data on component mount
   useEffect(() => {
@@ -127,7 +128,7 @@ export default function CreateAgentPage() {
           setOriginalAgentData(agentData);
           
           // Store existing knowledge base
-          setExistingKnowledgeBase(agentData.conversation_config.agent.prompt.knowledge_base || []);
+          setExistingKnowledgeBase((agentData.conversation_config.agent.prompt.knowledge_base as AgentKnowledgeItem[]) || []);
           
           // Set the agent ID for conversation
           setCreatedAgentId(agentId);
@@ -143,9 +144,6 @@ export default function CreateAgentPage() {
             knowledgeFile: null, // Can't restore file, only show existing knowledge
             selectedKnowledgeId: '', // Reset selection
           });
-          
-          // Filter voices based on loaded language
-          filterVoicesByLanguage(agentData.conversation_config.agent.language, Array.isArray(voicesData) ? voicesData : []);
         } catch (error) {
           console.error('Failed to load agent data:', error);
           setError('Failed to load agent data');
@@ -156,17 +154,14 @@ export default function CreateAgentPage() {
     };
 
     loadData();
-  }, [isEditMode, agentId, form.language]);
+  }, [isEditMode, agentId]);
 
-
-  // Filter voices by selected language
-  const filterVoicesByLanguage = (selectedLanguage: string, voicesList: Voice[] = voices) => {
-    const filtered = voicesList.filter(voice => 
-      voice.verified_languages.some(lang => lang.language === selectedLanguage)
-    );
-    setFilteredVoices(filtered);
-  };
-
+  // Filter voices when language or voices change
+  useEffect(() => {
+    if (voices.length > 0) {
+      filterVoicesByLanguage(form.language);
+    }
+  }, [form.language, voices, filterVoicesByLanguage]);
 
   // Handle voice preview play/pause
   const handleVoicePreview = (voiceId: string, previewUrl: string) => {
@@ -268,7 +263,7 @@ export default function CreateAgentPage() {
     if (!token) throw new Error('Authentication required');
 
       // Step 1: Build knowledge base array
-      const knowledgeBase: KnowledgeBaseItem[] = [];
+      const knowledgeBase: AgentKnowledgeItem[] = [];
       
       // Add selected existing document if any
       if (form.selectedKnowledgeId) {
@@ -516,7 +511,7 @@ export default function CreateAgentPage() {
     }
 
     // Step 1: Build knowledge base array
-    const knowledgeBase: AgentKnowledgeItem[] = [...(originalAgentData.conversation_config.agent.prompt.knowledge_base || [])]; // Start with existing knowledge base
+    const knowledgeBase: AgentKnowledgeItem[] = [...((originalAgentData.conversation_config.agent.prompt.knowledge_base as AgentKnowledgeItem[]) || [])]; // Start with existing knowledge base
     
     // Add selected existing document if any (avoid duplicates)
     if (form.selectedKnowledgeId) {
@@ -572,7 +567,7 @@ export default function CreateAgentPage() {
           first_message: form.firstMessage,
           language: form.language,
           prompt: (() => {
-            const { tool_ids, ...promptWithoutToolIds } = originalAgentData.conversation_config.agent.prompt;
+            const { tool_ids: _tool_ids, ...promptWithoutToolIds } = originalAgentData.conversation_config.agent.prompt;
             return {
               ...promptWithoutToolIds,
               prompt: form.promptText,
@@ -939,5 +934,13 @@ export default function CreateAgentPage() {
         />
       )}
     </motion.div>
+  );
+}
+
+export default function CreateAgentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <CreateAgentPageContent />
+    </Suspense>
   );
 }

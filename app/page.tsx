@@ -683,7 +683,7 @@ export default function Home() {
       )}
 
       {showAgentModal && (
-        <VoiceRecorderModal onClose={() => setShowAgentModal(false)} />
+        <VoiceRecorderModal onClose={() => setShowAgentModal(false)} agentId={null} />
       )}
     </div>
   );

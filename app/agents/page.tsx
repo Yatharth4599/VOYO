@@ -632,7 +632,6 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Edit, Trash2, X } from 'lucide-react';
 import { createApiUrl } from '@/lib/config';
@@ -656,7 +655,6 @@ export default function Agents() {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [modalStep, setModalStep] = useState<'initial' | 'phone' | 'getPhone' | 'connectPhone' | 'manualAdd' | 'web' | 'webCustomize'>('initial');
-  const [phoneInput, setPhoneInput] = useState(false);
   const [selectedPhone, setSelectedPhone] = useState('');
   const [copied, setCopied] = useState(false);
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
@@ -958,7 +956,7 @@ window.AIWidget = (function() {
         setError('Failed to fetch agents');
         setLoading(false);
       });
-  }, []);
+  }, [router]);
 
   const handleDelete = async (agentId: string) => {
     const token = localStorage.getItem('jwtToken');

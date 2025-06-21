@@ -145,7 +145,7 @@
 //   const [selectedPhone, setSelectedPhone] = useState<PhoneEntry | null>(null);
 //   const [showModal, setShowModal] = useState(false)
 
-//   const handleRowClick = (phoneEntry: any) => {
+//   const handleRowClick = (phoneEntry: PhoneEntry) => {
 //     setSelectedPhone(phoneEntry)
 //     setShowModal(true)
 //   }
@@ -319,7 +319,7 @@ export default function PhoneNumbersPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleRowClick = (phoneEntry: any) => {
+  const handleRowClick = (phoneEntry: PhoneEntry) => {
     setSelectedPhone(phoneEntry)
     setShowModal(true)
   }
