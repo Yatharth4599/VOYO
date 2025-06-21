@@ -3,11 +3,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FaBars, FaMicrophone, FaPaperPlane, FaCheckCircle, FaUserAlt, FaTimes, FaPlay, FaPause, FaSave, FaStop } from 'react-icons/fa';
+import { FaBars, FaMicrophone, FaPaperPlane, FaCheckCircle, FaUserAlt, FaTimes, FaPlay, FaPause, FaSave } from 'react-icons/fa';
 import VoiceRecorderModal from '@/components/VoiceRecorderModal';
 import Image from 'next/image';
 import { createApiUrl } from '@/lib/config';
 import { fetchLanguages, fetchVoices, fetchAgentDetails, updateAgent, fetchUserKnowledgeBase, Language, Voice, AgentDetails, KnowledgeDocument } from '@/lib/api';
+
+interface KnowledgeBaseItem {
+  id?: string;
+  title: string;
+  content: string;
+}
+
+interface AgentKnowledgeItem {
+  type: string;
+  name: string;
+  id: string;
+  usage_mode: string;
+}
 
 export default function CreateAgentPage() {
   const router = useRouter();
@@ -143,7 +156,7 @@ export default function CreateAgentPage() {
     };
 
     loadData();
-  }, [isEditMode, agentId]);
+  }, [isEditMode, agentId, form.language]);
 
 
   // Filter voices by selected language
@@ -255,7 +268,7 @@ export default function CreateAgentPage() {
     if (!token) throw new Error('Authentication required');
 
       // Step 1: Build knowledge base array
-      let knowledgeBase: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const knowledgeBase: KnowledgeBaseItem[] = [];
       
       // Add selected existing document if any
       if (form.selectedKnowledgeId) {
@@ -503,7 +516,7 @@ export default function CreateAgentPage() {
     }
 
     // Step 1: Build knowledge base array
-    let knowledgeBase: any[] = [...originalAgentData.conversation_config.agent.prompt.knowledge_base]; // Start with existing knowledge base
+    const knowledgeBase: AgentKnowledgeItem[] = [...(originalAgentData.conversation_config.agent.prompt.knowledge_base || [])]; // Start with existing knowledge base
     
     // Add selected existing document if any (avoid duplicates)
     if (form.selectedKnowledgeId) {
