@@ -154,6 +154,7 @@ function CreateAgentPageContent() {
     };
 
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode, agentId]);
 
   // Filter voices when language or voices change
@@ -566,19 +567,21 @@ function CreateAgentPageContent() {
           ...originalAgentData.conversation_config.agent,
           first_message: form.firstMessage,
           language: form.language,
-          prompt: (() => {
-            const { tool_ids: _tool_ids, ...promptWithoutToolIds } = originalAgentData.conversation_config.agent.prompt;
-            return {
-              ...promptWithoutToolIds,
-              prompt: form.promptText,
-              knowledge_base: knowledgeBase,
-            };
-          })()
+          prompt: {
+            ...originalAgentData.conversation_config.agent.prompt,
+            prompt: form.promptText,
+            knowledge_base: knowledgeBase,
+          }
         }
       },
       platform_settings: originalAgentData.platform_settings,
       tags: originalAgentData.tags || []
     };
+
+    // Remove tool_ids if it exists to avoid backend conflict
+    if ('tool_ids' in updatePayload.conversation_config.agent.prompt) {
+      delete (updatePayload.conversation_config.agent.prompt as Record<string, unknown>).tool_ids;
+    }
 
     await updateAgent(agentId, updatePayload);
     setSuccess(`Agent updated successfully!`);
