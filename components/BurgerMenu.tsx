@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 
 interface BurgerMenuProps {
   currentPage?: string;
@@ -27,6 +27,17 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
     onMenuToggle?.(open);
   };
 
+  const handleLogout = () => {
+    // Clear JWT token from localStorage
+    localStorage.removeItem('jwtToken');
+    
+    // Close the menu
+    toggleMenu(false);
+    
+    // Redirect to landing page
+    router.push('/');
+  };
+
   return (
     <>
       {/* Burger Menu Button */}
@@ -42,7 +53,7 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
         initial={{ x: -250 }}
         animate={{ x: isMenuOpen ? 0 : -250 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-0 left-0 w-64 h-full bg-white/95 backdrop-blur-md border-r border-gray-200 z-50 shadow-xl p-6 pt-8"
+        className="fixed top-0 left-0 w-64 h-screen bg-white/95 backdrop-blur-md border-r border-gray-200 z-50 shadow-xl p-6 pt-8 flex flex-col"
       >
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-amber-600">Menu</h2>
@@ -50,7 +61,8 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
             <X size={24} className="text-gray-700 cursor-pointer" />
           </button>
         </div>
-        <nav className="flex flex-col gap-6 mt-8">
+        {/* Navigation Items */}
+        <nav className="flex flex-col gap-6 mt-8 flex-1">
           {menuItems.map((item) => (
             <button
               key={item.path}
@@ -68,6 +80,17 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
             </button>
           ))}
         </nav>
+        
+        {/* Logout Button - positioned at bottom */}
+        <div className="border-t border-gray-200 pt-4 mt-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-lg text-left cursor-pointer transition-colors text-red-600 hover:text-red-700 w-full"
+          >
+            <LogOut size={20} />
+            Logout
+          </button>
+        </div>
       </motion.div>
     </>
   );

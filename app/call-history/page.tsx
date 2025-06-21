@@ -302,7 +302,7 @@
 
 // export default function CallHistoryPage() {
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   useEffect(() => {
@@ -541,7 +541,7 @@
 
 // export default function CallHistoryPage() {
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   const [showDateAfter, setShowDateAfter] = useState(false)
@@ -847,7 +847,7 @@
 
 // export default function CallHistoryPage() {
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   const [showDateAfter, setShowDateAfter] = useState(false)
@@ -1288,7 +1288,7 @@
 
 // export default function CallHistoryPage() {
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   const [showDateAfter, setShowDateAfter] = useState(false)
@@ -1729,7 +1729,7 @@
 //   const [calls, setCalls] = useState<Call[]>([])
 //   const [loading, setLoading] = useState(true)
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   const [showDateAfter, setShowDateAfter] = useState(false)
@@ -2248,7 +2248,7 @@
 //   const [calls, setCalls] = useState<Call[]>([])
 //   const [loading, setLoading] = useState(true)
 //   const [selected, setSelected] = useState<Call | null>(null)
-//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+//   const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
 //   const detailRef = useRef<HTMLDivElement>(null)
 
 //   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null])
@@ -2727,7 +2727,7 @@ export default function CallHistoryPage() {
   const [calls, setCalls] = useState<Call[]>([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<Call | null>(null)
-  const [activeTab, setActiveTab] = useState<'overview' | 'transcription' | 'client'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'transcription'>('overview')
   const detailRef = useRef<HTMLDivElement>(null)
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null])
@@ -3020,6 +3020,8 @@ export default function CallHistoryPage() {
                         console.error('Error fetching call details or audio:', err)
                         setCallDetails(null)
                         setAudioUrl(null)
+                      } finally {
+                        setDetailsLoading(false)
                       }
                     }}
                   >
@@ -3109,12 +3111,6 @@ export default function CallHistoryPage() {
                     >
                       Transcription
                     </button>
-                    <button
-                      className={`cursor-pointer transition-colors duration-200 ${activeTab === 'client' ? 'text-orange-600 font-medium' : 'text-gray-600 hover:text-gray-800'}`}
-                      onClick={() => setActiveTab('client')}
-                    >
-                      Client Data
-                    </button>
                   </div>
 
                   {/* Tabs Content */}
@@ -3158,49 +3154,18 @@ export default function CallHistoryPage() {
                         {detailsLoading ? (
                           <p className="text-sm text-gray-500">Loading transcription...</p>
                         ) : callDetails?.transcript?.length ? (
-                          <div className="space-y-4">
+                          <div className="space-y-3">
                             {callDetails.transcript.map((line: any, index: number) => (
-                              <div
-                                key={index}
-                                className={`flex ${line.speaker === 'User' ? 'justify-end' : 'justify-start'}`}
-                              >
-                                <div
-                                  className={`max-w-[70%] px-4 py-2 rounded-lg text-sm shadow-md ${
-                                    line.speaker === 'User'
-                                      ? 'bg-orange-500 text-white'
-                                      : 'bg-gray-100 text-gray-800 border border-gray-200'
-                                  }`}
-                                >
-                                  <p className="font-semibold mb-1">{line.speaker}</p>
-                                  <p>{line.text}</p>
-                                </div>
+                              <div key={index} className="text-sm">
+                                <span className="font-semibold capitalize text-gray-800">
+                                  {line.role}:
+                                </span>
+                                <span className="ml-2 text-gray-700">{line.message}</span>
                               </div>
                             ))}
                           </div>
                         ) : (
                           <p className="text-sm text-gray-500">No transcription available.</p>
-                        )}
-                      </div>
-                    )}
-
-                    {activeTab === 'client' && (
-                      <div className="border-t border-gray-200 mt-4 pt-6">
-                        <p className="text-lg font-bold mb-4 text-gray-900">Client Data</p>
-
-                        {detailsLoading ? (
-                          <p className="text-sm text-gray-500">Loading client data...</p>
-                        ) : callDetails?.conversation_initiation_client_data ? (
-                          <pre className="text-xs bg-gray-100 border border-gray-200 rounded p-4 overflow-x-auto whitespace-pre-wrap">
-                            {JSON.stringify(callDetails.conversation_initiation_client_data, null, 2)}
-                          </pre>
-                        ) : (
-                          <div className="bg-gray-50 text-gray-600 rounded-lg p-6 border border-gray-200">
-                            <p className="text-2xl text-center font-medium mb-1 text-gray-700">No client data</p>
-                            <p className="text-sm text-center text-gray-600">
-                              This conversation did not receive any client data. When sent, client overrides, custom LLM body, and dynamic
-                              variables will be shown here.
-                            </p>
-                          </div>
                         )}
                       </div>
                     )}

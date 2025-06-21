@@ -138,7 +138,6 @@ export interface AgentDetails {
         temperature: number;
         max_tokens: number;
         tools: any[];
-        tool_ids: string[];
         mcp_server_ids: string[];
         native_mcp_server_ids: string[];
         knowledge_base: any[];
@@ -293,12 +292,14 @@ export const updateAgent = async (agentId: string, agentData: Omit<AgentDetails,
 
 // Knowledge Base types and functions
 export interface KnowledgeDocument {
-  documentation_id: string;
+  id: string;
   name: string;
   created_at_unix: number;
   description?: string;
   metadata?: any;
   type: 'file' | 'url' | 'text';
+  supported_usages?: string[];
+  access_info?: any;
 }
 
 export interface KnowledgeBaseResponse {
@@ -325,4 +326,142 @@ export const fetchUserKnowledgeBase = async (): Promise<KnowledgeDocument[]> => 
 
   const data: KnowledgeBaseResponse = await response.json();
   return data.documents;
+};
+
+// Metrics and Agents types and functions for Dashboard
+export interface MetricsResponse {
+  total_calls: number;
+  active_calls: number;
+  average_duration: number;
+  most_agents_called: Array<{
+    agent_id: string;
+    count: number;
+  }>;
+}
+
+export interface Agent {
+  agent_id: string;
+  name: string;
+  tags: string[];
+  created_at_unix_secs: number;
+  access_info: {
+    is_creator: boolean;
+    creator_name: string;
+    creator_email: string;
+    role: string;
+  };
+}
+
+export interface AgentsResponse {
+  agents: Agent[];
+}
+
+export const fetchUserMetrics = async (): Promise<MetricsResponse> => {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Authentication required');
+
+  const response = await fetch(createApiUrl('/users/metrics'), {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user metrics: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
+export const fetchUserAgents = async (): Promise<Agent[]> => {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Authentication required');
+
+  const response = await fetch(createApiUrl('/users/agents'), {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user agents: ${response.statusText}`);
+  }
+
+  const data: AgentsResponse = await response.json();
+  return data.agents;
+};
+
+// Daily metrics types and functions
+export interface DailyMetric {
+  date: string;
+  total_calls: number;
+  success_rate: number;
+}
+
+export interface DailyMetricsResponse {
+  daily: DailyMetric[];
+}
+
+export const fetchDailyMetrics = async (startDate?: string, endDate?: string, agentId?: string): Promise<DailyMetric[]> => {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Authentication required');
+
+  let url = '/metrics/daily';
+  const params = new URLSearchParams();
+  
+  if (startDate) params.append('start_date', startDate);
+  if (endDate) params.append('end_date', endDate);
+  if (agentId) params.append('agent_id', agentId);
+  
+  if (params.toString()) {
+    url += `?${params.toString()}`;
+  }
+
+  const response = await fetch(createApiUrl(url), {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch daily metrics: ${response.statusText}`);
+  }
+
+  const data: DailyMetricsResponse = await response.json();
+  return data.daily;
+};
+
+// User profile types and functions
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const fetchCurrentUser = async (): Promise<User> => {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Authentication required');
+
+  const response = await fetch(createApiUrl('/me'), {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch current user: ${response.statusText}`);
+  }
+
+  return response.json();
 };
