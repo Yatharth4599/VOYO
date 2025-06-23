@@ -1,185 +1,3 @@
-// 'use client';
-
-// import { useEffect, useState } from 'react';
-// import { motion, AnimatePresence } from 'framer-motion';
-
-// type Doc = {
-//   name: string;
-//   size: string;
-//   createdBy: string;
-//   updatedAt: string;
-//   docId: string;
-//   content: string; // Will store extracted_inner_html
-// };
-
-// export default function KnowledgeBasePage() {
-//   const [docs, setDocs] = useState<Doc[]>([]);
-//   const [selected, setSelected] = useState<Doc | null>(null);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchDocs = async () => {
-//       try {
-//         const token = localStorage.getItem('jwtToken');
-//         if (!token) return;
-
-//         const res = await fetch('http://10.12.26.134:3000/user/knowledge-base', {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-
-//         const data = await res.json();
-
-//         const formatted = data.documents.map((doc: any) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
-//           name: doc.name,
-//           size: `${(doc.metadata.size_bytes / 1024).toFixed(1)} kB`,
-//           createdBy: doc.access_info.creator_name,
-//           updatedAt: new Date(doc.metadata.last_updated_at_unix_secs * 1000).toLocaleString(),
-//           docId: doc.id,
-//           content: '', // We'll fetch this later when selected
-//         }));
-
-//         setDocs(formatted);
-//         setLoading(false);
-//       } catch (err) {
-//         console.error('Error fetching documents:', err);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchDocs();
-//   }, []);
-
-//   const handleSelect = async (doc: Doc) => {
-//     try {
-//       const token = localStorage.getItem('jwtToken');
-//       if (!token) return;
-
-//       const res = await fetch(`http://10.12.26.134:3000/user/knowledge-base/${doc.docId}`, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-
-//       const data = await res.json();
-//       setSelected({ ...doc, content: data.extracted_inner_html });
-//     } catch (err) {
-//       console.error('Error fetching document content:', err);
-//     }
-//   };
-
-//   return (
-//     <div className="flex h-screen font-sans text-white bg-black overflow-hidden">
-//       {/* Sidebar */}
-//       <aside className="w-64 bg-gray-900 border-r px-4 py-6 space-y-4 border-cyan-300">
-//         <h1 className="text-xl font-bold text-white">🧠 Conversational AI</h1>
-//         <nav className="space-y-2 text-white cursor-pointer">
-//           <div className="hover:bg-gray-100">📊 Dashboard</div>
-//           <div className="hover:bg-gray-100">👥 Agents</div>
-//           <div className="hover:bg-gray-100">📞 Call History</div>
-//           <div className="hover:bg-gray-100">📚 Knowledge Base</div>
-//           <div className="hover:bg-gray-100">📱 Phone Numbers</div>
-//           <div className="hover:bg-gray-100">📤 Outbound</div>
-//           <div className="hover:bg-gray-100">⚙️ Settings</div>
-//         </nav>
-//       </aside>
-
-//       {/* Main + Detail */}
-//       <main className="flex-1 flex relative">
-//         {/* Main Content */}
-//         <div className="flex-1 p-8 overflow-y-auto">
-//           <h2 className="text-2xl font-bold mb-6 text-white">Knowledge Base</h2>
-
-//           {/* Buttons */}
-//           <div className="flex gap-4 mb-6">
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">🌐 Add URL</button>
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">📄 Add Files</button>
-//             <button className="bg-black border px-4 py-2 rounded hover:bg-gray-100 text-white cursor-pointer">✍️ Create Text</button>
-//           </div>
-
-//           {/* Search */}
-//           <input
-//             type="text"
-//             placeholder="Search Knowledge Base..."
-//             className="w-full p-2 mb-4 border rounded border-cyan-300 text-white bg-black"
-//           />
-
-//           {/* Loading */}
-//           {loading && <div className="text-white mt-10 text-center">Loading files...</div>}
-
-//           {/* File Table */}
-//           {!loading && (
-//             <table className="w-full bg-black border rounded shadow-sm border-cyan-300">
-//               <thead className="text-left bg-gray-100 border-cyan-300">
-//                 <tr>
-//                   <th className="p-3 text-white bg-black">Name</th>
-//                   <th className="p-3 text-white bg-black">Created by</th>
-//                   <th className="p-3 text-white bg-black">Last updated</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {docs.map((file, idx) => (
-//                   <tr
-//                     key={idx}
-//                     className="border-b hover:bg-gray-800 cursor-pointer border-cyan-300"
-//                     onClick={() => handleSelect(file)}
-//                   >
-//                     <td className="p-3 flex items-center gap-2 text-white">
-//                       📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
-//                     </td>
-//                     <td className="p-3 text-white">{file.createdBy}</td>
-//                     <td className="p-3 text-white">{file.updatedAt}</td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           )}
-//         </div>
-
-//         {/* Slide-in Detail View */}
-//         <AnimatePresence>
-//           {selected && (
-//             <motion.div
-//               key="detail"
-//               initial={{ x: '100%', opacity: 0 }}
-//               animate={{ x: 0, opacity: 1 }}
-//               exit={{ x: '100%', opacity: 0 }}
-//               transition={{ duration: 0.3 }}
-//               className="absolute top-0 right-0 h-full w-1/2 bg-gray-900 text-black p-6 shadow-lg overflow-y-auto z-10"
-//             >
-//               <div className="flex justify-between items-center mb-4">
-//                 <h2 className="text-xl font-semibold text-white">{selected.name}</h2>
-//                 <button
-//                   onClick={() => setSelected(null)}
-//                   className="border px-3 py-1 text-sm rounded-md hover:bg-gray-200 transition cursor-pointer"
-//                 >
-//                   Close
-//                 </button>
-//               </div>
-
-//               <div className="space-y-2 text-sm text-white">
-//                 <p><strong>Document ID:</strong> {selected.docId}</p>
-//                 <p><strong>Last updated:</strong> {selected.updatedAt}</p>
-//                 <p><strong>RAG indexes:</strong> No indexes</p>
-//                 <p><strong>Dependent agents:</strong> No dependent agents</p>
-//               </div>
-
-//               <div className="mt-6">
-//                 <h3 className="text-md font-medium mb-1 text-white">File Content</h3>
-//                 <div
-//                   className="p-4 rounded-md bg-gray-200 whitespace-pre-wrap text-sm"
-//                   dangerouslySetInnerHTML={{ __html: selected.content }}
-//                 />
-//               </div>
-//             </motion.div>
-//           )}
-//         </AnimatePresence>
-//       </main>
-//     </div>
-//   );
-// }
-
 
 'use client';
 
@@ -206,6 +24,9 @@ export default function KnowledgeBasePage() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
 
   // Fetch docs function
   const fetchDocs = async () => {
@@ -305,6 +126,38 @@ export default function KnowledgeBasePage() {
     }
   };
 
+
+
+  const handleDelete = async (docId: string) => {
+  if (!confirm('Are you sure you want to remove this file?')) return;
+
+  try {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) throw new Error('No auth token found');
+
+    const res = await fetch(createApiUrl(`/user/knowledge-base/${docId}`), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.ok) {
+      // Remove the doc from local state
+      setDocs((prev) => prev.filter((doc) => doc.docId !== docId));
+      // Close detail view if it was open
+      if (selected?.docId === docId) setSelected(null);
+    } else {
+      const errorText = await res.text();
+      alert(`Delete failed: ${errorText}`);
+    }
+  } catch (err) {
+    console.error('Delete error:', err);
+    alert('Something went wrong trying to delete the document');
+  }
+};
+
+
   // Close panel on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -321,6 +174,18 @@ export default function KnowledgeBasePage() {
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [selected]);
+
+  const totalPages = Math.ceil(docs.length / rowsPerPage);
+  const paginatedDocs = docs.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  useEffect(() => {
+  setCurrentPage(1);}, 
+  [docs]);
+
+
 
   return (
     <NavigationLayout 
@@ -356,26 +221,71 @@ export default function KnowledgeBasePage() {
                     <th className="p-4 text-left text-sm font-semibold text-gray-900">Name</th>
                     <th className="p-4 text-left text-sm font-semibold text-gray-900">Created by</th>
                     <th className="p-4 text-left text-sm font-semibold text-gray-900">Last updated</th>
+                    <th className="p-4 text-left text-sm font-semibold text-gray-900"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {docs.map((file, idx) => (
+                  {paginatedDocs.map((file, idx) => (
                     <tr
                       key={idx}
-                      className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
-                      onClick={() => handleSelect(file)}
+                      className="border-t border-gray-100 hover:bg-gray-50 transition-colors duration-200"
                     >
-                      <td className="p-4 flex items-center gap-2 text-gray-900">
+                      <td
+                        onClick={() => handleSelect(file)}
+                        className="p-4 flex items-center gap-2 text-gray-900 cursor-pointer"
+                      >
                         📄 {file.name} <span className="text-sm text-gray-500">({file.size})</span>
                       </td>
                       <td className="p-4 text-gray-700">{file.createdBy}</td>
                       <td className="p-4 text-gray-700">{file.updatedAt}</td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleDelete(file.docId)}
+                          className="text-red-600 hover:text-red-800 font-medium text-sm px-3 py-1 rounded border border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            
           )}
+          {!loading && docs.length > rowsPerPage && (
+                <div className="flex justify-center items-center gap-2 mt-6">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    ⬅️ Prev
+                  </button>
+
+                  {[...Array(totalPages)].map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentPage(idx + 1)}
+                      className={`px-3 py-1 border rounded text-sm ${
+                        currentPage === idx + 1
+                          ? 'bg-orange-500 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Next ➡️
+                  </button>
+                </div>
+              )}
         </div>
 
         {/* Slide-in Detail View */}

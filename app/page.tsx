@@ -1,11 +1,13 @@
+
 'use client';
 import LoginForm from '../components/LoginForm';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SignupForm from '../components/SignupForm';
 import VoiceRecorderModal from '../components/VoiceRecorderModal';
+
 
 const AnimatedSphere = dynamic(() => import('../components/AnimatedSphere'), { ssr: false });
 
@@ -13,9 +15,29 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const openModal = () => setShowModal(true);
-  const openLoginModal = () => setShowLoginModal(true);
+  // const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
+
+  const openLoginModal = () => {
+  setShowModal(false); // Close signup
+  setShowLoginModal(true); // Open login
+};
+
+  const openSignupModal = () => {
+    setShowLoginModal(false); // Close login
+    setShowModal(true); // Open signup
+  };
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+  }};
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="bg-[#FFFBF3] text-gray-900 min-h-screen relative overflow-hidden">
@@ -35,7 +57,7 @@ export default function Home() {
       <div className="geometric-shape geometric-shape-3"></div>
 
       {/* Navigation */}
-      <header className="relative z-50 px-6 lg:px-12 py-6">
+      <header className="sticky top-0 z-50 bg-[#FFFBF3] px-6 lg:px-12 py-6">
         <nav className="flex items-center justify-between max-w-7xl mx-auto">
           {/* Logo */}
           <motion.div 
@@ -50,9 +72,26 @@ export default function Home() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
-            <a href="#ecosystem" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Ecosystem</a>
-            <a href="#contact" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact</a>
+            <button
+              onClick={() => scrollToSection('features')}
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+            >
+              Features
+            </button>
+
+            <button
+              onClick={() => scrollToSection('ecosystem')}
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+            >
+              Ecosystem
+            </button>
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+            >
+              Contact
+            </button>
+
             <button onClick={openModal} className="btn-modern">
               Get Started
             </button>
@@ -71,11 +110,27 @@ export default function Home() {
             <details className="relative">
               <summary className="list-none text-gray-900 cursor-pointer text-xl font-bold">☰</summary>
               <div className="absolute right-0 mt-2 modern-card w-56 z-50 p-4 flex flex-col gap-3">
-                <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-                <a href="#ecosystem" className="text-gray-600 hover:text-gray-900 transition-colors">Ecosystem</a>
-                <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+                >
+                  Features
+                </button>
+                <button
+                  onClick={() => scrollToSection('ecosystem')}
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+                >
+                  Ecosystem
+                </button>
+
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+                >
+                  Contact
+                </button>
                 <button onClick={openModal} className="btn-modern w-full">
-                  Get Started
+                    Get Started
                 </button>
                 <a
                   href="https://calendly.com/yatharthkher/15min"
@@ -656,14 +711,18 @@ export default function Home() {
       {/* Modals */}
       {showModal && (
         <div
-          className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50"
-          onClick={() => setShowModal(false)}
+          className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-start pt-12 pb-12 overflow-y-auto z-50"
         >
           <div
             className="modern-card p-8 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <SignupForm onClose={() => setShowModal(false)} />
+            {/* <SignupForm onClose={() => setShowModal(false)} /> */}
+            <SignupForm 
+              onClose={() => setShowModal(false)} 
+              switchToLogin={openLoginModal}
+            />
+
           </div>
         </div>
       )}
@@ -671,13 +730,17 @@ export default function Home() {
       {showLoginModal && (
         <div
           className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50"
-          onClick={closeLoginModal}
         >
           <div
             className="modern-card p-8 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <LoginForm onClose={closeLoginModal} />
+            {/* <LoginForm onClose={closeLoginModal} /> */}
+            <LoginForm 
+              onClose={closeLoginModal} 
+              switchToSignup={openSignupModal}
+            />
+
           </div>
         </div>
       )}

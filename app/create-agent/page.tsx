@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
@@ -22,15 +23,17 @@ function CreateAgentPageContent() {
   const isEditMode = !!agentId;
 
   const [form, setForm] = useState({
-    name: '',
-    language: 'hi',
-    firstMessage: '',
-    speed: 0.93, // Default to medium speed
-    voiceId: 'vghiSqG5ezdhd8F3tKAD', // Default voice ID
-    promptText: '',
-    knowledgeFile: null as File | null,
-    selectedKnowledgeId: '', // For existing knowledge base documents
+  name: '',
+  language: 'hi',
+  firstMessage: '',
+  speed: 0.93,
+  voiceId: 'vghiSqG5ezdhd8F3tKAD',
+  promptText: '',
+  knowledgeFile: null as File | null,
+  selectedKnowledgeId: '',
+  knowledge_base: [] as Array<{ id: string; name: string; type?: string }>,
   });
+
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -143,6 +146,7 @@ function CreateAgentPageContent() {
             promptText: agentData.conversation_config.agent.prompt.prompt,
             knowledgeFile: null, // Can't restore file, only show existing knowledge
             selectedKnowledgeId: '', // Reset selection
+            knowledge_base: [] as Array<{ id: string; name: string; type?: string }>,
           });
         } catch (error) {
           console.error('Failed to load agent data:', error);
@@ -617,9 +621,9 @@ function CreateAgentPageContent() {
   // Show loading state while agent data is being fetched in edit mode
   if (isEditMode && loadingAgent) {
     return (
-      <div className="min-h-screen bg-gradient-to-tr from-[#0F1117] to-[#070A0F] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto mb-4"></div>
           <p className="text-lg">Loading agent data...</p>
         </div>
       </div>
@@ -777,9 +781,9 @@ function CreateAgentPageContent() {
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <label className="text-sm text-gray-600 font-medium">System Prompt</label>
-            <div className="flex gap-2">
+          <div className="flex items-center mb-1">
+            <label className="text-sm text-gray-600 font-medium">Agent Personailty OR Select from our existing personalities</label>
+            <div className="flex gap-2 ml-2">
               <button
                 onClick={() => handlePromptPreset('sales')}
                 className="text-sm border rounded-xl p-2 bg-amber-500 text-white hover:bg-amber-600 cursor-pointer"
@@ -824,12 +828,27 @@ function CreateAgentPageContent() {
                       <p className="text-sm text-gray-800">{doc.name}</p>
                       <p className="text-xs text-gray-600">ID: {doc.id}</p>
                     </div>
-                    <span className="text-xs text-green-600">✓ Attached</span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-xs text-green-600">✓ Attached</span>
+                      <button
+                        onClick={() => {
+                          setForm(prev => ({
+                            ...prev,
+                            knowledge_base: prev.knowledge_base.filter((kbDoc: { id: string }) => kbDoc.id !== doc.id)
+                          }));
+                        }}
+                        className="text-xs bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition-colors cursor-pointer"
+                        title={`Remove ${doc.name}`}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
+
 
           {/* Dropdown for selecting existing knowledge documents */}
           <div className="mb-4">
@@ -887,17 +906,19 @@ function CreateAgentPageContent() {
 
         <div className="flex flex-col sm:flex-row justify-end gap-4 mt-8">
           {/* Voice Chat Button for Mobile */}
-           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => {
-              console.log("clicked");
-              setShowVoiceModal(true);
-            }}
-            className="flex items-center justify-center gap-2 bg-white border border-amber-500 text-amber-600 hover:bg-amber-50 px-6 py-3 rounded-xl text-lg font-semibold shadow-sm transition-all cursor-pointer"
-          >
-            <FaMicrophone /> Test Agent
-          </motion.button>
+           {isEditMode && (
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                console.log("clicked");
+                setShowVoiceModal(true);
+              }}
+              className="flex items-center justify-center gap-2 bg-white border border-amber-500 text-amber-600 hover:bg-amber-50 px-6 py-3 rounded-xl text-lg font-semibold shadow-sm transition-all cursor-pointer"
+            >
+              <FaMicrophone /> Test Agent
+            </motion.button>
+          )}
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}

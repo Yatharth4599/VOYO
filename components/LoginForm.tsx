@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,14 @@ import { useRouter } from 'next/navigation';
 import { createApiUrl } from '@/lib/config';
 import { motion } from 'framer-motion';
 
-export default function LoginForm({ onClose }: { onClose: () => void }) {
+export default function LoginForm({
+  onClose,
+  switchToSignup,
+}: {
+  onClose: () => void;
+  switchToSignup: () => void;
+}) {
+
   const router = useRouter();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -165,11 +173,8 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
       <div className="text-center">
         <button
           type="button"
-          className="text-orange-600 hover:text-orange-700 font-medium transition-colors duration-200"
-          onClick={() => {
-            // You can add logic here to switch to signup form
-            onClose();
-          }}
+          className="text-orange-600 hover:text-orange-700 font-medium transition-colors duration-200 cursor-pointer"
+          onClick={switchToSignup}
         >
           Create a new account
         </button>
