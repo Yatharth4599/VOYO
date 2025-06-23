@@ -28,7 +28,7 @@ export default function NavigationLayout({
     <div className="min-h-screen bg-gradient-to-tr from-[#FAF8F3] to-[#F5F2EA] text-gray-800 font-sans">
       {/* Main Content Area */}
       <div 
-        className="px-8 py-12 relative transition-all duration-300 ease-in-out"
+        className="px-8 pt-2 relative transition-all duration-300 ease-in-out"
         style={{
           marginLeft: isMenuOpen ? '256px' : '0px'
         }}
