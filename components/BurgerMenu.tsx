@@ -20,6 +20,7 @@ export default function BurgerMenu({ currentPage, onMenuToggle }: BurgerMenuProp
     { name: 'Knowledge Base', path: '/knowledge-base' },
     { name: 'Call History', path: '/call-history' },
     { name: 'Phone Numbers', path: '/phone-numbers' },
+    { name: 'Outbound Calls', path: '/outbound' },
   ];
 
   const toggleMenu = (open: boolean) => {
