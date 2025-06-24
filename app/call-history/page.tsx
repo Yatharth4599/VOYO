@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { createApiUrl } from '@/lib/config'
 import NavigationLayout from '@/components/NavigationLayout'
+import Pagination from '@/components/Pagination'
 
 type TranscriptionLine = {
   speaker: string
@@ -87,9 +88,6 @@ export default function CallHistoryPage() {
 
   const [currentPage, setCurrentPage] = useState(1)
   const callsPerPage = 10
-
-
-
 
   useEffect(() => {
     const fetchCalls = async () => {
@@ -184,6 +182,7 @@ export default function CallHistoryPage() {
     const agentOK = agentFilter ? call.agent === agentFilter : true
 
     return afterOK && beforeOK && statusOK && agentOK
+
   })
 
   useEffect(() => {
@@ -387,27 +386,12 @@ export default function CallHistoryPage() {
           
         )}
 
-        <div className="mt-6 flex justify-center items-center gap-4">
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
-          >
-            ⬅ Prev
-          </button>
-          <span className="text-sm text-gray-600">
-            Page {currentPage} of {Math.ceil(filteredData.length / callsPerPage)}
-          </span>
-          <button
-            onClick={() =>
-              setCurrentPage(prev => Math.min(prev + 1, Math.ceil(filteredData.length / callsPerPage)))
-            }
-            disabled={currentPage === Math.ceil(filteredData.length / callsPerPage)}
-            className="text-sm px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
-            >
-            Next ➡
-          </button>
-        </div>
+        <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(filteredData.length / callsPerPage)}
+        onPageChange={setCurrentPage}
+      />
+
 
         {/* Slide-in detail view (you can complete this later) */}
         <AnimatePresence>

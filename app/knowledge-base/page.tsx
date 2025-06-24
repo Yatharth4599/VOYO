@@ -1,10 +1,10 @@
-
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createApiUrl } from '@/lib/config';
 import NavigationLayout from '@/components/NavigationLayout';
+import Pagination from '@/components/Pagination';
 
 type Doc = {
   name: string;
@@ -174,6 +174,7 @@ export default function KnowledgeBasePage() {
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [selected]);
+  
 
   const totalPages = Math.ceil(docs.length / rowsPerPage);
   const paginatedDocs = docs.slice(
@@ -184,7 +185,6 @@ export default function KnowledgeBasePage() {
   useEffect(() => {
   setCurrentPage(1);}, 
   [docs]);
-
 
 
   return (
@@ -254,38 +254,13 @@ export default function KnowledgeBasePage() {
             
           )}
           {!loading && docs.length > rowsPerPage && (
-                <div className="flex justify-center items-center gap-2 mt-6">
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    ⬅️ Prev
-                  </button>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
 
-                  {[...Array(totalPages)].map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentPage(idx + 1)}
-                      className={`px-3 py-1 border rounded text-sm ${
-                        currentPage === idx + 1
-                          ? 'bg-orange-500 text-white'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      {idx + 1}
-                    </button>
-                  ))}
-
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Next ➡️
-                  </button>
-                </div>
-              )}
         </div>
 
         {/* Slide-in Detail View */}

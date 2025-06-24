@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Edit, Trash2, X } from 'lucide-react';
 import { createApiUrl } from '@/lib/config';
 import NavigationLayout from '@/components/NavigationLayout';
+import Pagination from '@/components/Pagination';
+
 
 
 interface Agent {
@@ -716,45 +718,11 @@ window.AIWidget = (function() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="flex justify-center mt-6 gap-2 select-none">
-        <button
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`px-3 py-1 rounded-md border ${
-            currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200'
-          }`}
-        >
-          Prev
-        </button>
-
-        {[...Array(totalPages)].map((_, i) => {
-          const page = i + 1;
-          return (
-            <button
-              key={page}
-              onClick={() => goToPage(page)}
-              className={`px-3 py-1 rounded-md border ${
-                currentPage === page
-                  ? 'bg-amber-400 border-amber-400 font-semibold text-white'
-                  : 'hover:bg-gray-200'
-              }`}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        <button
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={`px-3 py-1 rounded-md border ${
-            currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-200'
-          }`}
-        >
-          Next
-        </button>
-      </div>
-
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+      />
     </NavigationLayout>
 
   );

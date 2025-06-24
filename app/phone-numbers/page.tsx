@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import NavigationLayout from '@/components/NavigationLayout'
 import { motion, AnimatePresence } from 'framer-motion'
+import Pagination from '@/components/Pagination'
 
 type PhoneEntry = {
   name: string;
@@ -60,7 +61,6 @@ export default function PhoneNumbersPage() {
   }
 
   const ITEMS_PER_PAGE = 10
-
   const [currentPage, setCurrentPage] = useState(1)
   const totalPages = Math.ceil(fakePhoneData.length / ITEMS_PER_PAGE)
 
@@ -68,6 +68,7 @@ export default function PhoneNumbersPage() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   )
+
 
 
   return (
@@ -140,8 +141,8 @@ export default function PhoneNumbersPage() {
               ))}
             </tbody>
           </table>
-
-          {/* Slide-in Side Panel */}
+        </div>
+        {/* Slide-in Side Panel */}
           <AnimatePresence>
             {showModal && selectedPhone && (
               <motion.div
@@ -198,29 +199,12 @@ export default function PhoneNumbersPage() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
       </div>
-      <div className="flex justify-center items-center gap-2 mt-4 px-2">
-        <button
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className={`px-3 py-1 rounded-md border text-sm ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`}
-        >
-          ← Prev
-        </button>
-
-        <span className="text-sm text-gray-700">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className={`px-3 py-1 rounded-md border text-sm ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`}
-        >
-          Next →
-        </button>
-      </div>
+      <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
     </NavigationLayout>
   )
 }
