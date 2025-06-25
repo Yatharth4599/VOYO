@@ -521,39 +521,51 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <div className="relative w-80 h-80">
-                {/* Central VOYO hub */}
-                <motion.div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 modern-card w-20 h-20 flex items-center justify-center"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <span className="text-highlight font-semibold text-lg">voyo</span>
-                </motion.div>
+            <div className="relative w-80 h-80 mx-auto">
+              {/* Central VOYO hub */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 modern-card w-20 h-20 flex items-center justify-center z-20"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className="text-highlight font-semibold text-lg">voyo</span>
+              </motion.div>
 
-                {/* Orbiting integration icons */}
+              {/* 🔁 Rotating Container for Orbiting Icons */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
+              >
                 {[
-                  { src: "/whatsapp.png", angle: 0, delay: 0 },
-                  { src: "/zendesk.png", angle: 72, delay: 0.2 },
-                  { src: "/salesforce.png", angle: 144, delay: 0.4 },
-                  { src: "/slack.png", angle: 216, delay: 0.6 },
-                  { src: "/freshdesk.png", angle: 288, delay: 0.8 },
-                ].map(({ src, angle, delay }, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute modern-card w-16 h-16 flex items-center justify-center"
-                    style={{
-                      top: '50%',
-                      left: '50%',
-                      transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-120px) rotate(-${angle}deg)`,
-                    }}
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, delay }}
-                  >
-                    <img src={src} className="w-8 h-8" alt="Integration" />
-                  </motion.div>
-                ))}
-              </div>
+                  { src: "/whatsapp.png", angle: 0 },
+                  { src: "/zendesk.png", angle: 72 },
+                  { src: "/salesforce.png", angle: 144 },
+                  { src: "/slack.png", angle: 216 },
+                  { src: "/freshdesk.png", angle: 288 },
+                ].map(({ src, angle }, i) => {
+                  const radius = 120;
+                  const rad = (angle * Math.PI) / 180;
+                  const x = radius * Math.cos(rad);
+                  const y = radius * Math.sin(rad);
+
+                  return (
+                    <div
+                      key={i}
+                      className="absolute w-16 h-16 modern-card flex items-center justify-center"
+                      style={{
+                        top: `calc(50% + ${y}px)`,
+                        left: `calc(50% + ${x}px)`,
+                        transform: 'translate(-50%, -50%)',
+                      }}
+                    >
+                      <img src={src} className="w-18 h-15" alt="Integration" />
+                    </div>
+                  );
+                })}
+              </motion.div>
+            </div>
+
             </motion.div>
           </div>
         </div>

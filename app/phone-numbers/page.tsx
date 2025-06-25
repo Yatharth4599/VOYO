@@ -77,7 +77,7 @@ export default function PhoneNumbersPage() {
       currentPage="/phone-numbers"
       showCreateButton={true}
       onCreateClick={() => setDropdownOpen(!dropdownOpen)}
-      createButtonText="Import Number"
+      createButtonText="Add Number" 
     >
       <div className="flex-1 relative">
         <div className="mb-6">
@@ -180,7 +180,7 @@ export default function PhoneNumbersPage() {
                       </p>
                     </div>
                     <button className="bg-black text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-gray-800 mr-4 cursor-pointer">
-                      📞 Outbound call
+                      📞 Call Now
                     </button>
                   </div>
 

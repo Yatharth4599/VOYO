@@ -56,6 +56,7 @@ type Call = {
   convoId?: string
   call_successful: 'success' | 'failed' | 'unknown'
   transcription?: TranscriptionLine[]
+  audioUrl?: string;
 }
 
 function parseCallDate(dateStr: string): Date | null {
@@ -90,65 +91,98 @@ export default function CallHistoryPage() {
   const callsPerPage = 10
 
   useEffect(() => {
-    const fetchCalls = async () => {
-      try {
-        if (typeof window === 'undefined') return;
+  const fetchCalls = async () => {
+    try {
+      if (typeof window === 'undefined') return;
 
-        const token = localStorage.getItem('jwtToken')
-        if (!token) {
-          console.warn('No JWT token found')
-          setLoading(false)
-          return
-        }
-
-        const res = await fetch(createApiUrl('/user/conversations/'), {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`)
-        }
-
-        const data = await res.json()
-        const formattedCalls: Call[] = data.conversations.map((conv: ConversationData) => {
-          const dateObj = new Date(conv.start_time_unix_secs * 1000)
-          const dateStr = dateObj.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          })
-
-          const minutes = Math.floor(conv.call_duration_secs / 60)
-          const seconds = conv.call_duration_secs % 60
-          const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`
-
-          let statusText = conv.status || (conv.call_successful ? 'Successful' : 'Failed')
-          statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1).toLowerCase()
-
-          return {
-            date: dateStr,
-            agent: conv.agent_name,
-            duration: durationStr,
-            messages: conv.message_count,
-            status: statusText,
-            call_successful: conv.call_successful,
-            convoId: conv.conversation_id,
-          }
-        })
-
-        setCalls(formattedCalls)
-        setLoading(false)
-      } catch (err) {
-        console.error('Error fetching conversations:', err)
-        setLoading(false)
+      const token = localStorage.getItem('jwtToken');
+      if (!token) {
+        console.warn('No JWT token found');
+        setLoading(false);
+        return;
       }
-    }
 
-    fetchCalls()
-  }, [])
+      const res = await fetch(createApiUrl('/user/conversations/'), {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      // Format the calls as usual
+      const formattedCalls: Call[] = data.conversations.map((conv: ConversationData) => {
+        const dateObj = new Date(conv.start_time_unix_secs * 1000);
+        const dateStr = dateObj.toLocaleString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        });
+
+        const minutes = Math.floor(conv.call_duration_secs / 60);
+        const seconds = conv.call_duration_secs % 60;
+        const durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        let statusText = conv.status || (conv.call_successful ? 'Successful' : 'Failed');
+        statusText = statusText.charAt(0).toUpperCase() + statusText.slice(1).toLowerCase();
+
+        return {
+          date: dateStr,
+          agent: conv.agent_name,
+          duration: durationStr,
+          messages: conv.message_count,
+          status: statusText,
+          call_successful: conv.call_successful,
+          convoId: conv.conversation_id,
+        };
+      });
+
+      setCalls(formattedCalls);
+      setLoading(false);
+
+      // Now prefetch audio and update calls with audio URLs
+      prefetchAudio(formattedCalls);
+
+    } catch (err) {
+      console.error('Error fetching conversations:', err);
+      setLoading(false);
+    }
+  };
+
+  // Prefetch audio function: gets called after initial calls set
+  const prefetchAudio = async (calls: Call[]) => {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) return;
+
+    const updatedCalls = await Promise.all(
+      calls.map(async (call) => {
+        try {
+          const audioRes = await fetch(createApiUrl(`/user/conversations/${call.convoId}/audio`), {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (audioRes.ok) {
+            const blob = await audioRes.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            return { ...call, audioUrl: objectUrl };
+          }
+        } catch (e) {
+          console.warn(`No audio for convo ${call.convoId}`);
+        }
+        return call;
+      })
+    );
+
+    setCalls(updatedCalls);
+  };
+
+  fetchCalls();
+}, []);
+
 
   const closeAllDropdowns = () => {
     setShowDateRange(false)
@@ -320,66 +354,124 @@ export default function CallHistoryPage() {
                 <tr>
                   <th className="p-4 text-left text-sm font-semibold text-gray-900">Date</th>
                   <th className="p-4 text-left text-sm font-semibold text-gray-900">Agent</th>
+                  <th className="p-4 text-center text-sm font-semibold text-gray-900">Audio</th>
                   <th className="p-4 text-left text-sm font-semibold text-gray-900">Duration</th>
                   <th className="p-4 text-left text-sm font-semibold text-gray-900">Messages</th>
-                  <th className="p-4 text-center text-sm font-semibold text-gray-900">Evaluation result</th>
+                  <th className="p-4 text-center text-sm font-semibold text-gray-900">Evaluation</th>
+                  <th className="p-4 text-center text-sm font-semibold text-gray-900">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.slice((currentPage - 1) * callsPerPage, currentPage * callsPerPage).map((call, i) => (
-
-                  <tr
-                    key={i}
-                    className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
-                    onClick={async () => {
-                      setSelected(call)
-                      setActiveTab('overview')
-                      setDetailsLoading(true)
-                      setCallDetails(null) // clear previous details
-
-                      try {
-                        const token = localStorage.getItem('jwtToken')
-
-                        // Fetch call details
-                        const res = await fetch(createApiUrl(`/user/conversations/${call.convoId}`), {
-                          headers: { Authorization: `Bearer ${token}` },
-                        })
-                        const data = await res.json()
-                        setCallDetails(data)
-
-                        // Fetch audio
-                        const audioRes = await fetch(createApiUrl(`/user/conversations/${call.convoId}/audio`), {
-                          headers: { Authorization: `Bearer ${token}` },
-                        })
-
-                        if (audioRes.ok) {
-                          const audioBlob = await audioRes.blob()
-                          const audioObjectUrl = URL.createObjectURL(audioBlob)
-                          setAudioUrl(audioObjectUrl)
-                        } else {
-                          setAudioUrl(null)
-                          console.warn('Audio not available:', audioRes.status)
-                        }
-                      } catch (err) {
-                        console.error('Error fetching call details or audio:', err)
+                {filteredData
+                  .slice((currentPage - 1) * callsPerPage, currentPage * callsPerPage)
+                  .map((call, i) => (
+                    <tr
+                      key={i}
+                      className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                      onClick={async () => {
+                        setSelected(call)
+                        setActiveTab('overview')
+                        setDetailsLoading(true)
                         setCallDetails(null)
-                        setAudioUrl(null)
-                      } finally {
-                        setDetailsLoading(false)
-                      }
-                    }}
-                  >
-                    <td className="p-4 text-gray-800">{call.date}</td>
-                    <td className="p-4 text-gray-800">{call.agent}</td>
-                    <td className="p-4 text-gray-800">{call.duration}</td>
-                    <td className="p-4 text-gray-800">{call.messages}</td>
-                    <td className="p-4 text-center">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(call.call_successful)}`}>
-                        {call.call_successful.charAt(0).toUpperCase() + call.call_successful.slice(1)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+
+                        try {
+                          const token = localStorage.getItem('jwtToken')
+                          const res = await fetch(createApiUrl(`/user/conversations/${call.convoId}`), {
+                            headers: { Authorization: `Bearer ${token}` },
+                          })
+                          const data = await res.json()
+                          setCallDetails(data)
+
+                          const audioRes = await fetch(createApiUrl(`/user/conversations/${call.convoId}/audio`), {
+                            headers: { Authorization: `Bearer ${token}` },
+                          })
+
+                          if (audioRes.ok) {
+                            const audioBlob = await audioRes.blob()
+                            const audioObjectUrl = URL.createObjectURL(audioBlob)
+                            setAudioUrl(audioObjectUrl)
+
+                            setCalls(prev =>
+                              prev.map(c => c.convoId === call.convoId ? { ...c, audioUrl: audioObjectUrl } : c)
+                            )
+                          } else {
+                            setAudioUrl(null)
+                            console.warn('Audio not available:', audioRes.status)
+                          }
+                        } catch (err) {
+                          console.error('Error fetching call details or audio:', err)
+                          setCallDetails(null)
+                          setAudioUrl(null)
+                        } finally {
+                          setDetailsLoading(false)
+                        }
+                      }}
+                    >
+                      <td className="p-4 text-gray-800">{call.date}</td>
+                      <td className="p-4 text-gray-800">{call.agent}</td>
+                      {/* Audio Player */}
+                      <td className="p-4 text-center">
+                        {call.convoId ? (
+                          <audio
+                            controls
+                            preload="none"
+                            className="w-32 mx-auto"
+                            onClick={(e) => e.stopPropagation()}
+                            src={call.audioUrl}
+                          >
+                            Your browser does not support the audio element.
+                          </audio>
+                        ) : (
+                          <span className="text-sm text-gray-400">—</span>
+                        )}
+                      </td>
+
+                      <td className="p-4 text-gray-800">{call.duration}</td>
+                      <td className="p-4 text-gray-800">{call.messages}</td>
+
+                      {/* Evaluation Badge */}
+                      <td className="p-4 text-center">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadgeClasses(call.call_successful)}`}>
+                          {call.call_successful.charAt(0).toUpperCase() + call.call_successful.slice(1)}
+                        </span>
+                      </td>
+
+                      {/* Delete Button */}
+                      <td
+                        className="p-4 text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation()
+                            const confirmDelete = window.confirm('Are you sure you want to delete this call?')
+                            if (!confirmDelete) return
+
+                            try {
+                              const token = localStorage.getItem('jwtToken')
+                              const res = await fetch(createApiUrl(`/user/conversations/${call.convoId}`), {
+                                method: 'DELETE',
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              })
+
+                              if (!res.ok) throw new Error('Delete failed')
+
+                              setCalls(prev => prev.filter(c => c.convoId !== call.convoId))
+                            } catch (err) {
+                              console.error('Delete failed:', err)
+                              alert('Could not delete the call.')
+                            }
+                          }}
+                          className="text-red-600 hover:text-red-800 text-sm transition-colors"
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

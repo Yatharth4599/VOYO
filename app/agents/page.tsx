@@ -35,14 +35,21 @@ export default function Agents() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const agentsPerPage = 10;
+  const [searchQuery, setSearchQuery] = useState('');
+
+const filteredAgents = agents.filter(agent =>
+  agent.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+  
+
 
   const totalPages = Math.ceil(agents.length / agentsPerPage);
 
-  const paginatedAgents = agents.slice(
-    (currentPage - 1) * agentsPerPage,
-    currentPage * agentsPerPage
-  );
-
+  const paginatedAgents = filteredAgents.slice(
+  (currentPage - 1) * agentsPerPage,
+  currentPage * agentsPerPage
+);
   const goToPage = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
@@ -399,6 +406,15 @@ window.AIWidget = (function() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
+        <div className="flex justify-center">
+          <input
+            type="text"
+            placeholder="Search agents..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition"
+          />
+        </div>
           {paginatedAgents.map((agent) => (
             <motion.div
               key={agent.agent_id}
