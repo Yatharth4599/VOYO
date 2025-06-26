@@ -260,9 +260,15 @@ export default function PricingPopup({ onClose }: { onClose: () => void }) {
                     <span className="text-[20px] text-gray-400"> {plan.per}</span>
                   </p>
                   <br />
-                  <button className="rounded-3xl p-1 w-full font-bold bg-zinc-100 hover:bg-zinc-200 cursor-pointer">
-                    GET STARTED
-                  </button>
+                  <a
+                    href="https://buy.stripe.com/test_4gM28q79xeOwbiubqd4Rq01"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <button className="rounded-3xl p-1 w-full font-bold bg-zinc-100 hover:bg-zinc-200 cursor-pointer">
+                      GET STARTED
+                    </button>
+                  </a>
                   <br />
                   <ul className="mt-5">
                     {plan.note && <p>{plan.note}</p>}
