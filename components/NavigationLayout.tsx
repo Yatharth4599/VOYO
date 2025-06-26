@@ -12,15 +12,19 @@ interface NavigationLayoutProps {
   showCreateButton?: boolean;
   onCreateClick?: () => void;
   createButtonText?: string;
+  onSecondaryClick?: () => void; // 👈 new prop
+  secondaryButtonText?: string;  // 👈 new prop
 }
 
 export default function NavigationLayout({
-  children,
+ children,
   title,
   currentPage,
   showCreateButton = false,
   onCreateClick,
-  createButtonText = 'Create New'
+  createButtonText = 'Create New',
+  onSecondaryClick,
+  secondaryButtonText = 'Secondary'
 }: NavigationLayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -49,6 +53,15 @@ export default function NavigationLayout({
               className="ml-auto bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-lg font-semibold cursor-pointer shadow-md transition-all"
             >
               {createButtonText}
+            </button>
+          )}
+
+          {onSecondaryClick && (
+            <button
+              onClick={onSecondaryClick}
+              className="bg-white border border-amber-600 text-amber-700 hover:bg-amber-100 px-4 py-2 rounded-lg text-lg font-semibold shadow-sm transition-all cursor-pointer"
+            >
+              {secondaryButtonText}
             </button>
           )}
         </div>

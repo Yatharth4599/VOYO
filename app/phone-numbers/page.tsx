@@ -38,6 +38,14 @@ export default function PhoneNumbersPage() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [selectedPhone, setSelectedPhone] = useState<PhoneEntry | null>(null)
   const [showModal, setShowModal] = useState(false)
+  const [showDialerModal, setShowDialerModal] = useState(false)
+  const [dialNumber, setDialNumber] = useState('')
+  const [selectedCountryCode, setSelectedCountryCode] = useState('+971') // Default to UAE
+
+  const fullNumber = `${selectedCountryCode}${dialNumber}`
+
+  
+
 
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -70,6 +78,13 @@ export default function PhoneNumbersPage() {
   )
 
 
+  const agents = ['PineBot', 'SparkAgent', 'NovaAgent']
+  const phoneNumbers = ['+1 404 123 9876', '+1 917 555 3045', '+1 213 888 7777']
+
+  const [selectedAgent, setSelectedAgent] = useState('')
+  const [selectedPhoneNumber, setSelectedPhoneNumber] = useState('')
+
+
 
   return (
     <NavigationLayout
@@ -78,6 +93,8 @@ export default function PhoneNumbersPage() {
       showCreateButton={true}
       onCreateClick={() => setDropdownOpen(!dropdownOpen)}
       createButtonText="Add Number" 
+      secondaryButtonText="Dial Number"
+      onSecondaryClick={() => setShowDialerModal(true)}
     >
       <div className="flex-1 relative">
         <div className="mb-6">
@@ -205,6 +222,122 @@ export default function PhoneNumbersPage() {
           totalPages={totalPages}
           onPageChange={(page) => setCurrentPage(page)}
         />
+
+        <AnimatePresence>
+          {showDialerModal && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/30"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDialerModal(false)}
+            >
+              <motion.div
+                className="bg-white rounded-2xl p-6 w-[340px] sm:w-[390px] shadow-2xl relative"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="absolute top-3 right-4 text-gray-400 hover:text-gray-700 cursor-pointer"
+                  onClick={() => setShowDialerModal(false)}
+                >
+                  ✖
+                </button>
+
+                <h2 className="text-xl font-semibold mb-4">Dial a Number</h2>
+
+                <div className="flex items-center gap-2 mb-4">
+                  <select
+                    value={selectedCountryCode}
+                    onChange={(e) => setSelectedCountryCode(e.target.value)}
+                    className="border border-gray-300 rounded-md px-2 py-3 text-sm"
+                  >
+                    <option value="+91">🇮🇳 +91</option>
+                    <option value="+971">🇦🇪 +971</option>
+                  </select>
+
+                  <input
+                    type="text"
+                    value={dialNumber}
+                    readOnly
+                    className="flex-1 text-center border border-gray-300 rounded-md py-2 text-lg tracking-wide"
+                  />
+
+                  <button
+                    className="text-sm text-gray-600 hover:text-black"
+                    onClick={() => setDialNumber((prev) => prev.slice(0, -1))}
+                  >
+                    ⌫
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  
+                  {['1','2','3','4','5','6','7','8','9','*','0','#'].map((digit) => (
+                    <button
+                      key={digit}
+                      onClick={() => setDialNumber(prev => prev + digit)}
+                      className="bg-gray-100 hover:bg-gray-200 text-xl py-3 rounded-md cursor-pointer"
+                    >
+                      {digit}
+                    </button>
+                  ))}
+
+                  
+                </div>
+
+                <button
+                  onClick={() => {
+                    alert(`Calling ${selectedCountryCode}${dialNumber}...`)
+                    setDialNumber('')
+                    setShowDialerModal(false)
+                  }}
+                  className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 cursor-pointer"
+                >
+                  📞 Call Now
+                </button>
+
+                <div className="mt-6 space-y-4">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Select Agent</label>
+                    <select
+                      value={selectedAgent}
+                      onChange={(e) => setSelectedAgent(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    >
+                      <option value="" disabled>Select an agent</option>
+                      {agents.map((agent) => (
+                        <option key={agent} value={agent}>
+                          {agent}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Select Phone Number</label>
+                    <select
+                      value={selectedPhoneNumber}
+                      onChange={(e) => setSelectedPhoneNumber(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    >
+                      <option value="" disabled>Select a phone number</option>
+                      {phoneNumbers.map((number) => (
+                        <option key={number} value={number}>
+                          {number}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
     </NavigationLayout>
   )
 }
