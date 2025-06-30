@@ -66,7 +66,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <img src="/logo-voyo-removebg-preview.png" className="w-20 h-20" alt="Voyo Logo" />
+            <img src="/logo-voyo-removebg-preview.png" className="w-50 h-50" alt="Voyo Logo" />
             {/* <span className="text-xl font-semibold text-gray-900">VOYO</span> */}
           </motion.div>
 
@@ -701,8 +701,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <img src="/logo-voyo-removebg-preview.png" className="w-8 h-8" alt="Voyo Logo" />
-              <span className="text-lg font-semibold text-gray-900">VOYO</span>
+              <img src="/logo-voyo-removebg-preview.png" className="w-30 h-30" alt="Voyo Logo" />
+              {/* <span className="text-lg font-semibold text-gray-900">VOYO</span> */}
             </div>
 
             <div className="flex space-x-8">
