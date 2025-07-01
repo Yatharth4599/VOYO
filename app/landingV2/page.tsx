@@ -341,13 +341,19 @@
 import Navbar from "@/components/landingV2/Navbar"
 import Hero from "@/components/landingV2/Hero"
 import Features from "@/components/landingV2/Features"
+import CaseStudies from "@/components/landingV2/CaseStudies"
+import Performance from "@/components/landingV2/Performance"
+import Working from "@/components/landingV2/Working"
 
 export default function home() {
   return (
     <div>
       <Navbar />
       <Hero />
+      <Working />
       <Features />
+      <CaseStudies />
+      <Performance />
     </div>
   )
 }

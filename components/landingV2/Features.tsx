@@ -15,7 +15,7 @@ export default function Features() {
 
   const Bottomlogos = [
     { src: "/airtable.png", alt: "Airtable Logo" },
-    { src: "/google-cloud.png", alt: "Cloud Logo" },
+    { src: "/google-cloud.jpg", alt: "Cloud Logo" },
     { src: "/huggingface.jpg", alt: "HuggingFace Logo" },
     { src: "/MC.png", alt: "MC Logo" },
     { src: "/Notion.png", alt: "Notion Logo" },
@@ -124,23 +124,19 @@ export default function Features() {
         <div className="bg-[#16162c] rounded-lg p-6 row-span-13 col-span-2">
           <h2 className="font-bold mb-2">Build multi-step agents calling custom tools</h2>
           <p className="text-sm mb-4">Create agentic systems on a single screen. Integrate any LLM into your workflows as fast as you can drag-n-drop.</p>
-          <button className="px-4 py-2 bg-purple-700 rounded font-bold hover:bg-purple-800 transition">
+          <button className="bg-gradient-to-r from-purple-500 to-violet-900 px-4 py-2 rounded font-bold hover:bg-purple-800 transition">
             Explore AI
           </button>
         </div>
 
 
-
-
         <div className="bg-[#16162c] rounded-lg p-6 row-span-26 ">
           <h2 className="font-bold mb-2">Chat with your own data</h2>
-          <p className="text-sm">Use Slack, Teams, SMS, voice, or our embedded chat interface to get accurate answers from your data, create tasks, and complete workflows.</p>
-
-
-          <div className="mt-10    text-sm border border-gray-100 rounded-2xl w-50 p-2">Who held meetings with SpaceX last week?</div>
+          <p className="text-sm ">Use Slack, Teams, SMS, voice, or our embedded chat interface to get accurate answers from your data, create tasks, and complete workflows.</p>
+          <div className="border-green-500 text-green-500 mt-10 text-sm border border-gray-100 rounded-2xl w-50 p-2">Who held meetings with SpaceX last week?</div>
           <div className="mt-5 text-sm border border-gray-100 rounded-2xl w-50 p-2 float-right">On Wednesday, Joe updated the status to "won" in Salesforce after a Zoom call.</div>
           <div className="mt-5 text-sm border border-gray-100 rounded-2xl w-50 p-2 float-right">On Thursday, Sue provided on-site setup and closed the ServiceNow ticket.</div>
-          <div className="mt-5 text-sm border border-gray-100 rounded-2xl w-50 p-2 float-left">Create a task in Asana...</div>
+          <div className="border-green-500 text-green-500 mt-5 text-sm border border-gray-100 rounded-2xl w-50 p-2 float-left">Create a task in Asana...</div>
         </div>
 
 
@@ -154,28 +150,6 @@ export default function Features() {
             <li>Access the entire source code on Github</li>
             <li>Hosted version also available</li>
           </ul>
-        </div>
-      </section>
-
-
-      {/* Case Studies */}
-      <section className="py-12 px-6 max-w-6xl mx-auto">
-        <h2 className="text-center font-bold text-2xl mb-6">Case Studies</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-[#16162c] rounded-lg p-6">
-            <h3 className="font-bold mb-1">How Delivery Hero saved 200 hours each month</h3>
-            <p className="text-sm mb-4">“We have seen drastic efficiency improvements...”</p>
-            <button className="px-4 py-2 bg-blue-700 rounded font-bold hover:bg-blue-800 transition">
-              Read Case Study
-            </button>
-          </div>
-          <div className="bg-[#16162c] rounded-lg p-6">
-            <h3 className="font-bold mb-1">How StepStone finishes 2 weeks’ work in 2 hours</h3>
-            <p className="text-sm mb-4">“We sped up our integration of marketplace data sources...”</p>
-            <button className="px-4 py-2 bg-blue-700 rounded font-bold hover:bg-blue-800 transition">
-              Read Case Study
-            </button>
-          </div>
         </div>
       </section>
       
