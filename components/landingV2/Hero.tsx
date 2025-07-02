@@ -19,26 +19,54 @@ export default function Hero() {
             <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
               Get started for free
             </button>
-            <button className="border border-gray-400 text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-800 transition">
+            <button className="border border-gray-400 p-3 text-gray-300 p-3 font-semibold px-6 py-3 rounded hover:bg-gray-800 p-3 transition">
               Talk to sales
             </button>
           </div>
         </div>
 
         {/* Right: Lightning Bolt */}
-        <div className="flex-1 mt-12 lg:mt-0 lg:ml-8 flex justify-center">
-          <Image
-            src="/assets/lightning.png"  // Replace with your own lightning image
-            alt="Lightning"
-            width={300}
-            height={300}
-            className="object-contain"
-          />
-        </div>
+          <div className="mt-12 lg:mt-0 lg:ml-8 grid grid-cols-3 gap-4 grid-rows-3">
+            {/* <Image
+              src="/assets/lightning.png"  // Replace with your own lightning image
+              alt="Lightning"
+              width={300}
+              height={300}
+              className="object-contain"
+            /> */}
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            <div className="border border-gray-700 p-3">
+              <div className="bg-white h-[100px] w-[100px]"></div>
+            </div>
+            
+          </div>
       </div>
 
       {/* Bottom: Tabs + Diagram */}
-      <div className="relative z-10 max-w-5xl mx-auto mt-16 bg-[#1B142F] border border-gray-600 rounded-xl p-6">
+      <div className="relative z-10 max-w-5xl mx-auto mt-16 bg-[#1B142F] border border-gray-600 p-3 rounded-xl p-6">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center mb-6">
           <div className="bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-[#3C2D6D] transition cursor-pointer">
             IT Ops can<br /><span className="font-medium text-white">On-board new employees</span>
@@ -57,7 +85,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-700">
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-700 p-3">
           <Image
             src="/assets/workflow-diagram.png"  // Replace with your own diagram
             alt="Workflow Diagram"
@@ -67,9 +95,9 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="text-center text-gray-400 text-lg mt-12">
+      <div className="text-center text-gray-400 p-3 text-lg mt-12">
         The world's most popular workflow automation platform for technical teams including
-        <div className="flex justify-center gap-25 mt-3">
+        <div className="flex flex-wrap justify-center gap-25 mt-3">
           <div className="text-3xl">Pearson</div>
           <div className="text-3xl">Unlabel</div>
           <div className="text-3xl">Cisco</div>

@@ -344,6 +344,8 @@ import Features from "@/components/landingV2/Features"
 import CaseStudies from "@/components/landingV2/CaseStudies"
 import Performance from "@/components/landingV2/Performance"
 import Working from "@/components/landingV2/Working"
+// import Reviews from "@/components/landingV2/Reviews"
+import Footer from "@/components/landingV2/Footer"
 
 export default function home() {
   return (
@@ -354,6 +356,7 @@ export default function home() {
       <Features />
       <CaseStudies />
       <Performance />
+      <Footer />
     </div>
   )
 }

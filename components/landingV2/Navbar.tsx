@@ -29,7 +29,7 @@ export default function Navbar() {
 
           {/* Right: Buttons grouped together with a little space */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="bg-orange text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-800 transition">
+            <button className="text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-800 transition">
               Sign In
             </button>
             <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">

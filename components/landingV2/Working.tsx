@@ -52,7 +52,7 @@ export default function Working() {
 
           <div className="flex gap-6 flex-wrap">
             {/* Agent Card 1  */}
-            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-[#16162c] rounded-lg p-6">
+            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-violet-950 rounded-lg p-6">
               <div className="bg-white h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
                 {/* <img src="agent1.png" alt="Agent 1" className="h-full w-full object-cover" /> */}
               </div>
@@ -69,7 +69,7 @@ export default function Working() {
             </div>
 
             {/* Agent Card 2  */}
-            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-[#16162c] rounded-lg p-6">
+            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-violet-950 rounded-lg p-6">
               <div className="bg-white h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
                 {/* <img src="agent2.png" alt="Agent 2" className="h-full w-full object-cover" /> */}
               </div>
@@ -86,7 +86,7 @@ export default function Working() {
             </div>
 
             {/* Agent Card 3  */}
-            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-[#16162c] rounded-lg p-6">
+            <div className="border border-gray-700 p-5 w-fit flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-violet-950 rounded-lg p-6">
               <div className="bg-white h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
                 {/* <img src="agent3.png" alt="Agent 3" className="h-full w-full object-cover" /> */}
               </div>

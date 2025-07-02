@@ -6,7 +6,13 @@ export default function Performance() {
   return (
      <section className="relative bg-gradient-to-b from-[#120B27] to-black text-white py-20 overflow-hidden">
       <div>
-         <div className="w-[300px] mx-auto flex justify-center border border-gray-800 rounded-2xl">Enterprise-ready</div>
+         <div className="flex justify-center">
+          <div className="mt-7 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-[1px] rounded-2xl w-fit shadow-lg">
+            <div className="bg-[#16162c] w-[200px] flex justify-center border border-gray-800 rounded-2xl text-white py-2">
+              Enterprise-ready
+            </div>
+          </div>
+        </div>
 
           <div className="flex flex-col md:flex-row w-full px-10 justify-evenly items-start">
 

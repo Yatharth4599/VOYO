@@ -5,14 +5,21 @@ import Image from 'next/image'
 export default function CaseStudies() {
   return (
       <section className="relative bg-gradient-to-b from-[#120B27] to-black text-white py-20 overflow-hidden">
-        <div className="w-[300px] mx-auto flex justify-center border border-gray-800 rounded-2xl">See The Results</div>
+        <div className="flex justify-center">
+          <div className="mt-7 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-[1px] rounded-2xl w-fit shadow-lg">
+            <div className="bg-[#16162c] w-[200px] flex justify-center border border-gray-800 rounded-2xl text-white py-2">
+              See The Results
+            </div>
+          </div>
+        </div>
+
         <h2 className="relative w-fit mx-auto px-10 bg-gradient-to-r from-gray-200 to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 text-center font-bold mb-6">
           Case Studies
         </h2>
 
         <div className="w-full flex justify-center">
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl w-full">
-            <div className="bg-[#16162c] rounded-lg p-6">
+            <div className="bg-gradient-to-b from-[#16162c] to-pink-950 rounded-lg p-6">
               <h3 className="mb-1 text-[20px] text-purple-200">
                 How Delivery Hero saved <span className="font-bold text-white"> 200 hours each <br />  month</span> with a single ITOps workflow
               </h3>
@@ -40,7 +47,7 @@ export default function CaseStudies() {
               </button>
             </div>
 
-            <div className="bg-[#16162c] rounded-lg p-6">
+            <div className="bg-gradient-to-b from-[#16162c] to-blue-950 rounded-lg p-6">
               <h3 className="mb-1 text-[20px] text-purple-200">
                 How StepStone finishes <span className="font-bold text-white">2 weeks’ work in <br /> only 2 hours</span> with n8n workflows
               </h3>
