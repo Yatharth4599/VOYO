@@ -1,83 +1,90 @@
 'use client'
 
 import Image from 'next/image'
+import { useState, useEffect } from 'react';
 
 export default function CaseStudies() {
+  const [mounted, setMounted] = useState(false);
+useEffect(() => setMounted(true), []);
+
+if (!mounted) return null; // prevents render mismatch
+
   return (
-      <section className="relative bg-gradient-to-b from-[#120B27] to-black text-white py-20 overflow-hidden">
-        <div className="flex justify-center">
-          <div className="mt-7 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-[1px] rounded-2xl w-fit shadow-lg">
-            <div className="bg-[#16162c] w-[200px] flex justify-center border border-gray-800 rounded-2xl text-white py-2">
-              See The Results
-            </div>
+    <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
+      <div className="flex justify-center">
+        <div className="mt-7 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 dark:from-purple-500 dark:via-pink-500 dark:to-red-500 p-[2px] rounded-2xl w-fit shadow-lg">
+          <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border border-gray-300 dark:border-gray-800 rounded-2xl text-black dark:text-white py-2">
+            See The Results
           </div>
         </div>
+      </div>
 
-        <h2 className="relative w-fit mx-auto px-10 bg-gradient-to-r from-gray-200 to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 text-center font-bold mb-6">
-          Case Studies
-        </h2>
+      <h2 className="relative w-fit mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 text-center font-bold mb-6">
+        Case Studies
+      </h2>
 
-        <div className="w-full flex justify-center">
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl w-full">
-            <div className="bg-gradient-to-b from-[#16162c] to-pink-950 rounded-lg p-6">
-              <h3 className="mb-1 text-[20px] text-purple-200">
-                How Delivery Hero saved <span className="font-bold text-white"> 200 hours each <br />  month</span> with a single ITOps workflow
-              </h3>
+      <div className="w-full flex justify-center">
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl w-full">
+          {/* Card 1 */}
+          <div className="bg-gradient-to-b from-[#ffffff] to-orange-500 dark:from-[#16162c] dark:to-pink-950 rounded-lg p-6 text-black dark:text-white">
+            <h3 className="mb-1 text-[20px] dark:text-purple-200">
+              How Delivery Hero saved <span className="font-bold text-amber-500 dark:text-white">200 hours each <br /> month</span> with a single ITOps workflow
+            </h3>
 
-              <div className="border-b mt-12 border-gray-700"></div>
+            <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
-              <p className="text-lg mb-4 mt-10">
-                "We have seen drastic efficiency improvements since we started using n8n for user management. 
-                It's incredibly powerful, but also simple to use."
-              </p>
-              <div className="flex gap-4 items-center mt-11">
-                <Image
-                  src="/account_circle.svg"
-                  alt="account icon"
-                  width={35}
-                  height={35}
-                />
-                <div>
-                  <p>Name</p>
-                  <p className="text-sm">Position</p>
-                </div>
+            <p className="text-lg mb-4 mt-10">
+              "We have seen drastic efficiency improvements since we started using n8n for user management. 
+              It's incredibly powerful, but also simple to use."
+            </p>
+            <div className="flex gap-4 items-center mt-18">
+              <Image
+                src="/account_circle.svg"
+                alt="account icon"
+                width={35}
+                height={35}
+              />
+              <div>
+                <p>Name</p>
+                <p className="text-sm">Position</p>
               </div>
-              <button className="bg-gradient-to-r from-blue-500 to-violet-900 px-4 py-2 rounded font-bold transition mt-10">
-                Read Case Study
-              </button>
             </div>
+            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white">
+              Read Case Study
+            </button>
+          </div>
 
-            <div className="bg-gradient-to-b from-[#16162c] to-blue-950 rounded-lg p-6">
-              <h3 className="mb-1 text-[20px] text-purple-200">
-                How StepStone finishes <span className="font-bold text-white">2 weeks’ work in <br /> only 2 hours</span> with n8n workflows
-              </h3>
+          {/* Card 2 */}
+          <div className="bg-gradient-to-b from-[#ffffff] to-yellow-300 dark:from-[#16162c] dark:to-blue-950 rounded-lg p-6 text-black dark:text-white">
+            <h3 className="mb-1 text-[20px] dark:text-purple-200">
+              How StepStone finishes <span className="font-bold text-amber-500 dark:text-white">2 weeks’ work in <br /> only 2 hours</span> with n8n workflows
+            </h3>
 
-              <div className="border-b mt-12 border-gray-700"></div>
+            <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
-              <p className="text-lg mb-4 mt-10">
-                “We’ve sped up our integration of marketplace data sources by 25X. 
-                It takes me 2 hours max to connect up APIs and transform the data we need. 
-                You can’t do this that fast in code.”
-              </p>
-              <div className="flex gap-4 items-center">
-                <Image
-                  src="/account_circle.svg"
-                  alt="account icon"
-                  width={35}
-                  height={35}
-                />
-                <div>
-                  <p>Name</p>
-                  <p className="text-sm">Position</p>
-                </div>
+            <p className="text-lg mb-4 mt-10">
+              “We’ve sped up our integration of marketplace data sources by 25X. 
+              It takes me 2 hours max to connect up APIs and transform the data we need. 
+              You can’t do this that fast in code.”
+            </p>
+            <div className="flex gap-4 items-center mt-11">
+              <Image
+                src="/account_circle.svg"
+                alt="account icon"
+                width={35}
+                height={35}
+              />
+              <div>
+                <p>Name</p>
+                <p className="text-sm">Position</p>
               </div>
-              <button className="bg-gradient-to-r from-blue-500 to-violet-900 px-4 py-2 rounded font-bold transition mt-10">
-                Read Case Study
-              </button>
             </div>
+            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white">
+              Read Case Study
+            </button>
           </div>
         </div>
-
-      </section>
+      </div>
+    </section>
   )
 }
