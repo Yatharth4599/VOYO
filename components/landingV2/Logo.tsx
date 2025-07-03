@@ -68,8 +68,8 @@ export default function Logo() {
         <Image
           src="/logo-voyo-removebg-preview.png"
           alt="voyo logo light"
-          width={120}
-          height={120}
+          width={140}
+          height={140}
           className="object-contain"
         />
       )}

@@ -7,8 +7,8 @@ export default function Performance() {
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
       <div>
         <div className="flex justify-center">
-          <div className="mt-7 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 dark:from-purple-500 dark:via-pink-500 dark:to-red-500 p-[1px] rounded-2xl w-fit shadow-lg">
-            <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border border-gray-300 dark:border-gray-800 rounded-2xl text-black dark:text-white py-2">
+          <div className="mt-7 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 dark:from-purple-500 dark:via-pink-500 dark:to-red-500 p-[2px] rounded-2xl w-fit shadow-lg">
+            <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border-none rounded-2xl text-black dark:text-white">
               Enterprise-ready
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function Performance() {
                   <p className="text-sm">Position</p>
                 </div>
               </div>
-              <button className="text-sm mt-4 text-blue-600 dark:text-pink-400 underline hover:text-pink-500 transition">
+              <button className="text-sm mt-4 text-blue-600 dark:text-pink-400 underline hover:text-amber-500 dark:hover:text-pink-500 transition cursor-pointer">
                 See the case
               </button>
             </div>

@@ -186,10 +186,29 @@ import { useState, useEffect } from 'react'
 import Logo from '@/components/landingV2/Logo'
 import { Menu, X } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import SignupForm from '../SignupForm'
+import LoginForm from '../LoginForm'
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  // const openLoginModal = () => setShowLoginModal(true);
+  const closeLoginModal = () => setShowLoginModal(false);
+  const [showAgentModal, setShowAgentModal] = useState(false);
+
+  const openLoginModal = () => {
+  setShowModal(false); // Close signup
+  setShowLoginModal(true); // Open login
+};
+
+  const openSignupModal = () => {
+    setShowLoginModal(false); // Close login
+    setShowModal(true); // Open signup
+  };
 
   useEffect(() => {
     setMounted(true)
@@ -218,10 +237,10 @@ export default function Navbar() {
           {/* Right: Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <button className="text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+            <button onClick={openLoginModal} className="text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-800 transition cursor-pointer">
               Sign In
             </button>
-            <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
+            <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
               Get Started
             </button>
           </div>
@@ -250,6 +269,42 @@ export default function Navbar() {
           </nav>
         </div>
       )}
+
+      {showModal && (
+              <div
+                className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-start pt-12 pb-12 overflow-y-auto z-50"
+              >
+                <div
+                  className="modern-card p-8 max-w-md w-full mx-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* <SignupForm onClose={() => setShowModal(false)} /> */}
+                  <SignupForm 
+                    onClose={() => setShowModal(false)} 
+                    switchToLogin={openLoginModal}
+                  />
+      
+                </div>
+              </div>
+            )}
+      
+            {showLoginModal && (
+              <div
+                className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50"
+              >
+                <div
+                  className="modern-card p-8 max-w-md w-full mx-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* <LoginForm onClose={closeLoginModal} /> */}
+                  <LoginForm 
+                    onClose={closeLoginModal} 
+                    switchToSignup={openSignupModal}
+                  />
+      
+                </div>
+              </div>
+            )}
     </header>
   )
 }

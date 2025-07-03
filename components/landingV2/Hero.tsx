@@ -2,12 +2,35 @@
 
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
+import SignupForm from '../SignupForm';
+import LoginForm from '../LoginForm';
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
-useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), []);
+
+  const [showModal, setShowModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  // const openLoginModal = () => setShowLoginModal(true);
+  const closeLoginModal = () => setShowLoginModal(false);
+  const [showAgentModal, setShowAgentModal] = useState(false);
+
+  const openLoginModal = () => {
+  setShowModal(false); // Close signup
+  setShowLoginModal(true); // Open login
+};
+
+  const openSignupModal = () => {
+    setShowLoginModal(false); // Close login
+    setShowModal(true); // Open signup
+  };
+
 
 if (!mounted) return null; // prevents render mismatch
+
+
 
   return (
     <section className="bg-[#FFFBF3] relative dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white pt-30 pb-32 overflow-hidden">
@@ -24,10 +47,10 @@ if (!mounted) return null; // prevents render mismatch
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
+            <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
               Get started for free
             </button>
-            <button className="border border-gray-400 dark:border-gray-600 text-black dark:text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+            <button className="border border-gray-400 dark:border-gray-600 text-black dark:text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">
               Talk to sales
             </button>
           </div>
@@ -94,6 +117,36 @@ if (!mounted) return null; // prevents render mismatch
           <span className="font-bold">200k+ community members.</span> This wouldn't be possible without you.
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-start pt-12 pb-12 overflow-y-auto z-50">
+          <div
+            className="modern-card p-8 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* <SignupForm onClose={() => setShowModal(false)} /> */}
+            <SignupForm 
+              onClose={() => setShowModal(false)} 
+              switchToLogin={openLoginModal}
+            />
+          </div>
+        </div>
+      )}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-white bg-opacity-60 flex justify-center items-center z-50">
+          <div
+            className="modern-card p-8 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* <LoginForm onClose={closeLoginModal} /> */}
+            <LoginForm 
+              onClose={closeLoginModal} 
+              switchToSignup={openSignupModal}
+            />
+            
+            </div>
+        </div>
+      )}
     </section>
   )
 }

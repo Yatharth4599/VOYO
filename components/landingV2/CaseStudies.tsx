@@ -13,7 +13,7 @@ if (!mounted) return null; // prevents render mismatch
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
       <div className="flex justify-center">
         <div className="mt-7 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 dark:from-purple-500 dark:via-pink-500 dark:to-red-500 p-[2px] rounded-2xl w-fit shadow-lg">
-          <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border border-gray-300 dark:border-gray-800 rounded-2xl text-black dark:text-white py-2">
+          <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border-none rounded-2xl text-black dark:text-white">
             See The Results
           </div>
         </div>
@@ -49,7 +49,7 @@ if (!mounted) return null; // prevents render mismatch
                 <p className="text-sm">Position</p>
               </div>
             </div>
-            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white">
+            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white hover:opacity-90 cursor-pointer">
               Read Case Study
             </button>
           </div>
@@ -79,7 +79,7 @@ if (!mounted) return null; // prevents render mismatch
                 <p className="text-sm">Position</p>
               </div>
             </div>
-            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white">
+            <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white hover:opacity-90 cursor-pointer">
               Read Case Study
             </button>
           </div>

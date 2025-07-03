@@ -94,7 +94,7 @@ export default function Features() {
       `}</style>
 
       <div className="flex justify-center">
-        <button className="mt-10 px-4 py-2 bg-gradient-to-r from-yellow-300 to-orange-500 dark:from-purple-600 dark:to-pink-600 rounded font-bold cursor-pointer">
+        <button className="mt-10 px-4 py-2 bg-gradient-to-r from-yellow-300 to-orange-500 dark:from-purple-600 dark:to-pink-600 rounded font-bold hover:opacity-90 cursor-pointer">
           Browse all integrations
         </button>
       </div>
