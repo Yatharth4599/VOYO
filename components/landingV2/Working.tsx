@@ -57,12 +57,43 @@
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { createApiUrl } from '@/lib/config'
+
+interface Agent {
+  "Agent Name": string
+  "Agent URL": string
+  "Agent Logo": string
+  "Description": string
+  "Pricing Model": string
+  "Category": string
+  "Official Website URL": string
+}
 
 export default function Working() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [agents, setAgents] = useState<Agent[]>([])
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+    fetchAgents()
+  }, [])
+
+  const fetchAgents = async () => {
+    try {
+      const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'))
+      const data = await response.json()
+      if (data.success && data.data.length >= 3) {
+        // Get first 3 agents from Customer Service category
+        setAgents(data.data.slice(0, 3))
+      } else if (data.success && data.data.length > 0) {
+        // If less than 3 agents, show all available
+        setAgents(data.data)
+      }
+    } catch (error) {
+      console.error('Error fetching Customer Service agents:', error)
+    }
+  }
 
   if (!mounted) return null
 
@@ -101,23 +132,61 @@ export default function Working() {
           </div>
 
           <div className="flex gap-6 flex-wrap justify-center">
-            {[1, 2, 3].map((num) => (
-              <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
-                <div className="bg-gray-200 dark:bg-white h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
-                  {/* Example: <Image src={`/agent${num}.png`} alt={`Agent ${num}`} fill className="object-cover"/> */}
+            {agents.length > 0 ? (
+              agents.map((agent, index) => (
+                <div key={index} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+                  <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
+                    {agent['Agent Logo'] ? (
+                      <img 
+                        src={agent['Agent Logo']} 
+                        alt={agent['Agent Name']} 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
+                        {agent['Agent Name'].substring(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-center font-semibold mt-2">{agent['Agent Name']}</p>
+                  <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
+                  <div className="flex items-center justify-center mt-3">
+                    <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
+                      {agent['Pricing Model']}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+                  </div>
+                  <button 
+                    onClick={() => window.open(agent['Official Website URL'], '_blank')}
+                    className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-4 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
+                  >
+                    Visit Website
+                  </button>
                 </div>
-                <p className="text-center font-semibold mt-2">Agent Name {num}</p>
-                <p className="text-center text-sm mt-1">Lorem ipsum dolor sit amet...</p>
-                <p className="text-center text-sm mt-1">Praesentium laborum dignissimos...</p>
-                <p className="text-center text-sm mt-1">Aliquid quidem, placeat nihil...</p>
-                <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
-                  <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+              ))
+            ) : (
+              // Loading skeleton
+              [1, 2, 3].map((num) => (
+                <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+                  <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse">
+                  </div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded mt-2 w-3/4 animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-2/3 animate-pulse"></div>
+                  <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+                  </div>
+                  <div className="h-8 bg-gray-200 dark:bg-gray-500 rounded mt-4 w-20 animate-pulse"></div>
                 </div>
-                <button className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-4 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer">
-                  Deploy
-                </button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>

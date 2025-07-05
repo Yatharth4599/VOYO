@@ -4,10 +4,42 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react';
 import SignupForm from '../SignupForm';
 import LoginForm from '../LoginForm';
+import { createApiUrl } from '@/lib/config';
+
+interface Agent {
+  "Agent Name": string
+  "Agent URL": string
+  "Agent Logo": string
+  "Description": string
+  "Pricing Model": string
+  "Category": string
+  "Official Website URL": string
+}
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  
+  useEffect(() => {
+    setMounted(true);
+    fetchAgents();
+  }, []);
+
+  const fetchAgents = async () => {
+    try {
+      const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'));
+      const data = await response.json();
+      if (data.success && data.data.length >= 9) {
+        // Get first 9 agents from Customer Service category
+        setAgents(data.data.slice(0, 9));
+      } else if (data.success && data.data.length > 0) {
+        // If less than 9 agents, show all available
+        setAgents(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching Customer Service agents:', error);
+    }
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -15,7 +47,6 @@ export default function Hero() {
   const openModal = () => setShowModal(true);
   // const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
-  const [showAgentModal, setShowAgentModal] = useState(false);
 
   const openLoginModal = () => {
   setShowModal(false); // Close signup
@@ -56,13 +87,38 @@ if (!mounted) return null; // prevents render mismatch
           </div>
         </div>
 
-        {/* Right: Lightning Bolt */}
+        {/* Right: Agent Images Grid */}
         <div className="mt-12 lg:mt-0 lg:ml-8 grid grid-cols-3 gap-4 grid-rows-3">
-          {[...Array(9)].map((_, i) => (
-            <div key={i} className="border border-gray-300 dark:border-gray-700 p-3">
-              <div className="bg-gray-200 dark:bg-white h-[100px] w-[100px]"></div>
-            </div>
-          ))}
+          {agents.length > 0 ? (
+            agents.map((agent, i) => (
+              <div key={i} className="border border-gray-300 dark:border-gray-700 p-3 hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="h-[100px] w-[100px] bg-gray-200 dark:bg-gray-500 rounded-lg overflow-hidden">
+                  {agent['Agent Logo'] ? (
+                    <img 
+                      src={agent['Agent Logo']} 
+                      alt={agent['Agent Name']} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
+                      {agent['Agent Name'].substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            // Loading skeleton
+            [...Array(9)].map((_, i) => (
+              <div key={i} className="border border-gray-300 dark:border-gray-700 p-3">
+                <div className="bg-gray-200 dark:bg-gray-500 h-[100px] w-[100px] animate-pulse rounded-lg"></div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 

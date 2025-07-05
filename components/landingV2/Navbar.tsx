@@ -184,35 +184,112 @@
 
 import { useState, useEffect } from 'react'
 import Logo from '@/components/landingV2/Logo'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronDown } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import SignupForm from '../SignupForm'
 import LoginForm from '../LoginForm'
+import { checkAuthStatus, logout, User } from '@/lib/auth'
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const openModal = () => setShowModal(true);
-  // const openLoginModal = () => setShowLoginModal(true);
-  const closeLoginModal = () => setShowLoginModal(false);
-  const [showAgentModal, setShowAgentModal] = useState(false);
 
   const openLoginModal = () => {
-  setShowModal(false); // Close signup
-  setShowLoginModal(true); // Open login
-};
+    setShowModal(false); // Close signup
+    setShowLoginModal(true); // Open login
+  };
 
   const openSignupModal = () => {
     setShowLoginModal(false); // Close login
     setShowModal(true); // Open signup
   };
 
+  const handleLoginClose = () => {
+    setShowLoginModal(false);
+    // Refresh user data after login
+    checkUser();
+  };
+
   useEffect(() => {
     setMounted(true)
+    checkUser()
+    
+    // Also check user status periodically to catch login events
+    const interval = setInterval(() => {
+      // Only check if there's a token in localStorage
+      const token = localStorage.getItem('jwtToken')
+      if (token) {
+        checkUser()
+      }
+    }, 2000) // Check every 2 seconds
+    
+    return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showUserDropdown && !target.closest('.user-dropdown-container')) {
+        setShowUserDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserDropdown])
+
+  useEffect(() => {
+    // Listen for storage changes (when token is added/removed)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'jwtToken') {
+        checkUser()
+      }
+    }
+
+    // Listen for page visibility changes (when user returns to tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkUser()
+      }
+    }
+
+    // Listen for logout events
+    const handleLogoutEvent = () => {
+      setUser(null)
+      setShowUserDropdown(false)
+      // Stop checking for user status after logout
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('logout', handleLogoutEvent)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('logout', handleLogoutEvent)
+    }
+  }, [])
+
+  const checkUser = async () => {
+    const userData = await checkAuthStatus()
+    setUser(userData)
+  }
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Logout button clicked');
+    logout()
+  }
 
   if (!mounted) return null
 
@@ -237,12 +314,46 @@ export default function Navbar() {
           {/* Right: Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <button onClick={openLoginModal} className="text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-800 transition cursor-pointer">
-              Sign In
-            </button>
-            <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
-              Get Started
-            </button>
+            {user ? (
+              <div className="relative user-dropdown-container">
+                <button 
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  className="flex items-center space-x-2 text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-800 transition cursor-pointer"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <ChevronDown size={16} />
+                </button>
+                
+                {showUserDropdown && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                      <p className="font-semibold text-gray-900 dark:text-white">{user.name}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{user.phoneNumber}</p>
+                    </div>
+                    <div className="p-2">
+                      <button 
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition cursor-pointer"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button onClick={openLoginModal} className="text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-800 transition cursor-pointer">
+                  Sign In
+                </button>
+                <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
+                  Get Started
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -298,7 +409,7 @@ export default function Navbar() {
                 >
                   {/* <LoginForm onClose={closeLoginModal} /> */}
                   <LoginForm 
-                    onClose={closeLoginModal} 
+                    onClose={handleLoginClose} 
                     switchToSignup={openSignupModal}
                   />
       

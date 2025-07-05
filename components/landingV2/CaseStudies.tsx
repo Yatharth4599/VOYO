@@ -11,14 +11,6 @@ if (!mounted) return null; // prevents render mismatch
 
   return (
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
-      <div className="flex justify-center">
-        <div className="mt-7 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 dark:from-purple-500 dark:via-pink-500 dark:to-red-500 p-[2px] rounded-2xl w-fit shadow-lg">
-          <div className="bg-white dark:bg-[#16162c] w-[200px] flex justify-center border-none rounded-2xl text-black dark:text-white">
-            See The Results
-          </div>
-        </div>
-      </div>
-
       <h2 className="relative w-fit mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 text-center font-bold mb-6">
         Case Studies
       </h2>
@@ -34,8 +26,8 @@ if (!mounted) return null; // prevents render mismatch
             <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
             <p className="text-lg mb-4 mt-10">
-              "We have seen drastic efficiency improvements since we started using n8n for user management. 
-              It's incredibly powerful, but also simple to use."
+              &quot;We have seen drastic efficiency improvements since we started using n8n for user management. 
+              It&apos;s incredibly powerful, but also simple to use.&quot;
             </p>
             <div className="flex gap-4 items-center mt-18">
               <Image

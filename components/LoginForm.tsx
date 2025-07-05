@@ -189,6 +189,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createApiUrl } from '@/lib/config';
+import { getRedirectPath } from '@/lib/auth';
 import { motion } from 'framer-motion';
 
 export default function LoginForm({
@@ -232,7 +233,7 @@ export default function LoginForm({
       localStorage.setItem('jwtToken', result.token);
       localStorage.setItem('showPricingPopup', 'true');
       onClose();
-      router.push('/post-login');
+      router.push(getRedirectPath());
 
 
     } catch (err) {

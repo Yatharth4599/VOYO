@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 
 export default function Features() {
-  const { resolvedTheme, setTheme } = useTheme();
+  useTheme(); // Keep for hydration
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
