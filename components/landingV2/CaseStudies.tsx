@@ -26,7 +26,7 @@ if (!mounted) return null; // prevents render mismatch
             <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
             <p className="text-lg mb-4 mt-10">
-              &quot;We have seen drastic efficiency improvements since we started using n8n for user management. 
+              &quot;We have seen drastic efficiency improvements since we started using VOYO for user management. 
               It&apos;s incredibly powerful, but also simple to use.&quot;
             </p>
             <div className="flex gap-4 items-center mt-18">
@@ -49,7 +49,7 @@ if (!mounted) return null; // prevents render mismatch
           {/* Card 2 */}
           <div className="bg-gradient-to-b from-[#ffffff] to-yellow-300 dark:from-[#16162c] dark:to-blue-950 rounded-lg p-6 text-black dark:text-white">
             <h3 className="mb-1 text-[20px] dark:text-purple-200">
-              How StepStone finishes <span className="font-bold text-amber-500 dark:text-white">2 weeks’ work in <br /> only 2 hours</span> with n8n workflows
+              How StepStone finishes <span className="font-bold text-amber-500 dark:text-white">2 weeks’ work in <br /> only 2 hours</span> with VOYO workflows
             </h3>
 
             <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>

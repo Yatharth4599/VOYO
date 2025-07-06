@@ -1,92 +1,120 @@
 'use client'
 
-import Image from 'next/image'
+import React, { useRef } from 'react';
+import Image from 'next/image';
 
 export default function Reviews() {
+  const testimonials = [
+    {
+      quote: "I set up my restaurant's order notifications in 10 minutes—no tech skills needed! Now my staff gets WhatsApp alerts for every new order.",
+      name: "Priya S.",
+      handle: "@priyarestaurant",
+      img: "/account_circle.svg"
+    },
+    {
+      quote: "I run a small online shop and Voyo's workflows helped me send abandoned cart reminders automatically. My sales went up without hiring a developer!",
+      name: "James T.",
+      handle: "@jamesshop",
+      img: "/account_circle.svg"
+    },
+    {
+      quote: "I’m not a techie, but I built a feedback collection system for my yoga studio in minutes. My customers love the follow-up emails!",
+      name: "Anita R.",
+      handle: "@anitayoga",
+      img: "/account_circle.svg"
+    },
+    {
+      quote: "I used to spend hours sending appointment reminders. Now it’s all automated and my clients never miss a session.",
+      name: "Carlos M.",
+      handle: "@carlostherapy",
+      img: "/account_circle.svg"
+    },
+    {
+      quote: "I was worried about setup, but Voyo’s sandbox made it so easy. I just dragged what I needed and it worked!",
+      name: "Fatima L.",
+      handle: "@fatimaboutique",
+      img: "/account_circle.svg"
+    }
+  ];
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const width = carouselRef.current.offsetWidth;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -width : width,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <section className="relative bg-gradient-to-b from-[#120B27] to-black text-white py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="border border-gray-800 p-10 rounded-xl bg-black/30 backdrop-blur">
-          <div className="flex justify-center">
-          <div className="mt-7 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-[1px] rounded-2xl w-fit shadow-lg">
-            <div className="bg-[#16162c] w-[200px] flex justify-center border border-gray-800 rounded-2xl text-white py-2">
-              n8n embed
-            </div>
-          </div>
-        </div>
-          <div className="flex justify-center text-[50px] font-bold">Automation for <br /> your customers</div>
-          <p className="mt-6 flex justify-center text-center">
-            Wow your customers with access to 500+ app integrations to automate their own <br /> workflows. 
-            Your branding. Our white-labelled tech.
-          </p>
-          <button className="bg-gradient-to-r from-blue-500 to-violet-900 px-4 py-2 rounded font-bold transition mt-10 mx-auto block">
-            Explore n8n embed
+        <h2 className="text-3xl font-bold text-center mb-12">What our users say</h2>
+        <div className="relative">
+          {/* Navigation arrows (desktop only) */}
+          <button
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 text-white rounded-full w-10 h-10 items-center justify-center shadow-lg"
+            onClick={() => scroll('left')}
+            aria-label="Scroll left"
+            style={{ left: '-20px' }}
+          >
+            &#8592;
           </button>
-        </div>
-
-        <div className="mt-20"></div>
-
-        <div className="border border-gray-800 p-10 rounded-xl bg-black/30 backdrop-blur">
-          <div className="flex justify-center text-[50px] font-bold text-center">There’s nothing you <br /> can’t automate with n8n.</div>
-          <p className="mt-6 flex justify-center text-center">
-            Our customer’s words, not ours. <br />
-            Skeptical? Try it out, and see for yourself.
-          </p>
-          <button className="bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2 rounded font-bold transition mt-10 mx-auto block">
-            Start Building
+          <button
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 text-white rounded-full w-10 h-10 items-center justify-center shadow-lg"
+            onClick={() => scroll('right')}
+            aria-label="Scroll right"
+            style={{ right: '-20px' }}
+          >
+            &#8594;
           </button>
-        </div>
-      </div>
-
-      <div className="overflow-hidden mt-20 relative">
-        {/* Marquee Container */}
-        <div className="animate-marquee flex whitespace-nowrap hover:[animation-play-state:paused] gap-8 px-6">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="h-[350px] max-w-fit border border-white rounded-2xl p-6 bg-black/30 text-white"
-            >
-              <p className="text-lg leading-relaxed mb-6">
-                <span className="font-bold">Lorem ipsum dolor sit</span> amet consectetur, adipisicing elit. <br />
-                Fuga non consectetur sunt illum iste ipsa odio enim, quidem minus porro amet. <br />
-                Sit doloribus velit eveniet, accusamus repellat placeat accusantium asperiores.
-              </p>
-              <div className="flex items-center gap-4 mt-auto">
-                <Image
-                  src="/account_circle.svg"
-                  alt="account icon"
-                  width={35}
-                  height={35}
-                />
-                <div>
-                  <p className="font-semibold">Name</p>
-                  <p className="text-sm text-gray-300">@Account</p>
+          <div
+            ref={carouselRef}
+            className="flex gap-8 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 snap-x snap-mandatory"
+            style={{ scrollSnapType: 'x mandatory' }}
+          >
+            {testimonials.map((t, i) => (
+              <div
+                key={i}
+                className="min-w-[320px] max-w-[350px] h-[320px] flex-shrink-0 bg-black/60 border border-white/20 rounded-2xl p-6 flex flex-col justify-between shadow-xl snap-center"
+              >
+                <p className="text-lg leading-relaxed mb-6 line-clamp-6">
+                  <span className="font-bold">“{t.quote}”</span>
+                </p>
+                <div className="flex items-center gap-4 mt-auto">
+                  <Image
+                    src={t.img}
+                    alt="account icon"
+                    width={35}
+                    height={35}
+                  />
+                  <div>
+                    <p className="font-semibold">{t.name}</p>
+                    <p className="text-sm text-gray-300">{t.handle}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-
-        {/* Inline style for marquee animation */}
-        <style jsx>{`
-          @keyframes marquee {
-            0% {
-              transform: translateX(100%);
-            }
-            100% {
-              transform: translateX(-100%);
-            }
-          }
-          .animate-marquee {
-            animation: marquee 40s linear infinite;
-          }
-        `}</style>
       </div>
-  
+      <style jsx>{`
+        .scrollbar-thin::-webkit-scrollbar {
+          height: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: #444;
+          border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: #18111A;
+        }
+      `}</style>
     </section>
-
-    
-  )
+  );
 }
 
 

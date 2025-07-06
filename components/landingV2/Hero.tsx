@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import SignupForm from '../SignupForm';
 import LoginForm from '../LoginForm';
 import { createApiUrl } from '@/lib/config';
+import SandboxDemo from './SandboxDemo';
 
 interface Agent {
   "Agent Name": string
@@ -69,88 +70,41 @@ if (!mounted) return null; // prevents render mismatch
         {/* Left: Text + CTAs */}
         <div className="flex-1 text-center lg:text-left">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight text-black dark:text-white">
-            AI <span className="text-highlight font-medium">Agents</span> that work
+            Welcome to the <span className="text-orange-500">AI Agent Marketplace</span>
           </h1>
 
           <p className="text-lg text-black dark:text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0">
-            Transform your business with intelligent AI agents that handle complex queries, 
-            boost efficiency, and deliver precision at scale.
+            Discover, test, and use ready-made AI workflows for your business. No coding, no complicated setup—just pick what you need and get started instantly. One simple subscription, all the AI power you need.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
               Get started for free
             </button>
-            <button className="border border-gray-400 dark:border-gray-600 text-black dark:text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">
-              Talk to sales
+            <button className="border border-gray-400 dark:border-gray-600 text-black dark:text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer" onClick={() => {
+              window.scrollTo({ top: document.getElementById('sandbox-section')?.offsetTop || 0, behavior: 'smooth' });
+            }}>
+              Try the Sandbox
             </button>
           </div>
         </div>
 
-        {/* Right: Agent Images Grid */}
-        <div className="mt-12 lg:mt-0 lg:ml-8 grid grid-cols-3 gap-4 grid-rows-3">
-          {agents.length > 0 ? (
-            agents.map((agent, i) => (
-              <div key={i} className="border border-gray-300 dark:border-gray-700 p-3 hover:shadow-lg transition-shadow cursor-pointer">
-                <div className="h-[100px] w-[100px] bg-gray-200 dark:bg-gray-500 rounded-lg overflow-hidden">
-                  {agent['Agent Logo'] ? (
-                    <img 
-                      src={agent['Agent Logo']} 
-                      alt={agent['Agent Name']} 
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
-                      {agent['Agent Name'].substring(0, 2).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            // Loading skeleton
-            [...Array(9)].map((_, i) => (
-              <div key={i} className="border border-gray-300 dark:border-gray-700 p-3">
-                <div className="bg-gray-200 dark:bg-gray-500 h-[100px] w-[100px] animate-pulse rounded-lg"></div>
-              </div>
-            ))
-          )}
+        {/* Right: Friendly Marketplace Visual */}
+        <div className="mt-12 lg:mt-0 lg:ml-8 flex flex-col items-center">
+          <div className="rounded-xl bg-white dark:bg-[#23182B] shadow-lg p-6 flex flex-col items-center">
+            <span className="text-5xl mb-2">🛒🤖</span>
+            <div className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-1">Browse AI Agents</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">For restaurants, retail, and more</div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom: Tabs + Diagram */}
-      <div className="relative z-10 max-w-5xl mx-auto mt-16 bg-[#faf6e8f6] dark:bg-[#1B142F] border border-gray-300 dark:border-gray-600 p-6 rounded-xl">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center mb-6">
-          <div className="bg-orange-200 dark:bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-orange-300 dark:hover:bg-[#3C2D6D] transition cursor-pointer">
-            IT Ops can<br /><span className="font-medium text-black dark:text-white">On-board new employees</span>
-          </div>
-          <div className="bg-orange-200 dark:bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-orange-300 dark:hover:bg-[#3C2D6D] transition cursor-pointer">
-            Sec Ops can<br /><span className="font-medium text-black dark:text-white">Enrich security tickets</span>
-          </div>
-          <div className="bg-orange-200 dark:bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-orange-300 dark:hover:bg-[#3C2D6D] transition cursor-pointer">
-            Dev Ops can<br /><span className="font-medium text-black dark:text-white">Convert natural language</span>
-          </div>
-          <div className="bg-orange-200 dark:bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-orange-300 dark:hover:bg-[#3C2D6D] transition cursor-pointer">
-            Sales can<br /><span className="font-medium text-black dark:text-white">Generate insights</span>
-          </div>
-          <div className="bg-orange-200 dark:bg-[#2A1E4D] rounded-lg py-4 px-2 text-sm hover:bg-orange-300 dark:hover:bg-[#3C2D6D] transition cursor-pointer">
-            You can<br /><span className="font-medium text-black dark:text-white">Watch this video</span>
-          </div>
-        </div>
-
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-gray-300 dark:border-gray-700 p-3">
-          <Image
-            src="/assets/workflow-diagram.png"  // Replace with your own diagram
-            alt="Workflow Diagram"
-            fill
-            className="object-cover"
-          />
-        </div>
-      </div>
+      {/* Sandbox Section: Drag-and-drop workflow builder for restaurants */}
+      <section id="sandbox-section" className="relative z-10 max-w-5xl mx-auto mt-16 bg-[#faf6e8f6] dark:bg-[#1B142F] border border-gray-300 dark:border-gray-600 p-6 rounded-xl">
+        <h2 className="text-2xl font-bold mb-4 text-center text-black dark:text-white">Try the AI Workflow Sandbox</h2>
+        <p className="text-center text-gray-700 dark:text-gray-300 mb-6">Enter your restaurant name or website and see what AI can do for you. Drag workflows you like into your own sandbox!</p>
+        <SandboxDemo />
+      </section>
 
       <div className="text-center text-gray-600 dark:text-gray-400 p-3 text-lg mt-12">
         The world's most popular workflow automation platform for technical teams including
@@ -180,7 +134,6 @@ if (!mounted) return null; // prevents render mismatch
             className="modern-card p-8 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* <SignupForm onClose={() => setShowModal(false)} /> */}
             <SignupForm 
               onClose={() => setShowModal(false)} 
               switchToLogin={openLoginModal}
@@ -194,13 +147,11 @@ if (!mounted) return null; // prevents render mismatch
             className="modern-card p-8 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* <LoginForm onClose={closeLoginModal} /> */}
             <LoginForm 
               onClose={closeLoginModal} 
               switchToSignup={openSignupModal}
             />
-            
-            </div>
+          </div>
         </div>
       )}
     </section>

@@ -41,7 +41,7 @@
 //             </ul>
 
 //             <ul className="list-none flex flex-col justify-between">
-//               {["Case Studies", "Zapier vs n8n", "Make vs n8n", "Tools", "AI agent report"].map(item => (
+//               {["Case Studies", "Zapier vs VOYO", "Make vs VOYO", "Tools", "AI agent report"].map(item => (
 //                 <li key={item} className="text-amber-600 dark:text-purple-200 hover:text-black dark:hover:text-white cursor-pointer">{item}</li>
 //               ))}
 //             </ul>
@@ -60,7 +60,7 @@
 //             { title: "Popular integrations", items: ["Google Sheets", "Telegram", "MySQL", "Slack", "Discord", "Postgres"] },
 //             { title: "Trending combinations", items: ["HubSpot and Salesforce", "Twilio and WhatsApp", "GitHub and Jira", "Asana and Slack", "Asana and Salesforce", "Jira and Slack"] },
 //             { title: "Top integration categories", items: ["Communication", "Development", "Cybersecurity", "AI", "Data & Storage", "Marketing"] },
-//             { title: "Trending templates", items: ["Creating an API endpoint", "AI agent chat", "Scrape and summarize webpages with AI", "Joining different datasets", "Back Up Your n8n Workflows To Github", "Very quick quickstart"] },
+//             { title: "Trending templates", items: ["Creating an API endpoint", "AI agent chat", "Scrape and summarize webpages with AI", "Joining different datasets", "Back Up Your VOYO Workflows To Github", "Very quick quickstart"] },
 //             { title: "Top guides", items: ["Telegram bots", "Open-source chatbot", "Open-source LLM", "Open-source low-code platforms", "Zapier alternatives", "Make vs Zapier"] },
 //           ].map(({ title, items }) => (
 //             <div key={title} className="list-none">
@@ -127,7 +127,7 @@ export default function Footer() {
             </ul>
 
             <ul className="list-none flex flex-col justify-between">
-              {["Case Studies", "Zapier vs n8n", "Make vs n8n", "Tools", "AI agent report"].map((item) => (
+              {["Case Studies", "Zapier vs VOYO", "Make vs VOYO", "Tools", "AI agent report"].map((item) => (
                 <li
                   key={item}
                   className="text-amber-600 dark:text-purple-200 hover:text-black dark:hover:text-white cursor-pointer"

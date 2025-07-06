@@ -46,7 +46,7 @@
 //             <span className="text-orange-400">for technical teams</span>
 //           </h1>
 //           <p className="text-lg text-gray-200 mb-6 max-w-xl">
-//             Build with the precision of code or the speed of drag-n-drop. Host with on-prem control or in-the-cloud convenience. n8n gives you more freedom to implement multi-step AI agents and integrate apps than any other tool.
+//             Build with the precision of code or the speed of drag-n-drop. Host with on-prem control or in-the-cloud convenience. VOYO gives you more freedom to implement multi-step AI agents and integrate apps than any other tool.
 //           </p>
 //           <div className="flex gap-4 mb-8">
 //             <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded font-semibold text-base shadow">Get started for free</button>
@@ -159,7 +159,7 @@
 //         <div className="grid md:grid-cols-2 gap-8">
 //           <div className="bg-[#23182B] rounded-2xl p-8 shadow-lg flex flex-col justify-between">
 //             <h3 className="text-lg font-bold mb-2">How Delivery Hero saved <span className='text-white'>200 hours each month</span> with a single ITOps workflow</h3>
-//             <p className="text-gray-300 mb-4">"We have seen drastic efficiency improvements since we started using n8n for user management. It's incredibly powerful, but also simple to use."</p>
+//             <p className="text-gray-300 mb-4">"We have seen drastic efficiency improvements since we started using VOYO for user management. It's incredibly powerful, but also simple to use."</p>
 //             <div className="flex items-center gap-3 mt-auto">
 //               <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">DZ</div>
 //               <div>
@@ -170,7 +170,7 @@
 //             <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded font-semibold text-sm mt-4 self-start">Read Case Study</button>
 //           </div>
 //           <div className="bg-[#23182B] rounded-2xl p-8 shadow-lg flex flex-col justify-between">
-//             <h3 className="text-lg font-bold mb-2">How StepStone finishes <span className='text-white'>2 weeks' work in only 2 hours</span> with n8n workflows</h3>
+//             <h3 className="text-lg font-bold mb-2">How StepStone finishes <span className='text-white'>2 weeks' work in only 2 hours</span> with VOYO workflows</h3>
 //             <p className="text-gray-300 mb-4">"We've sped up our integration of marketplace data sources by 25X. It takes me 2 hours max to connect up APIs and transform the data we need. You can't do this that fast in code."</p>
 //             <div className="flex items-center gap-3 mt-auto">
 //               <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">LP</div>
@@ -189,9 +189,9 @@
 //         <div className="flex-1">
 //           <span className="inline-block bg-purple-900 text-purple-300 text-xs px-3 py-1 rounded-full mb-4">Enterprise-ready</span>
 //           <h2 className="text-3xl font-bold mb-4">Secure. Reliable. Collaborative.</h2>
-//           <p className="text-gray-300 mb-6">Remove inefficiencies across your org by rolling out automation as reliably as you deploy code. Run n8n air-gapped on your servers or on our secure cloud-based solution.</p>
+//           <p className="text-gray-300 mb-6">Remove inefficiencies across your org by rolling out automation as reliably as you deploy code. Run VOYO air-gapped on your servers or on our secure cloud-based solution.</p>
 //           <div className="flex gap-4">
-//             <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded font-semibold text-sm">Explore n8n for enterprise</button>
+//             <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded font-semibold text-sm">Explore VOYO for enterprise</button>
 //             <button className="bg-[#23182B] border border-purple-600 text-purple-400 px-4 py-2 rounded font-semibold text-sm hover:bg-purple-600 hover:text-white transition">Talk to sales</button>
 //           </div>
 //         </div>
@@ -208,16 +208,16 @@
 //           <div className="relative w-full h-[180px] mb-8 flex items-center justify-center">
 //             <Image src="/file.svg" alt="Automation Visual" width={320} height={180} className="object-contain mx-auto" />
 //           </div>
-//           <span className="inline-block bg-orange-600 text-white text-xs px-3 py-1 rounded-full mb-4">n8n embed</span>
+//           <span className="inline-block bg-orange-600 text-white text-xs px-3 py-1 rounded-full mb-4">VOYO embed</span>
 //           <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center">Automation for your customers</h2>
 //           <p className="text-gray-300 mb-6 text-center max-w-2xl mx-auto">Wow your customers with access to 500+ app integrations to automate their own workflows. Your branding. Our white-labelled tech.</p>
-//           <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded font-semibold text-sm">Explore n8n embed</button>
+//           <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded font-semibold text-sm">Explore VOYO embed</button>
 //         </div>
 //       </section>
 
 //       {/* Final Call to Action Section */}
 //       <section className="py-16 px-4 text-center">
-//         <h2 className="text-3xl font-bold mb-6">There's nothing you can't automate with n8n.</h2>
+//         <h2 className="text-3xl font-bold mb-6">There's nothing you can't automate with VOYO.</h2>
 //         <p className="mb-8 max-w-xl mx-auto text-gray-300">Our customer's words, not ours. Skeptical? Try it out, and see for yourself.</p>
 //         <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold text-lg">Start building</button>
 //       </section>
@@ -226,7 +226,7 @@
 //       <section className="py-12 px-4 bg-gradient-to-b from-[#23182B] to-[#18111A]">
 //         <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-6 overflow-x-auto">
 //           <div className="bg-[#18111A] rounded-2xl p-6 min-w-[320px] shadow-lg">
-//             <p className="text-gray-200 mb-4">Thank you to the n8n community. I did the beginners course and promptly took an automation WAY beyond my skill level.</p>
+//             <p className="text-gray-200 mb-4">Thank you to the VOYO community. I did the beginners course and promptly took an automation WAY beyond my skill level.</p>
 //             <div className="flex items-center gap-3">
 //               <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">RT</div>
 //               <div>
@@ -236,7 +236,7 @@
 //             </div>
 //           </div>
 //           <div className="bg-[#18111A] rounded-2xl p-6 min-w-[320px] shadow-lg">
-//             <p className="text-gray-200 mb-4">n8n is a beast for automation. self-hosting and low-code make it a dev's dream. if you're not automating yet, you're working too hard.</p>
+//             <p className="text-gray-200 mb-4">VOYO is a beast for automation. self-hosting and low-code make it a dev's dream. if you're not automating yet, you're working too hard.</p>
 //             <div className="flex items-center gap-3">
 //               <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">A</div>
 //               <div>
@@ -246,7 +246,7 @@
 //             </div>
 //           </div>
 //           <div className="bg-[#18111A] rounded-2xl p-6 min-w-[320px] shadow-lg">
-//             <p className="text-gray-200 mb-4">I've said it many times. But I'll say it again. n8n is the GOAT. Anything is possible with n8n. You just need some technical knowledge + imagination.</p>
+//             <p className="text-gray-200 mb-4">I've said it many times. But I'll say it again. VOYO is the GOAT. Anything is possible with VOYO. You just need some technical knowledge + imagination.</p>
 //             <div className="flex items-center gap-3">
 //               <div className="w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white font-bold">MP</div>
 //               <div>
@@ -317,7 +317,7 @@
 //           </div>
 //         </div>
 //         <div className="flex flex-col md:flex-row justify-between items-center border-t border-[#2A2233] pt-6">
-//           <div className="mb-2 md:mb-0">© 2025 n8n | All rights reserved.</div>
+//           <div className="mb-2 md:mb-0">© 2025 VOYO | All rights reserved.</div>
 //           <div className="flex gap-4">
 //             <span>Impressum</span>
 //             <span>|</span>
@@ -367,10 +367,11 @@ import { ThemeProvider } from 'next-themes'
 import Navbar from "@/components/landingV2/Navbar"
 import Hero from "@/components/landingV2/Hero"
 import Features from "@/components/landingV2/Features"
-import CaseStudies from "@/components/landingV2/CaseStudies"
+// import CaseStudies from "@/components/landingV2/CaseStudies"
 import Performance from "@/components/landingV2/Performance"
 import Working from "@/components/landingV2/Working"
 import Footer from "@/components/landingV2/Footer"
+import Reviews from '../../components/landingV2/Reviews';
 
 export default function Home() {
   return (
@@ -380,8 +381,10 @@ export default function Home() {
         <Hero />
         <Working />
         <Features />
-        <CaseStudies />
+        {/* <CaseStudies /> */}
+        {/* Remove Secure. Reliable. Collaborative. section and related content */}
         <Performance />
+        <Reviews />
         <Footer />
       </div>
     </ThemeProvider>
