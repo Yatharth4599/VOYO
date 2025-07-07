@@ -465,3 +465,5 @@ export const fetchCurrentUser = async (): Promise<User> => {
 
   return response.json();
 };
+
+export { createApiUrl };

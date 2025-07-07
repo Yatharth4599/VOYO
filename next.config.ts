@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  images: {
+    domains: [
+      'storage.googleapis.com',
+    ],
+  },
 };
 
 export default nextConfig;

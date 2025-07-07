@@ -6,6 +6,7 @@ import SignupForm from '../SignupForm';
 import LoginForm from '../LoginForm';
 import { createApiUrl } from '@/lib/config';
 import SandboxDemo from './SandboxDemo';
+import LogoCarousel from './LogoCarousel';
 
 interface Agent {
   "Agent Name": string
@@ -91,11 +92,12 @@ if (!mounted) return null; // prevents render mismatch
 
         {/* Right: Friendly Marketplace Visual */}
         <div className="mt-12 lg:mt-0 lg:ml-8 flex flex-col items-center">
-          <div className="rounded-xl bg-white dark:bg-[#23182B] shadow-lg p-6 flex flex-col items-center">
+          {/* <div className="rounded-xl bg-white dark:bg-[#23182B] shadow-lg p-6 flex flex-col items-center">
             <span className="text-5xl mb-2">🛒🤖</span>
             <div className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-1">Browse AI Agents</div>
             <div className="text-sm text-gray-500 dark:text-gray-400">For restaurants, retail, and more</div>
-          </div>
+          </div> */}
+          <LogoCarousel/>
         </div>
       </div>
 
