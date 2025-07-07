@@ -367,7 +367,7 @@ import { ThemeProvider } from 'next-themes'
 import Navbar from "@/components/landingV2/Navbar"
 import Hero from "@/components/landingV2/Hero"
 import Features from "@/components/landingV2/Features"
-// import CaseStudies from "@/components/landingV2/CaseStudies"
+import CaseStudies from "@/components/landingV2/CaseStudies"
 import Performance from "@/components/landingV2/Performance"
 import Working from "@/components/landingV2/Working"
 import Footer from "@/components/landingV2/Footer"
@@ -381,7 +381,7 @@ export default function Home() {
         <Hero />
         <Working />
         <Features />
-        {/* <CaseStudies /> */}
+        <CaseStudies />
         {/* Remove Secure. Reliable. Collaborative. section and related content */}
         <Performance />
         <Reviews />

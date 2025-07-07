@@ -19,15 +19,25 @@ if (!mounted) return null; // prevents render mismatch
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl w-full">
           {/* Card 1 */}
           <div className="bg-gradient-to-b from-[#ffffff] to-orange-500 dark:from-[#16162c] dark:to-pink-950 rounded-lg p-6 text-black dark:text-white">
-            <h3 className="mb-1 text-[20px] dark:text-purple-200">
-              How Delivery Hero saved <span className="font-bold text-amber-500 dark:text-white">200 hours each <br /> month</span> with a single ITOps workflow
+            <h3 className="mb-1 text-[20px] text-orange-600 dark:text-purple-200">
+              Case Study 1: <span className="text-black dark:text-white">TigerPay (Fintech)</span>
             </h3>
 
             <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
             <p className="text-lg mb-4 mt-10">
-              &quot;We have seen drastic efficiency improvements since we started using VOYO for user management. 
-              It&apos;s incredibly powerful, but also simple to use.&quot;
+              {/* &quot;We have seen drastic efficiency improvements since we started using VOYO for user management. 
+              It&apos;s incredibly powerful, but also simple to use.&quot; */}
+              <p className="text-orange-600 dark:text-purple-200">Challenge:</p>
+              TigerPay was scaling fast but struggled with onboarding new merchants and handling support tickets around the clock. <br />
+              <br />
+              <p className="text-orange-600 dark:text-purple-200">Solution:</p>
+              Using VOYO Marketplace, TigerPay deployed a sales onboarding agent and a multilingual support agent—no code, no extra hires. <br />
+              <br />
+              <p className="text-orange-600 dark:text-purple-200">Result:</p>
+              Onboarding time dropped by 60%.
+              Support response time went from hours to seconds.
+              TigerPay’s team now focuses on growth, not repetitive tasks.
             </p>
             <div className="flex gap-4 items-center mt-18">
               <Image
@@ -48,18 +58,25 @@ if (!mounted) return null; // prevents render mismatch
 
           {/* Card 2 */}
           <div className="bg-gradient-to-b from-[#ffffff] to-yellow-300 dark:from-[#16162c] dark:to-blue-950 rounded-lg p-6 text-black dark:text-white">
-            <h3 className="mb-1 text-[20px] dark:text-purple-200">
-              How StepStone finishes <span className="font-bold text-amber-500 dark:text-white">2 weeks’ work in <br /> only 2 hours</span> with VOYO workflows
+            <h3 className="mb-1 text-[20px] text-orange-600 dark:text-purple-200">
+              Case Study 2: <span className="text-black dark:text-white">FreshCart (Ecommerce)</span>
             </h3>
 
             <div className="border-b mt-12 border-gray-400 dark:border-gray-700"></div>
 
             <p className="text-lg mb-4 mt-10">
-              “We’ve sped up our integration of marketplace data sources by 25X. 
-              It takes me 2 hours max to connect up APIs and transform the data we need. 
-              You can’t do this that fast in code.”
+              <p className="text-orange-600 dark:text-purple-200">Challenge:</p>
+              FreshCart’s small team was bogged down with order queries and payment follow-ups during peak sale periods. <br />
+              <br />
+              <p className="text-orange-600 dark:text-purple-200">Solution:</p>
+              FreshCart launched an order tracking agent and a payment reminder agent via VOYO Marketplace—both integrated into their WhatsApp and Shopify. <br />
+              <br />
+              <p className="text-orange-600 dark:text-purple-200">Result:</p>
+              80% fewer missed customer messages.
+              Late payment reminders handled automatically.
+              FreshCart scaled to 3x more orders—without increasing headcount.
             </p>
-            <div className="flex gap-4 items-center mt-11">
+            <div className="flex gap-4 items-center mt-18">
               <Image
                 src="/account_circle.svg"
                 alt="account icon"
