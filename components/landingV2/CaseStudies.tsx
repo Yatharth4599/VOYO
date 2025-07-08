@@ -55,8 +55,8 @@ if (!mounted) return null; // prevents render mismatch
                 height={35}
               />
               <div>
-                <p>Name</p>
-                <p className="text-sm">Position</p>
+                <p>Prabh Singh</p>
+                <p className="text-sm">CEO</p>
               </div>
             </div>
             <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white hover:opacity-90 cursor-pointer">
@@ -96,8 +96,8 @@ if (!mounted) return null; // prevents render mismatch
                 height={35}
               />
               <div>
-                <p>Name</p>
-                <p className="text-sm">Position</p>
+                <p>Sarah Mitchell</p>
+                <p className="text-sm">VP of Operations</p>
               </div>
             </div>
             <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white hover:opacity-90 cursor-pointer">
