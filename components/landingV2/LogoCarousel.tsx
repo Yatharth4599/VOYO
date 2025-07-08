@@ -1,12 +1,13 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 interface AgentLogo {
   "Agent Logo": string;
 }
 
-export default function Logo3DRing() {
+export default function LogoGridStaggeredFade() {
   const [logos, setLogos] = useState<AgentLogo[]>([]);
 
   useEffect(() => {
@@ -30,51 +31,34 @@ export default function Logo3DRing() {
   if (!logos.length) return null;
 
   return (
-    <div className="py-12 flex justify-center items-center bg-transparent overflow-hidden">
-      <div className="ring-container w-[400px] h-[400px] max-w-full">
-        <div className="ring">
-          {logos.slice(0, 12).map((logo, index) => (
-            <img
-              key={index}
+    <div className="py-12 bg-transparent">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 place-items-center">
+        {logos.map((logo, i) => (
+          <div
+            key={i}
+            className="w-24 h-24 relative animate-fade-loop"
+            style={{
+              animationDelay: `${i * 0.2}s`, // stagger delay
+            }}
+          >
+            <Image
               src={logo["Agent Logo"]}
-              alt={`Logo ${index}`}
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none'; // hide broken logos
-              }}
-              style={{
-                transform: `rotateY(${index * (360 / 12)}deg) translateZ(180px)`,
-              }}
-              className="rounded-full object-contain"
+              alt={`Logo ${i}`}
+              fill
+              className="object-contain"
             />
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
       <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
+        @keyframes fadeLoop {
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 1; }
         }
-        .ring-container {
-          perspective: 1200px;
+        .animate-fade-loop {
+          animation: fadeLoop 3s ease-in-out infinite;
         }
-        .ring {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          transform-style: preserve-3d;
-          animation: spin 20s linear infinite;
-        }
-        .ring img {
-          position: absolute;
-          width: 64px;
-          height: 64px;
-          top: 50%;
-          left: 50%;
-          transform-origin: center center -180px;
-          backface-visibility: hidden; /* ✨ THIS FIXES THE BLACK FLASHES */
-        }
-
       `}</style>
     </div>
   );

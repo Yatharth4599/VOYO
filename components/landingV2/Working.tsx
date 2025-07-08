@@ -52,12 +52,500 @@
 // }
 
 
+// 'use client'
+
+// import Image from 'next/image'
+// import { useTheme } from 'next-themes'
+// import { useEffect, useState } from 'react'
+// import { createApiUrl } from '@/lib/config'
+
+// interface Agent {
+//   "Agent Name": string
+//   "Agent URL": string
+//   "Agent Logo": string
+//   "Description": string
+//   "Pricing Model": string
+//   "Category": string
+//   "Official Website URL": string
+// }
+
+// export default function Working() {
+//   const { resolvedTheme } = useTheme()
+//   const [mounted, setMounted] = useState(false)
+//   const [agents, setAgents] = useState<Agent[]>([])
+
+//   useEffect(() => {
+//     setMounted(true)
+//     fetchAgents()
+//   }, [])
+
+//   const fetchAgents = async () => {
+//     try {
+//       const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'))
+//       const data = await response.json()
+//       if (data.success && data.data.length >= 3) {
+//         // Get first 3 agents from Customer Service category
+//         setAgents(data.data.slice(0, 3))
+//       } else if (data.success && data.data.length > 0) {
+//         // If less than 3 agents, show all available
+//         setAgents(data.data)
+//       }
+//     } catch (error) {
+//       console.error('Error fetching Customer Service agents:', error)
+//     }
+//   }
+
+//   if (!mounted) return null
+
+//   return (
+//     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
+//       <div>
+//         <h1 className="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6">
+//           How It Works
+//         </h1>
+
+//         <div className="flex flex-col lg:flex-row justify-evenly">
+//           <div className="flex flex-col space-y-6 mb-12 lg:mb-0">
+//             {[
+//               { icon: "arrow-top", text: "Browse the marketplace" },
+//               { icon: "all-out", text: "Test agents in a sandbox" },
+//               { icon: "deployed-code", text: "Deploy instantly with no code" },
+//             ].map(({ icon, text }, idx) => (
+//               <div key={idx} className="flex items-center gap-x-4 w-[200px]">
+//                 <div className="border border-gray-300 dark:border-gray-700 h-fit w-fit">
+//                   <Image
+//                     src={`/${icon}-${resolvedTheme === 'dark' ? 'dark' : 'light'}.svg`}
+//                     alt={text}
+//                     width={40}
+//                     height={40}
+//                     className="transition duration-300"
+//                   />
+
+//                 </div>
+//                 <p className="text-[25px]">
+//                   {text.split(' ').slice(0, 2).join(' ')}
+//                   <br />
+//                   {text.split(' ').slice(2).join(' ')}
+//                 </p>
+//               </div>
+//             ))}
+//           </div>
+
+//           <div className="flex gap-6 flex-wrap justify-center">
+//             {agents.length > 0 ? (
+//               agents.map((agent, index) => (
+//                 <div key={index} className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]">
+//                   {/* LOGO */}
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
+//                     {agent['Agent Logo'] ? (
+//                       <img 
+//                         src={agent['Agent Logo']} 
+//                         alt={agent['Agent Name']} 
+//                         className="h-[60%] w-[60%] object-contain"
+//                         onError={(e) => {
+//                           e.currentTarget.style.display = 'none';
+//                           e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+//                         }}
+//                       />
+//                     ) : (
+//                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
+//                         {agent['Agent Name'].substring(0, 2).toUpperCase()}
+//                       </div>
+//                     )}
+//                   </div>
+
+//                   {/* MID: this section can flex and grow */}
+//                   <div className="flex flex-col items-center flex-grow mt-2">
+//                     <p className="text-center font-semibold">{agent['Agent Name']}</p>
+//                     <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
+//                     <div className="flex items-center justify-center mt-3">
+//                       <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
+//                         {agent['Pricing Model']}
+//                       </span>
+//                     </div>
+//                   </div>
+
+//                   {/* BOTTOM: stars + button, always stick to bottom */}
+//                   <div className="mt-4 flex flex-col items-center">
+//                     <div className="flex items-center justify-center text-yellow-400 text-lg">
+//                       <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                     </div>
+//                     <button 
+//                       onClick={() => window.open(agent['Official Website URL'], '_blank')}
+//                       className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-3 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
+//                     >
+//                       Visit Website
+//                     </button>
+//                   </div>
+//                 </div>
+//               ))
+//             ) : (
+//               // Loading skeleton
+//               [1, 2, 3].map((num) => (
+//                 <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse">
+//                   </div>
+//                   <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded mt-2 w-3/4 animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-2/3 animate-pulse"></div>
+//                   <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
+//                     <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                   </div>
+//                   <div className="h-8 bg-gray-200 dark:bg-gray-500 rounded mt-4 w-20 animate-pulse"></div>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   )
+// }
+
+
+// 'use client'
+
+// import Image from 'next/image'
+// import { useTheme } from 'next-themes'
+// import { useEffect, useState } from 'react'
+// import { createApiUrl } from '@/lib/config'
+// import DecryptedText from './DecryptedText'
+
+// interface Agent {
+//   "Agent Name": string
+//   "Agent URL": string
+//   "Agent Logo": string
+//   "Description": string
+//   "Pricing Model": string
+//   "Category": string
+//   "Official Website URL": string
+// }
+
+// export default function Working() {
+//   const { resolvedTheme } = useTheme()
+//   const [mounted, setMounted] = useState(false)
+//   const [agents, setAgents] = useState<Agent[]>([])
+
+//   useEffect(() => {
+//     setMounted(true)
+//     fetchAgents()
+//   }, [])
+
+//   const fetchAgents = async () => {
+//     try {
+//       const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'))
+//       const data = await response.json()
+//       if (data.success && data.data.length >= 3) {
+//         // Get first 3 agents from Customer Service category
+//         setAgents(data.data.slice(0, 3))
+//       } else if (data.success && data.data.length > 0) {
+//         // If less than 3 agents, show all available
+//         setAgents(data.data)
+//       }
+//     } catch (error) {
+//       console.error('Error fetching Customer Service agents:', error)
+//     }
+//   }
+
+//   if (!mounted) return null
+
+//   return (
+//     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
+//       <div>
+//         {/* <h1 className="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6">
+//           How It Works
+//         </h1> */}
+
+//         <div className="mt-10">
+//           <DecryptedText
+//             text="How It Works"
+//             animateOn="view"
+//             revealDirection="center"
+//             parentClassName="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6"
+//           />
+//         </div>
+
+
+//         <div className="flex flex-col lg:flex-row justify-evenly">
+//           <div className="flex flex-col space-y-6 mb-12 lg:mb-0">
+//             {[
+//               { icon: "arrow-top", text: "Browse the marketplace" },
+//               { icon: "all-out", text: "Test agents in a sandbox" },
+//               { icon: "deployed-code", text: "Deploy instantly with no code" },
+//             ].map(({ icon, text }, idx) => (
+//               <div key={idx} className="flex items-center gap-x-4 w-[200px]">
+//                 <div className="border border-gray-300 dark:border-gray-700 h-fit w-fit">
+//                   <Image
+//                     src={`/${icon}-${resolvedTheme === 'dark' ? 'dark' : 'light'}.svg`}
+//                     alt={text}
+//                     width={40}
+//                     height={40}
+//                     className="transition duration-300"
+//                   />
+
+//                 </div>
+//                 <p className="text-[25px]">
+//                   {text.split(' ').slice(0, 2).join(' ')}
+//                   <br />
+//                   {text.split(' ').slice(2).join(' ')}
+//                 </p>
+//               </div>
+//             ))}
+//           </div>
+
+//           <div className="flex gap-6 flex-wrap justify-center">
+//             {agents.length > 0 ? (
+//               agents.map((agent, index) => (
+//                 <div key={index} className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]">
+//                   {/* LOGO */}
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
+//                     {agent['Agent Logo'] ? (
+//                       <img 
+//                         src={agent['Agent Logo']} 
+//                         alt={agent['Agent Name']} 
+//                         className="h-[60%] w-[60%] object-contain"
+//                         onError={(e) => {
+//                           e.currentTarget.style.display = 'none';
+//                           e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+//                         }}
+//                       />
+//                     ) : (
+//                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
+//                         {agent['Agent Name'].substring(0, 2).toUpperCase()}
+//                       </div>
+//                     )}
+//                   </div>
+
+//                   {/* MID: this section can flex and grow */}
+//                   <div className="flex flex-col items-center flex-grow mt-2">
+//                     <p className="text-center font-semibold">{agent['Agent Name']}</p>
+//                     <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
+//                     <div className="flex items-center justify-center mt-3">
+//                       <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
+//                         {agent['Pricing Model']}
+//                       </span>
+//                     </div>
+//                   </div>
+
+//                   {/* BOTTOM: stars + button, always stick to bottom */}
+//                   <div className="mt-4 flex flex-col items-center">
+//                     <div className="flex items-center justify-center text-yellow-400 text-lg">
+//                       <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                     </div>
+//                     <button 
+//                       onClick={() => window.open(agent['Official Website URL'], '_blank')}
+//                       className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-3 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
+//                     >
+//                       Visit Website
+//                     </button>
+//                   </div>
+//                 </div>
+//               ))
+//             ) : (
+//               // Loading skeleton
+//               [1, 2, 3].map((num) => (
+//                 <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse">
+//                   </div>
+//                   <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded mt-2 w-3/4 animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-2/3 animate-pulse"></div>
+//                   <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
+//                     <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                   </div>
+//                   <div className="h-8 bg-gray-200 dark:bg-gray-500 rounded mt-4 w-20 animate-pulse"></div>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   )
+// }
+
+
+// 'use client'
+
+// import Image from 'next/image'
+// import { useTheme } from 'next-themes'
+// import { useEffect, useState } from 'react'
+// import { createApiUrl } from '@/lib/config'
+// import DecryptedText from './DecryptedText'
+// import { motion } from 'framer-motion'
+
+// interface Agent {
+//   "Agent Name": string
+//   "Agent URL": string
+//   "Agent Logo": string
+//   "Description": string
+//   "Pricing Model": string
+//   "Category": string
+//   "Official Website URL": string
+// }
+
+// export default function Working() {
+//   const { resolvedTheme } = useTheme()
+//   const [mounted, setMounted] = useState(false)
+//   const [agents, setAgents] = useState<Agent[]>([])
+
+//   useEffect(() => {
+//     setMounted(true)
+//     fetchAgents()
+//   }, [])
+
+//   const fetchAgents = async () => {
+//     try {
+//       const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'))
+//       const data = await response.json()
+//       if (data.success && data.data.length >= 3) {
+//         setAgents(data.data.slice(0, 3))
+//       } else if (data.success && data.data.length > 0) {
+//         setAgents(data.data)
+//       }
+//     } catch (error) {
+//       console.error('Error fetching Customer Service agents:', error)
+//     }
+//   }
+
+//   if (!mounted) return null
+
+//   const cardVariants = {
+//     hidden: { opacity: 0, x: 50 },
+//     visible: (i: number) => ({
+//       opacity: 1,
+//       x: 0,
+//       transition: {
+//         delay: i * 0.3,
+//         duration: 0.6,
+//         ease: 'easeOut',
+//       },
+//     }),
+//   }
+
+//   return (
+//     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
+//       <div>
+//         <div className="mt-10">
+//           <DecryptedText
+//             text="How It Works"
+//             animateOn="view"
+//             revealDirection="center"
+//             parentClassName="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6"
+//           />
+//         </div>
+
+//         <div className="flex flex-col lg:flex-row justify-evenly">
+//           <div className="flex flex-col space-y-6 mb-12 lg:mb-0">
+//             {[
+//               { icon: "arrow-top", text: "Browse the marketplace" },
+//               { icon: "all-out", text: "Test agents in a sandbox" },
+//               { icon: "deployed-code", text: "Deploy instantly with no code" },
+//             ].map(({ icon, text }, idx) => (
+//               <div key={idx} className="flex items-center gap-x-4 w-[200px]">
+//                 <div className="border border-gray-300 dark:border-gray-700 h-fit w-fit">
+//                   <Image
+//                     src={`/${icon}-${resolvedTheme === 'dark' ? 'dark' : 'light'}.svg`}
+//                     alt={text}
+//                     width={40}
+//                     height={40}
+//                     className="transition duration-300"
+//                   />
+//                 </div>
+//                 <p className="text-[25px]">
+//                   {text.split(' ').slice(0, 2).join(' ')}<br />
+//                   {text.split(' ').slice(2).join(' ')}
+//                 </p>
+//               </div>
+//             ))}
+//           </div>
+
+//           <div className="flex gap-6 flex-wrap justify-center">
+//             {agents.length > 0 ? (
+//               agents.map((agent, index) => (
+//                 <motion.div
+//                   key={index}
+//                   custom={index}
+//                   initial="hidden"
+//                   whileInView="visible"
+//                   viewport={{ once: true }}
+//                   variants={cardVariants}
+//                   className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]"
+//                 >
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
+//                     {agent['Agent Logo'] ? (
+//                       <img
+//                         src={agent['Agent Logo']}
+//                         alt={agent['Agent Name']}
+//                         className="h-[60%] w-[60%] object-contain"
+//                         onError={(e) => {
+//                           e.currentTarget.style.display = 'none'
+//                           e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`
+//                         }}
+//                       />
+//                     ) : (
+//                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">
+//                         {agent['Agent Name'].substring(0, 2).toUpperCase()}
+//                       </div>
+//                     )}
+//                   </div>
+
+//                   <div className="flex flex-col items-center flex-grow mt-2">
+//                     <p className="text-center font-semibold">{agent['Agent Name']}</p>
+//                     <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
+//                     <div className="flex items-center justify-center mt-3">
+//                       <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
+//                         {agent['Pricing Model']}
+//                       </span>
+//                     </div>
+//                   </div>
+
+//                   <div className="mt-4 flex flex-col items-center">
+//                     <div className="flex items-center justify-center text-yellow-400 text-lg">
+//                       <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                     </div>
+//                     <button
+//                       onClick={() => window.open(agent['Official Website URL'], '_blank')}
+//                       className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-3 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
+//                     >
+//                       Visit Website
+//                     </button>
+//                   </div>
+//                 </motion.div>
+//               ))
+//             ) : (
+//               [1, 2, 3].map((num) => (
+//                 <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+//                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse"></div>
+//                   <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded mt-2 w-3/4 animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
+//                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-2/3 animate-pulse"></div>
+//                   <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
+//                     <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+//                   </div>
+//                   <div className="h-8 bg-gray-200 dark:bg-gray-500 rounded mt-4 w-20 animate-pulse"></div>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   )
+// }
+
+
 'use client'
 
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { createApiUrl } from '@/lib/config'
+import DecryptedText from './DecryptedText'
+import { motion, Variants } from 'framer-motion'
 
 interface Agent {
   "Agent Name": string
@@ -84,10 +572,8 @@ export default function Working() {
       const response = await fetch(createApiUrl('/api/agents-directory/category/Customer%20Service'))
       const data = await response.json()
       if (data.success && data.data.length >= 3) {
-        // Get first 3 agents from Customer Service category
         setAgents(data.data.slice(0, 3))
       } else if (data.success && data.data.length > 0) {
-        // If less than 3 agents, show all available
         setAgents(data.data)
       }
     } catch (error) {
@@ -97,12 +583,30 @@ export default function Working() {
 
   if (!mounted) return null
 
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.3,
+        duration: 0.6,
+        ease: [0.42, 0, 0.58, 1], // easeInOut cubic bezier
+      },
+    }),
+  }
+
   return (
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
       <div>
-        <h1 className="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6">
-          How It Works
-        </h1>
+        <div className="mt-10">
+          <DecryptedText
+            text="How It Works"
+            animateOn="view"
+            revealDirection="center"
+            parentClassName="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6"
+          />
+        </div>
 
         <div className="flex flex-col lg:flex-row justify-evenly">
           <div className="flex flex-col space-y-6 mb-12 lg:mb-0">
@@ -120,11 +624,9 @@ export default function Working() {
                     height={40}
                     className="transition duration-300"
                   />
-
                 </div>
                 <p className="text-[25px]">
-                  {text.split(' ').slice(0, 2).join(' ')}
-                  <br />
+                  {text.split(' ').slice(0, 2).join(' ')}<br />
                   {text.split(' ').slice(2).join(' ')}
                 </p>
               </div>
@@ -134,17 +636,24 @@ export default function Working() {
           <div className="flex gap-6 flex-wrap justify-center">
             {agents.length > 0 ? (
               agents.map((agent, index) => (
-                <div key={index} className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]">
-                  {/* LOGO */}
+                <motion.div
+                  key={index}
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={cardVariants}
+                  className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]"
+                >
                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
                     {agent['Agent Logo'] ? (
-                      <img 
-                        src={agent['Agent Logo']} 
-                        alt={agent['Agent Name']} 
+                      <img
+                        src={agent['Agent Logo']}
+                        alt={agent['Agent Name']}
                         className="h-[60%] w-[60%] object-contain"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+                          e.currentTarget.style.display = 'none'
+                          e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`
                         }}
                       />
                     ) : (
@@ -154,7 +663,6 @@ export default function Working() {
                     )}
                   </div>
 
-                  {/* MID: this section can flex and grow */}
                   <div className="flex flex-col items-center flex-grow mt-2">
                     <p className="text-center font-semibold">{agent['Agent Name']}</p>
                     <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
@@ -165,26 +673,23 @@ export default function Working() {
                     </div>
                   </div>
 
-                  {/* BOTTOM: stars + button, always stick to bottom */}
                   <div className="mt-4 flex flex-col items-center">
                     <div className="flex items-center justify-center text-yellow-400 text-lg">
                       <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
                     </div>
-                    <button 
+                    <button
                       onClick={() => window.open(agent['Official Website URL'], '_blank')}
                       className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-3 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
                     >
                       Visit Website
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
-              // Loading skeleton
               [1, 2, 3].map((num) => (
                 <div key={num} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
-                  <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse">
-                  </div>
+                  <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden animate-pulse"></div>
                   <div className="h-4 bg-gray-200 dark:bg-gray-500 rounded mt-2 w-3/4 animate-pulse"></div>
                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>
                   <div className="h-3 bg-gray-200 dark:bg-gray-500 rounded mt-1 w-full animate-pulse"></div>

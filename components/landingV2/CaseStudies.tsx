@@ -2,6 +2,8 @@
 
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
+import SpotlightCard from './SpotlightCard';
+import DecryptedText from './DecryptedText';
 
 export default function CaseStudies() {
   const [mounted, setMounted] = useState(false);
@@ -11,14 +13,20 @@ if (!mounted) return null; // prevents render mismatch
 
   return (
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
-      <h2 className="relative w-fit mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 text-center font-bold mb-6">
-        Case Studies
-      </h2>
+      <div className="mt-10">
+                <DecryptedText
+                  text="Case Studies"
+                  animateOn="view"
+                  revealDirection="center"
+                  parentClassName="relative mx-auto px-10 bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[50px] mt-15 font-bold mb-6"
+                />
+              </div>
 
       <div className="w-full flex justify-center">
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl w-full">
           {/* Card 1 */}
-          <div className="bg-gradient-to-b from-[#ffffff] to-orange-500 dark:from-[#16162c] dark:to-pink-950 rounded-lg p-6 text-black dark:text-white">
+          <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(255, 132, 0, 0.66)">
+            <div className="bg-gradient-to-b from-[#ffffff] to-orange-500 dark:from-[#16162c] dark:to-pink-950 rounded-lg p-6 text-black dark:text-white">
             <h3 className="mb-1 text-[20px] text-orange-600 dark:text-purple-200">
               Case Study 1: <span className="text-black dark:text-white">TigerPay (Fintech)</span>
             </h3>
@@ -54,10 +62,14 @@ if (!mounted) return null; // prevents render mismatch
             <button className="bg-gradient-to-r from-amber-500 to-red-500 dark:from-blue-500 dark:to-violet-900 px-4 py-2 rounded font-bold transition mt-17 text-white hover:opacity-90 cursor-pointer">
               Read Case Study
             </button>
-          </div>
+            </div>
+          </SpotlightCard>
+          
+          
 
           {/* Card 2 */}
-          <div className="bg-gradient-to-b from-[#ffffff] to-yellow-300 dark:from-[#16162c] dark:to-blue-950 rounded-lg p-6 text-black dark:text-white">
+          <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(255, 132, 0, 0.66)">
+            <div className="bg-gradient-to-b from-[#ffffff] to-yellow-300 dark:from-[#16162c] dark:to-blue-950 rounded-lg p-6 text-black dark:text-white">
             <h3 className="mb-1 text-[20px] text-orange-600 dark:text-purple-200">
               Case Study 2: <span className="text-black dark:text-white">FreshCart (Ecommerce)</span>
             </h3>
@@ -92,6 +104,8 @@ if (!mounted) return null; // prevents render mismatch
               Read Case Study
             </button>
           </div>
+          </SpotlightCard>
+          
         </div>
       </div>
     </section>

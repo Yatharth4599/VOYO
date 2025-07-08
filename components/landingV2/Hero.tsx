@@ -7,6 +7,7 @@ import LoginForm from '../LoginForm';
 import { createApiUrl } from '@/lib/config';
 import SandboxDemo from './SandboxDemo';
 import LogoCarousel from './LogoCarousel';
+import BlurText  from "./BlurText";
 
 interface Agent {
   "Agent Name": string
@@ -71,7 +72,14 @@ if (!mounted) return null; // prevents render mismatch
         {/* Left: Text + CTAs */}
         <div className="flex-1 text-center lg:text-left">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight text-black dark:text-white">
-            Welcome to the <span className="text-orange-500">AI Agent Marketplace</span>
+            Welcome to the 
+            <BlurText
+              text="AI Agent Marketplace"
+                delay={150}
+                animateBy="words"
+              direction="top"
+              className="text-orange-500 dark:text-purple-500"
+              />
           </h1>
 
           <p className="text-lg text-black dark:text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0">
