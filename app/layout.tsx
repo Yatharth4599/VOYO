@@ -92,19 +92,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Voyo - AI Voice Agents for Business",
+  title: "Voyo - Your AI Agent Marketplace",
   description: "Build multi-step AI voice agents and integrate apps with VOYO. The fast way to get AI working in your business.",
+  metadataBase: new URL('https://www.voyo.club'),
   openGraph: {
-    title: "Voyo - AI Voice Agents for Business",
+    title: "Voyo - Your AI Agent Marketplace",
     description: "Build multi-step AI voice agents and integrate apps with VOYO. The fast way to get AI working in your business.",
     url: "https://www.voyo.club",
     siteName: "Voyo",
     images: [
       {
-        url: "/logo-voyo-removebg-preview.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Voyo Logo",
+        alt: "Voyo - Your AI Agent Marketplace",
       },
     ],
     locale: "en_US",
@@ -112,9 +113,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Voyo - AI Voice Agents for Business",
+    title: "Voyo - Your AI Agent Marketplace",
     description: "Build multi-step AI voice agents and integrate apps with VOYO. The fast way to get AI working in your business.",
-    images: ["/logo-voyo-removebg-preview.png"],
+    images: ["/og-image.png"],
   },
   icons: {
     icon: "/logo-voyo-removebg-preview.png",
