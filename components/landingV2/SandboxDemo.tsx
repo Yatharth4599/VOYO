@@ -377,6 +377,225 @@
 // } 
 
 
+// 'use client';
+
+// import React, { useState, useEffect } from 'react';
+// import { createApiUrl } from '@/lib/api'; // adjust path if your file lives elsewhere
+// import Link from 'next/link';
+
+// const PreviewModal = ({ open, onClose, workflow }: { open: boolean, onClose: () => void, workflow: any }) => {
+//   if (!open || !workflow) return null;
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+//       <div className={`rounded-xl shadow-xl p-8 max-w-md w-full bg-gray-50 dark:bg-[#1f1f1f] relative`}>
+//         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+//         <div className="flex items-center gap-3 mb-4">
+//           <span className="text-3xl">{workflow.icon || '🤖'}</span>
+//           <span className="font-bold text-lg">{workflow.title}</span>
+//         </div>
+//         <div className="text-gray-700 whitespace-pre-line text-base mb-2">{workflow.category}</div>
+//         <div className="text-xs text-gray-400 mt-4">This is a simulated preview.</div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default function SandboxDemo() {
+//   const [input, setInput] = useState('');
+//   const [showSuggestions, setShowSuggestions] = useState(true);
+//   const [myWorkflows, setMyWorkflows] = useState<any[]>([]);
+//   const [dragged, setDragged] = useState<any>(null);
+//   const [workflows, setWorkflows] = useState<any[]>([]);
+//   const [filteredWorkflows, setFilteredWorkflows] = useState<any[]>([]);
+//   const [preview, setPreview] = useState<any>(null);
+//   const [search, setSearch] = useState('');
+//   const [dragSource, setDragSource] = useState<'suggestions' | 'sandbox' | null>(null);
+
+
+//   // 🔥 Fetch workflows on mount
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(createApiUrl('/workflows'));
+//         const data = await response.json();
+//         setWorkflows(data.workflows);
+//         setFilteredWorkflows(data.workflows);
+//       } catch (error) {
+//         console.error('Failed to fetch workflows:', error);
+//       }
+//     };
+//     fetchData();
+//   }, []);
+
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setShowSuggestions(true);
+//     setMyWorkflows([]);
+//   };
+
+//   const handleDragStart = (workflow: any, source: 'suggestions' | 'sandbox') => {
+//   setDragged(workflow);
+//   setDragSource(source);
+// };
+
+//   const handleDrop = (e: React.DragEvent) => {
+//     e.preventDefault();
+//     if (dragged && !myWorkflows.find(w => w.id === dragged.id)) {
+//       setMyWorkflows([...myWorkflows, dragged]);
+//     }
+//     setDragged(null);
+//   };
+
+//   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   const query = e.target.value;
+//   setSearch(query);
+
+//   const filtered = workflows.filter(
+//     (wf) =>
+//       wf.title.toLowerCase().includes(query.toLowerCase()) ||
+//       wf.category.toLowerCase().includes(query.toLowerCase())
+//   );
+//   setFilteredWorkflows(filtered);
+// };
+
+
+
+//   return (
+//     <div className="w-full flex flex-col items-center">
+//       <PreviewModal open={!!preview} onClose={() => setPreview(null)} workflow={preview} />
+
+//       <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 mb-8 w-full max-w-2xl">
+//         <input
+//         type="text"
+//         value={search}
+//         onChange={handleSearch}
+//         placeholder="Search workflows by title or category..."
+//         className="flex-1 px-4 py-3 rounded-l border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none bg-white dark:bg-[#23182B] text-black dark:text-white text-lg"
+//       />
+
+//         <button
+//           type="submit"
+//           className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-r text-lg"
+//         >
+//           Show Workflows
+//         </button>
+//       </form>
+
+//       <div className="flex items-center gap-2 text-lg font-semibold mb-6">
+//         <span role="img" aria-label="cart">🛒</span>
+//         <span role="img" aria-label="robot">🤖</span>
+//         <Link href="/agentsV2" className="hover:underline dark:hover:underline">
+//           Browse AI Agents
+//         </Link>
+//         <span className="text-gray-500 text-base font-normal ml-2">For restaurants, retail, and more</span>
+//       </div>
+
+//       <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-start">
+//         {/* Suggestions */}
+//         <div className="flex-1 max-h-[600px] overflow-y-auto scrollbar-none">
+//           {showSuggestions && (
+//             <div>
+//               <div className="font-semibold mb-2 text-gray-800 dark:text-gray-100 text-lg">Suggested Workflows:</div>
+//               <div className="flex flex-wrap gap-6">
+//                 {filteredWorkflows.map(wf => (
+//                   <div
+//                     key={wf.id}
+//                     className="bg-white/80 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 ml-2 mr-2 shadow-xl cursor-grab w-72 relative flex flex-col items-center transition-transform hover:scale-105"
+//                     draggable
+//                     onDragStart={() => handleDragStart({ ...wf, agents: ['VOYO AI'] }, 'suggestions')}
+//                     style={{ boxShadow: '0 4px 24px 0 rgba(255, 140, 0, 0.10)' }}
+//                   >
+//                     <div className="text-4xl mb-2">{wf.icon}</div>
+//                     <div className="font-bold text-orange-600 dark:text-blue-400 mb-1 text-lg text-center">{wf.category}</div>
+//                     <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
+//                     <div className="flex flex-wrap gap-2 mt-2 justify-center">
+//                       <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+//                     </div>
+//                     <div className="mt-2 text-xs text-gray-400">Drag to Sandbox below</div>
+//                     <button
+//                       className="absolute top-2 right-2 bg-orange-100 hover:bg-orange-200 dark:hover:bg-purple-200 dark:bg-purple-100 dark:text-purple-700 text-orange-700 text-xs px-2 py-1 rounded shadow cursor-pointer"
+//                       onClick={e => { e.stopPropagation(); setPreview(wf); }}
+//                       type="button"
+//                     >
+//                       Preview
+//                     </button>
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Sandbox Area */}
+
+//         <div className="flex flex-col items-center overflow-visible">
+//           <div
+//             className="w-full max-h-[700px] bg-gradient-to-br from-orange-50 via-white to-orange-100 dark:from-[#23182B] dark:via-[#1B142F] dark:to-[#2A1E4D] border-4 border-dashed border-orange-300 dark:border-purple-500 rounded-3xl p-12 flex flex-col items-center relative shadow-2xl overflow-hidden"
+//             onDragOver={e => e.preventDefault()}
+//             onDrop={() => {
+//               if (dragged && dragSource === 'sandbox') {
+//                 setMyWorkflows(prev => prev.filter(wf => wf.id !== dragged.id));
+//                 setDragged(null);
+//                 setDragSource(null);
+//               }
+//             }}
+//             onDragStart={() => handleDragStart(wf, 'sandbox')}
+//           >
+//             <div className="font-bold text-orange-700 dark:text-purple-300 mb-4 text-2xl z-10">My Sandbox</div>
+
+//             {myWorkflows.length === 0 ? (
+//               <div className="text-gray-400 text-lg mt-12 z-10 text-center">
+//                 Drag workflows here to build your own automation!<br />
+//                 It’s as easy as stacking building blocks.
+//               </div>
+//             ) : (
+//               <div className="w-full overflow-y-auto max-h-[500px] pr-4 custom-scroll z-10">
+//                 <div className="flex gap-y-11 flex-col items-center w-full relative">
+//                   {myWorkflows.map((wf, idx) => (
+//                     <div key={wf.id} className="relative w-full flex flex-col items-center">
+//                       <div className="bg-white/90 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 shadow-xl w-3/4 mb-8 flex flex-col items-center transition-transform">
+//                         <div className="text-4xl mb-2">{wf.icon}</div>
+//                         <div className="font-bold text-orange-600 dark:text-blue-400 text-lg text-center">{wf.category}</div>
+//                         <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
+//                         <div className="flex flex-wrap gap-2 mt-2 justify-center">
+//                           <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+//                         </div>
+//                         <button
+//                           className="absolute top-2 right-20 bg-orange-100 hover:bg-orange-200 dark:hover:bg-purple-200 dark:bg-purple-100 dark:text-purple-700 text-orange-700 text-xs px-2 py-1 rounded shadow cursor-pointer"
+//                           onClick={e => {
+//                             e.stopPropagation();
+//                             setPreview(wf);
+//                           }}
+//                           type="button"
+//                         >
+//                           Preview
+//                         </button>
+//                       </div>
+
+//                       {idx < myWorkflows.length - 1 && (
+//                         <svg height="70" width="40" className="absolute left-1/2 -translate-x-1/2 top-full z-0" style={{ marginTop: '-28px' }}>
+//                           <defs>
+//                             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+//                               <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c" />
+//                             </marker>
+//                           </defs>
+//                           <line x1="20" y1="0" x2="20" y2="30" stroke="#fb923c" strokeWidth="4" markerEnd="url(#arrowhead)" />
+//                         </svg>
+//                       )}
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+
+//       </div>
+//     </div>
+//   );
+// }
+
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -402,16 +621,15 @@ const PreviewModal = ({ open, onClose, workflow }: { open: boolean, onClose: () 
 
 export default function SandboxDemo() {
   const [input, setInput] = useState('');
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const [myWorkflows, setMyWorkflows] = useState<any[]>([]);
   const [dragged, setDragged] = useState<any>(null);
+  const [dragSource, setDragSource] = useState<'suggestions' | 'sandbox' | null>(null);
   const [workflows, setWorkflows] = useState<any[]>([]);
   const [filteredWorkflows, setFilteredWorkflows] = useState<any[]>([]);
   const [preview, setPreview] = useState<any>(null);
   const [search, setSearch] = useState('');
 
-
-  // 🔥 Fetch workflows on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -432,8 +650,9 @@ export default function SandboxDemo() {
     setMyWorkflows([]);
   };
 
-  const handleDragStart = (workflow: any) => {
+  const handleDragStart = (workflow: any, source: 'suggestions' | 'sandbox') => {
     setDragged(workflow);
+    setDragSource(source);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -442,34 +661,41 @@ export default function SandboxDemo() {
       setMyWorkflows([...myWorkflows, dragged]);
     }
     setDragged(null);
+    setDragSource(null);
+  };
+
+  const handleOuterDrop = () => {
+    if (dragged && dragSource === 'sandbox') {
+      setMyWorkflows(prev => prev.filter(wf => wf.id !== dragged.id));
+    }
+    setDragged(null);
+    setDragSource(null);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const query = e.target.value;
-  setSearch(query);
+    const query = e.target.value;
+    setSearch(query);
 
-  const filtered = workflows.filter(
-    (wf) =>
-      wf.title.toLowerCase().includes(query.toLowerCase()) ||
-      wf.category.toLowerCase().includes(query.toLowerCase())
-  );
-  setFilteredWorkflows(filtered);
-};
-
+    const filtered = workflows.filter(
+      (wf) =>
+        wf.title.toLowerCase().includes(query.toLowerCase()) ||
+        wf.category.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredWorkflows(filtered);
+  };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center" onDragOver={(e) => e.preventDefault()} onDrop={handleOuterDrop}>
       <PreviewModal open={!!preview} onClose={() => setPreview(null)} workflow={preview} />
 
       <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-3 mb-8 w-full max-w-2xl">
         <input
-        type="text"
-        value={search}
-        onChange={handleSearch}
-        placeholder="Search workflows by title or category..."
-        className="flex-1 px-4 py-3 rounded-l border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none bg-white dark:bg-[#23182B] text-black dark:text-white text-lg"
-      />
-
+          type="text"
+          value={search}
+          onChange={handleSearch}
+          placeholder="Search workflows by title or category..."
+          className="flex-1 px-4 py-3 rounded-l border border-gray-300 focus:ring-2 focus:ring-orange-400 outline-none bg-white dark:bg-[#23182B] text-black dark:text-white text-lg"
+        />
         <button
           type="submit"
           className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-r text-lg"
@@ -488,8 +714,7 @@ export default function SandboxDemo() {
       </div>
 
       <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-start">
-        {/* Suggestions */}
-        <div className="flex-1">
+        <div className="flex-1 max-h-[600px] overflow-y-auto scrollbar-none">
           {showSuggestions && (
             <div>
               <div className="font-semibold mb-2 text-gray-800 dark:text-gray-100 text-lg">Suggested Workflows:</div>
@@ -497,20 +722,20 @@ export default function SandboxDemo() {
                 {filteredWorkflows.map(wf => (
                   <div
                     key={wf.id}
-                    className="bg-white/80 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-orange-400 rounded-2xl p-6 shadow-xl cursor-grab w-72 relative flex flex-col items-center transition-transform hover:scale-105"
+                    className="bg-white/80 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 ml-2 mr-2 shadow-xl cursor-grab w-72 relative flex flex-col items-center transition-transform hover:scale-105"
                     draggable
-                    onDragStart={() => handleDragStart({ ...wf, agents: ['VOYO AI'] })} // 🔥 keep only VOYO AI
+                    onDragStart={() => handleDragStart({ ...wf, agents: ['VOYO AI'] }, 'suggestions')}
                     style={{ boxShadow: '0 4px 24px 0 rgba(255, 140, 0, 0.10)' }}
                   >
                     <div className="text-4xl mb-2">{wf.icon}</div>
-                    <div className="font-bold text-orange-600 dark:text-orange-300 mb-1 text-lg text-center">{wf.category}</div>
+                    <div className="font-bold text-orange-600 dark:text-blue-400 mb-1 text-lg text-center">{wf.category}</div>
                     <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
                     <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                      <span className="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+                      <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
                     </div>
                     <div className="mt-2 text-xs text-gray-400">Drag to Sandbox below</div>
                     <button
-                      className="absolute top-2 right-2 bg-orange-100 hover:bg-orange-200 text-orange-700 text-xs px-2 py-1 rounded shadow"
+                      className="absolute top-2 right-2 bg-orange-100 hover:bg-orange-200 dark:hover:bg-purple-200 dark:bg-purple-100 dark:text-purple-700 text-orange-700 text-xs px-2 py-1 rounded shadow cursor-pointer"
                       onClick={e => { e.stopPropagation(); setPreview(wf); }}
                       type="button"
                     >
@@ -523,47 +748,60 @@ export default function SandboxDemo() {
           )}
         </div>
 
-        {/* Sandbox Area */}
         <div className="flex flex-col items-center overflow-visible">
           <div
-            className="w-full min-h-[420px] bg-gradient-to-br from-orange-50 via-white to-orange-100 dark:from-[#23182B] dark:via-[#1B142F] dark:to-[#2A1E4D] border-4 border-dashed border-orange-300 dark:border-orange-500 rounded-3xl p-12 flex flex-col items-center relative shadow-2xl overflow-hidden"
-            onDragOver={e => e.preventDefault()}
+            className="w-full max-h-[700px] bg-gradient-to-br from-orange-50 via-white to-orange-100 dark:from-[#23182B] dark:via-[#1B142F] dark:to-[#2A1E4D] border-4 border-dashed border-orange-300 dark:border-purple-500 rounded-3xl p-12 flex flex-col items-center relative shadow-2xl overflow-hidden"
+            onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
           >
-            <div className="font-bold text-orange-700 dark:text-orange-300 mb-4 text-2xl z-10">My Sandbox</div>
+            <div className="font-bold text-orange-700 dark:text-purple-300 mb-4 text-2xl z-10">My Sandbox</div>
+
             {myWorkflows.length === 0 ? (
-              <div className="text-gray-400 text-lg mt-12 z-10">Drag workflows here to build your own automation!<br />It’s as easy as stacking building blocks.</div>
+              <div className="text-gray-400 text-lg mt-12 z-10 text-center">
+                Drag workflows here to build your own automation!<br />
+                It’s as easy as stacking building blocks.
+              </div>
             ) : (
-              <div className="flex gap-y-11 flex-col items-center w-full relative z-10">
-                {myWorkflows.map((wf, idx) => (
-                  <div key={wf.id} className="relative w-full flex flex-col items-center">
-                    <div className="bg-white/90 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-orange-400 rounded-2xl p-6 shadow-xl w-3/4 mb-8 z-10 flex flex-col items-center transition-transform ">
-                      <div className="text-4xl mb-2">{wf.icon}</div>
-                      <div className="font-bold text-orange-600 dark:text-orange-300 text-lg text-center">{wf.category}</div>
-                      <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
-                      <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                        <span className="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+              <div className="w-full overflow-y-auto max-h-[500px] pr-4 custom-scroll z-10">
+                <div className="flex gap-y-11 flex-col items-center w-full relative">
+                  {myWorkflows.map((wf, idx) => (
+                    <div
+                      key={wf.id}
+                      className="relative w-full flex flex-col items-center"
+                      draggable
+                      onDragStart={() => handleDragStart(wf, 'sandbox')}
+                    >
+                      <div className="bg-white/90 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 shadow-xl w-3/4 mb-8 flex flex-col items-center transition-transform">
+                        <div className="text-4xl mb-2">{wf.icon}</div>
+                        <div className="font-bold text-orange-600 dark:text-blue-400 text-lg text-center">{wf.category}</div>
+                        <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
+                        <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                          <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+                        </div>
+                        <button
+                          className="absolute top-2 right-20 bg-orange-100 hover:bg-orange-200 dark:hover:bg-purple-200 dark:bg-purple-100 dark:text-purple-700 text-orange-700 text-xs px-2 py-1 rounded shadow cursor-pointer"
+                          onClick={e => {
+                            e.stopPropagation();
+                            setPreview(wf);
+                          }}
+                          type="button"
+                        >
+                          Preview
+                        </button>
                       </div>
-                      <button
-                        className="absolute top-2 right-20 bg-orange-100 hover:bg-orange-200 text-orange-700 text-xs px-2 py-1 rounded shadow"
-                        onClick={e => { e.stopPropagation(); setPreview(wf); }}
-                        type="button"
-                      >
-                        Preview
-                      </button>
+                      {idx < myWorkflows.length - 1 && (
+                        <svg height="70" width="40" className="absolute left-1/2 -translate-x-1/2 top-full z-0" style={{ marginTop: '-28px' }}>
+                          <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                              <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c" />
+                            </marker>
+                          </defs>
+                          <line x1="20" y1="0" x2="20" y2="30" stroke="#fb923c" strokeWidth="4" markerEnd="url(#arrowhead)" />
+                        </svg>
+                      )}
                     </div>
-                    {idx < myWorkflows.length - 1 && (
-                      <svg height="70" width="40" className="absolute left-1/2 -translate-x-1/2 top-full z-0" style={{ marginTop: '-28px' }}>
-                        <defs>
-                          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="#fb923c" />
-                          </marker>
-                        </defs>
-                        <line x1="20" y1="0" x2="20" y2="30" stroke="#fb923c" strokeWidth="4" markerEnd="url(#arrowhead)" />
-                      </svg>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
           </div>

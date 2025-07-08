@@ -134,16 +134,17 @@ export default function Working() {
           <div className="flex gap-6 flex-wrap justify-center">
             {agents.length > 0 ? (
               agents.map((agent, index) => (
-                <div key={index} className="border border-gray-300 dark:border-gray-700 p-5 w-[250px] flex flex-col items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 rounded-lg p-6">
+                <div key={index} className="border border-gray-300 dark:border-gray-700 w-[250px] flex flex-col justify-between items-center rounded-md shadow-md bg-gradient-to-b from-transparent to-orange-100 dark:to-violet-950 p-6 min-h-[460px]">
+                  {/* LOGO */}
                   <div className="bg-gray-200 dark:bg-gray-500 h-[80px] w-[80px] flex items-center justify-center rounded-full overflow-hidden">
                     {agent['Agent Logo'] ? (
                       <img 
                         src={agent['Agent Logo']} 
                         alt={agent['Agent Name']} 
-                        className="w-full h-full object-cover"
+                        className="h-[60%] w-[60%] object-contain"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium">${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
+                          e.currentTarget.parentElement!.innerHTML = `<div class='w-full h-full flex items-center justify-center text-gray-500 text-sm font-medium'>${agent['Agent Name'].substring(0, 2).toUpperCase()}</div>`;
                         }}
                       />
                     ) : (
@@ -152,22 +153,30 @@ export default function Working() {
                       </div>
                     )}
                   </div>
-                  <p className="text-center font-semibold mt-2">{agent['Agent Name']}</p>
-                  <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
-                  <div className="flex items-center justify-center mt-3">
-                    <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
-                      {agent['Pricing Model']}
-                    </span>
+
+                  {/* MID: this section can flex and grow */}
+                  <div className="flex flex-col items-center flex-grow mt-2">
+                    <p className="text-center font-semibold">{agent['Agent Name']}</p>
+                    <p className="text-center text-sm mt-1 line-clamp-3">{agent.Description}</p>
+                    <div className="flex items-center justify-center mt-3">
+                      <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs">
+                        {agent['Pricing Model']}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center mt-3 text-yellow-400 text-lg">
-                    <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+
+                  {/* BOTTOM: stars + button, always stick to bottom */}
+                  <div className="mt-4 flex flex-col items-center">
+                    <div className="flex items-center justify-center text-yellow-400 text-lg">
+                      <span>★</span><span>★</span><span>★</span><span>★</span><span className="text-gray-400">★</span>
+                    </div>
+                    <button 
+                      onClick={() => window.open(agent['Official Website URL'], '_blank')}
+                      className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-3 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
+                    >
+                      Visit Website
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => window.open(agent['Official Website URL'], '_blank')}
-                    className="bg-orange-300 dark:bg-purple-600 border border-gray-300 dark:border-gray-800 py-1 px-4 mt-4 hover:bg-orange-500 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white transition cursor-pointer"
-                  >
-                    Visit Website
-                  </button>
                 </div>
               ))
             ) : (
