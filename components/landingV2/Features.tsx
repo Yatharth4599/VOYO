@@ -4,12 +4,16 @@ import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { motion } from 'framer-motion';
 
+const TypewriterText = dynamic(() => import('./TypewriterText'), { ssr: false });
 
 export default function Features() {
   useTheme(); // Keep for hydration
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -40,7 +44,20 @@ export default function Features() {
     <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
       <div className="text-center text-4xl md:text-5xl font-bold mb-16">
         Plug AI into your own data &<br />
-        <span className="text-orange-400">over 500 integrations</span>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          onViewportEnter={() => !hasAnimated && setHasAnimated(true)}
+        >
+          {mounted && hasAnimated && (
+            <TypewriterText
+              key="typewriter-in-view"
+              text="over 500 integrations"
+              className="text-orange-400"
+            />
+          )}
+        </motion.div>
       </div>
 
       <div className="relative overflow-hidden max-w-4xl mx-auto">

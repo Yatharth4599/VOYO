@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createApiUrl } from '@/lib/config'
 
 interface Agent {
@@ -28,6 +28,8 @@ export default function Hero() {
   const [agents, setAgents] = useState<Agent[]>([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState<AgentModal>({ isOpen: false, agent: null })
+  const cardGridRef = useRef<HTMLDivElement | null>(null);
+  const [cardGridHeight, setCardGridHeight] = useState(0);
 
   useEffect(() => {
     setAnimate(true)
@@ -112,6 +114,14 @@ export default function Hero() {
       return 0
     })
 
+    useEffect(() => {
+      if (cardGridRef.current) {
+        const height = cardGridRef.current.offsetHeight;
+        setCardGridHeight(height);
+      }
+    }, [visibleCount, filteredAgents]);
+
+
   return (
     <section className="bg-[#FFFBF3] relative dark:bg-gradient-to-b dark:from-[#120B27] dark:via-orange-950 dark:to-black text-black dark:text-white pt-30 pb-32 overflow-hidden">
       <style>{`
@@ -165,14 +175,14 @@ export default function Hero() {
             placeholder="Search for AI agents..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border border-gray-200 w-[500px] p-2 rounded-lg outline-none backdrop-saturate-50 hover:border-purple-500"
+            className="border border-gray-200 w-[500px] p-2 rounded-lg outline-none backdrop-saturate-50 dark:hover:border-purple-500 hover:border-orange-500"
           />
         </div>
       </div>
 
       <div className="mt-10 ml-30 mr-30 flex justify-between items-start gap-8">
         {/* Sidebar */}
-        <div className="w-60 sticky top-0 h-screen overflow-y-auto pr-4 border-r border-gray-300 dark:border-gray-700">
+        <div className="w-60 sticky top-0 h-screen overflow-y-auto pr-4">
           <h2 className="font-bold mb-4 text-xl">Categories</h2>
           <form className="flex flex-col gap-2 text-sm">
             <label className="flex items-center gap-2 cursor-pointer hover:text-amber-600 transition">
@@ -244,7 +254,7 @@ export default function Hero() {
                       <img 
                         src={agent['Agent Logo']} 
                         alt={agent['Agent Name']} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain p-1" // ← FIXED
                         onError={(e) => {
                           e.currentTarget.style.display = 'none'
                         }}
@@ -300,11 +310,12 @@ export default function Hero() {
                   <img 
                     src={modal.agent['Agent Logo']} 
                     alt={modal.agent['Agent Name']} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-1" 
                     onError={(e) => {
                       e.currentTarget.style.display = 'none'
                     }}
                   />
+
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500 text-2xl">
                     AI
@@ -338,7 +349,10 @@ export default function Hero() {
 
               <div className="pt-4">
                 <button
-                  onClick={() => window.open(modal.agent['Official Website URL'], '_blank')}
+                  onClick={() => {
+                    const url = modal.agent?.['Official Website URL'];
+                    if (url) window.open(url, '_blank');
+                  }}
                   className="w-full bg-amber-600 hover:bg-amber-700 dark:bg-violet-700 dark:hover:bg-violet-800 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
                 >
                   Visit Website
@@ -351,3 +365,6 @@ export default function Hero() {
     </section>
   )
 }
+
+
+
