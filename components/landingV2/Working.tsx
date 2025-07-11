@@ -597,7 +597,7 @@ export default function Working() {
   }
 
   return (
-    <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white py-20 overflow-hidden">
+    <section className="relative bg-[#FFFBF3] dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white overflow-hidden">
       <div>
         <div className="mt-10">
           <DecryptedText

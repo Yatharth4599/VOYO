@@ -297,7 +297,7 @@ if (!mounted) return null; // prevents render mismatch
 
 
   return (
-    <section className="bg-[#FFFBF3] relative dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white pt-30 pb-32 overflow-hidden">
+    <section className="bg-[#FFFBF3] relative dark:bg-gradient-to-b dark:from-[#120B27] dark:to-black text-black dark:text-white pt-24 pb-10 overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between">
         {/* Left: Text + CTAs */}
         <div className="flex-1 text-center lg:text-left">
