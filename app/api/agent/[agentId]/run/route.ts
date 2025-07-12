@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client only when needed
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY environment variable is required');
+  }
+  return new OpenAI({ apiKey });
+}
 
 export async function POST(
   request: NextRequest,
@@ -167,6 +172,7 @@ async function executeLLMNode(node: any, input: string): Promise<string> {
     const systemPrompt = config.systemPrompt || 'You are a helpful AI assistant.';
     const temperature = config.temperature || 0.7;
 
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model,
       messages: [
