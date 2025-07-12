@@ -81,7 +81,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"; 
 import React, { ReactNode } from 'react';
 import Script from "next/script";
-import { SessionProvider } from "next-auth/react";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -148,11 +148,11 @@ export default function RootLayout({ children }: Props) {
         </Script>
       </head>
       <body>
-        <SessionProvider>
+        <Providers>
           <ThemeProviderWrapper>
             {children}
           </ThemeProviderWrapper>
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   );
