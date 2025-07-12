@@ -188,8 +188,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createApiUrl } from '@/lib/config';
-import { getRedirectPath } from '@/lib/auth';
+import { signIn } from 'next-auth/react';
 import { motion } from 'framer-motion';
 
 export default function LoginForm({
@@ -217,25 +216,21 @@ export default function LoginForm({
     setIsLoading(true);
 
     try {
-      const response = await fetch(createApiUrl('/login'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
       });
 
-      const result = await response.json();
-
-      if (!response.ok || !result.token) {
-        setError(result.error || 'Incorrect Email address or Password');
+      if (result?.error) {
+        setError('Incorrect Email address or Password');
         return;
       }
 
-      localStorage.setItem('jwtToken', result.token);
-      localStorage.setItem('showPricingPopup', 'true');
-      onClose();
-      router.push(getRedirectPath());
-
-
+      if (result?.ok) {
+        onClose();
+        router.push('/dashboard');
+      }
     } catch (err) {
       console.error('Login error:', err);
       setError('Something went wrong. Please try again.');
