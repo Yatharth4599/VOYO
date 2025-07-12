@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  userType      UserType  @default(COMPANY)
+  companyName   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  agents   Agent[]
+  agentRuns AgentRun[]
+  integrations Integration[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum UserType {
+  COMPANY
+  AGENT_CREATOR
+}
+
+model Agent {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  logicJson   Json        // Stores the agent workflow logic
+  visibility  Visibility  @default(PRIVATE)
+  type        AgentType   @default(CUSTOM)
+  status      AgentStatus @default(DRAFT)
+  usageStats  Json?       // Stores usage statistics
+  tags        String[]    // Array of tags for categorization
+  version     Int         @default(1)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  ownerId String
+  owner   User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  runs    AgentRun[]
+}
+
+enum Visibility {
+  PRIVATE
+  PUBLIC
+  UNLISTED
+}
+
+enum AgentType {
+  CUSTOM
+  TEMPLATE
+  MARKETPLACE
+}
+
+enum AgentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  SUSPENDED
+}
+
+model AgentRun {
+  id        String   @id @default(cuid())
+  input     String
+  output    String?
+  error     String?
+  duration  Int?     // Duration in milliseconds
+  createdAt DateTime @default(now())
+
+  agentId String
+  agent   Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tool {
+  id     String   @id @default(cuid())
+  name   String   @unique
+  type   ToolType
+  config Json     // Tool-specific configuration
+  active Boolean  @default(true)
+}
+
+enum ToolType {
+  LLM
+  API_CALL
+  EMAIL
+  SLACK
+  WHATSAPP
+  DATABASE
+  FILE_OPERATION
+  CONDITION
+  LOOP
+  MEMORY
+}
+
+model Integration {
+  id       String           @id @default(cuid())
+  type     IntegrationType
+  settings Json             // Integration-specific settings
+  active   Boolean          @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum IntegrationType {
+  SLACK
+  WHATSAPP
+  EMAIL
+  WEBHOOK
+  API
+} 

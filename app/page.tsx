@@ -1,26 +1,32 @@
-import { ThemeProvider } from 'next-themes'
-import Navbar from "@/components/landingV2/Navbar"
-import Hero from "@/components/landingV2/Hero"
-import Features from "@/components/landingV2/Features"
-import CaseStudies from "@/components/landingV2/CaseStudies"
-import Performance from "@/components/landingV2/Performance"
-import Working from "@/components/landingV2/Working"
-import Footer from "@/components/landingV2/Footer"
-import Reviews from "@/components/landingV2/Reviews"
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    
+    if (session) {
+      // User is signed in, redirect to dashboard
+      router.replace('/dashboard');
+    } else {
+      // User is not signed in, redirect to landing page
+      router.replace('/landingV2');
+    }
+  }, [session, status, router]);
+
+  // Show loading while redirecting
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div>
-        <Navbar />
-        <Hero />
-        <Working />
-        <Features />
-        <CaseStudies />
-        <Performance />
-        <Reviews />
-        <Footer />
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+        <p className="text-gray-400">Loading...</p>
       </div>
-    </ThemeProvider>
-  )
+    </div>
+  );
 }

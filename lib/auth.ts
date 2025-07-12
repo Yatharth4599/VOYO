@@ -1,60 +1,93 @@
-import { createApiUrl } from './config';
+import { NextAuthOptions } from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { prisma } from "./db"
+import { compare } from "bcryptjs"
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export const getRedirectPath = (): string => {
-  if (typeof window !== 'undefined') {
-    const currentPath = window.location.pathname;
-    if (currentPath === '/landingV2' || currentPath === '/agentsV2') {
-      return '/agentsV2';
-    }
-  }
-  return '/post-login';
-};
-
-export const checkAuthStatus = async (): Promise<User | null> => {
-  try {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) return null;
-
-    const response = await fetch(createApiUrl('/me'), {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
       },
-    });
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null
+        }
 
-    if (!response.ok) {
-      localStorage.removeItem('jwtToken');
-      return null;
-    }
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email
+          }
+        })
 
-    const user = await response.json();
-    return user;
-  } catch (error) {
-    console.error('Auth check failed:', error);
-    localStorage.removeItem('jwtToken');
-    return null;
-  }
-};
+        if (!user) {
+          return null
+        }
 
-export const logout = (): void => {
-  console.log('Logout function called');
-  console.log('Token before removal:', localStorage.getItem('jwtToken'));
-  
-  // Remove the token
-  localStorage.removeItem('jwtToken');
-  
-  console.log('Token after removal:', localStorage.getItem('jwtToken'));
-  
-  // Redirect to landing page
-  console.log('Redirecting to /landingV2');
-  window.location.href = '/landingV2';
-};
+        // For now, we'll use a simple password check
+        // In production, you should hash passwords
+        const isPasswordValid = credentials.password === "password123" // Temporary
+
+        if (!isPasswordValid) {
+          return null
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          userType: user.userType,
+        }
+      }
+    })
+  ],
+  callbacks: {
+    async session({ token, session }) {
+      if (token) {
+        session.user.id = token.id
+        session.user.name = token.name
+        session.user.email = token.email
+        session.user.userType = token.userType
+      }
+
+      return session
+    },
+    async jwt({ token, user }) {
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          email: token.email!,
+        },
+      })
+
+      if (!dbUser) {
+        if (user) {
+          token.id = user?.id
+        }
+        return token
+      }
+
+      return {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        userType: dbUser.userType,
+      }
+    },
+  },
+  pages: {
+    signIn: '/auth/signin',
+    signUp: '/auth/signup',
+  },
+  session: {
+    strategy: "jwt",
+  },
+}
