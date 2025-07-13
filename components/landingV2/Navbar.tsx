@@ -6,7 +6,7 @@ import { Menu, X, ChevronDown } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import SignupForm from '../SignupForm'
 import LoginForm from '../LoginForm'
-import { useSession, signOut } from 'next-auth/react'
+// import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 
 export default function Navbar() {
@@ -15,7 +15,16 @@ export default function Navbar() {
   const [showModal, setShowModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { data: session } = useSession();
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
+
+  // Check for stored JWT token and user info
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    const userData = localStorage.getItem('userData');
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   useEffect(() => {
     setMounted(true)
@@ -54,7 +63,10 @@ export default function Navbar() {
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    signOut({ callbackUrl: '/' });
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userData');
+    setUser(null);
+    window.location.href = '/';
   }
 
   if (!mounted) return null
@@ -80,14 +92,14 @@ export default function Navbar() {
           {/* Right: Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            {session?.user ? (
+            {user ? (
               <div className="relative user-dropdown-container">
                 <button 
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                   className="flex items-center space-x-2 text-gray-800 dark:text-purple-200 text-sm font-semibold px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-800 transition cursor-pointer"
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    {session.user.name?.charAt(0).toUpperCase() || 'U'}
+                    {user.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                   <ChevronDown size={16} />
                 </button>
@@ -95,8 +107,8 @@ export default function Navbar() {
                 {showUserDropdown && (
                   <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
                     <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                      <p className="font-semibold text-gray-900 dark:text-white">{session.user.name}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{session.user.email}</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">{user.name}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
                     </div>
                     <div className="p-2">
                       <Link 

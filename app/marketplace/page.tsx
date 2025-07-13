@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Filter, Play, Star, Users, Eye } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface Agent {
   id: string;
@@ -27,11 +28,23 @@ const categories = [
 ];
 
 export default function Marketplace() {
+  const router = useRouter();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [filteredAgents, setFilteredAgents] = useState<Agent[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check authentication
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      router.push('/landingV2');
+      return;
+    }
+    setIsAuthenticated(true);
+  }, [router]);
 
   useEffect(() => {
     fetchAgents();
@@ -87,7 +100,8 @@ export default function Marketplace() {
     console.log('Using agent:', agentId);
   };
 
-  if (loading) {
+  // Show loading state while checking authentication or loading data
+  if (loading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>

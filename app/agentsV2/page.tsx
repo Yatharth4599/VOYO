@@ -6,25 +6,31 @@ import Navbar from "@/components/landingV2/Navbar"
 import Hero from "@/components/agentsV2/Hero"
 import Footer from "@/components/landingV2/Footer"
 import LoginForm from "@/components/LoginForm"
-import { useSession } from 'next-auth/react'
 
 export default function AgentsV2() {
-  const { data: session, status } = useSession()
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     
+    // Check authentication
+    const token = localStorage.getItem('jwtToken');
+    const userData = localStorage.getItem('userData');
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
+    
     // Start 60 second timer for login prompt if not authenticated
-    if (status === 'unauthenticated') {
+    if (!token) {
       const timer = setTimeout(() => {
         setShowLoginModal(true)
       }, 60000) // 60 seconds
       
       return () => clearTimeout(timer)
     }
-  }, [status])
+  }, [])
 
   if (!mounted) return null
 

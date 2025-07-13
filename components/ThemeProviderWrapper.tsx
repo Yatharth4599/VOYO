@@ -29,7 +29,12 @@ import { ReactNode } from "react";
 
 export default function ThemeProviderWrapper({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider attribute="class" enableSystem defaultTheme="light">
+    <ThemeProvider 
+      attribute="class" 
+      enableSystem 
+      defaultTheme="system"
+      suppressColorSchemeWarning
+    >
       {children}
     </ThemeProvider>
   );

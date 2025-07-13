@@ -188,7 +188,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { createApiUrl } from '@/lib/config';
 import { motion } from 'framer-motion';
 
 export default function LoginForm({
@@ -216,21 +216,39 @@ export default function LoginForm({
     setIsLoading(true);
 
     try {
-      const result = await signIn('credentials', {
-        email: formData.email,
-        password: formData.password,
-        redirect: false,
+      const response = await fetch(createApiUrl('/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
-      if (result?.error) {
-        setError('Incorrect Email address or Password');
+      const result = await response.json();
+
+      if (!response.ok || !result.token) {
+        setError(result.error || 'Incorrect Email address or Password');
         return;
       }
 
-      if (result?.ok) {
-        onClose();
-        router.push('/dashboard');
+      localStorage.setItem('jwtToken', result.token);
+      
+      // Fetch user data after successful login
+      try {
+        const userResponse = await fetch(createApiUrl('/me'), {
+          headers: {
+            'Authorization': `Bearer ${result.token}`
+          }
+        });
+        
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          localStorage.setItem('userData', JSON.stringify(userData));
+        }
+      } catch (err) {
+        console.log('Could not fetch user data, will fetch later');
       }
+      
+      onClose();
+      router.push('/dashboard');
     } catch (err) {
       console.error('Login error:', err);
       setError('Something went wrong. Please try again.');

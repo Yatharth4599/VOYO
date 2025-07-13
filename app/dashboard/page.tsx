@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { createApiUrl } from '@/lib/config';
 import { motion } from 'framer-motion';
 import { 
   Building2, 
@@ -25,8 +26,10 @@ interface DashboardStats {
 }
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [user, setUser] = useState<{name: string, email: string, userType: string} | null>(null);
   const [userType, setUserType] = useState<'COMPANY' | 'AGENT_CREATOR' | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
     totalAgents: 0,
     totalRuns: 0,
@@ -35,12 +38,59 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (session?.user) {
-      // In a real app, fetch user type from session or API
-      setUserType(session.user.userType || 'COMPANY');
+    const checkAuth = async () => {
+      const token = localStorage.getItem('jwtToken');
+      
+      if (!token) {
+        router.push('/');
+        return;
+      }
+      
+      let userData = localStorage.getItem('userData');
+      
+      // If no user data in localStorage, fetch from API
+      if (!userData) {
+        try {
+          const response = await fetch(createApiUrl('/me'), {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const userInfo = await response.json();
+            // Add default userType if not provided by backend
+            const userWithDefaults = {
+              ...userInfo,
+              userType: userInfo.userType || 'COMPANY'
+            };
+            localStorage.setItem('userData', JSON.stringify(userWithDefaults));
+            setUser(userWithDefaults);
+            setUserType(userWithDefaults.userType);
+          } else {
+            // Invalid token, redirect to login
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userData');
+            router.push('/');
+            return;
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          router.push('/');
+          return;
+        }
+      } else {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setUserType(parsedUser.userType || 'COMPANY');
+      }
+      
       fetchDashboardStats();
-    }
-  }, [session]);
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [router]);
 
   const fetchDashboardStats = async () => {
     try {
@@ -54,7 +104,7 @@ export default function Dashboard() {
     }
   };
 
-  if (status === 'loading') {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
@@ -62,7 +112,7 @@ export default function Dashboard() {
     );
   }
 
-  if (!session) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -86,7 +136,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">
-                Welcome back, {session.user?.name || 'User'}!
+                Welcome back, {user?.name || 'User'}!
               </h1>
               <p className="text-gray-400 mt-1">
                 {userType === 'COMPANY' ? 'Manage your AI agents and integrations' : 'Build and monetize your AI agents'}

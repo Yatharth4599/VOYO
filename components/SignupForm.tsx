@@ -67,8 +67,10 @@ export default function SignupForm({ onClose, switchToLogin }: { onClose: () => 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-        ...formData,
-        phonenumber: `${countryCode}${formData.phonenumber.trim()}`,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: `${countryCode}${formData.phonenumber.trim()}`,
       }),
       });
 
