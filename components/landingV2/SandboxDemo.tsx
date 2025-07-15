@@ -502,7 +502,7 @@
 //                     key={wf.id}
 //                     className="bg-white/80 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 ml-2 mr-2 shadow-xl cursor-grab w-72 relative flex flex-col items-center transition-transform hover:scale-105"
 //                     draggable
-//                     onDragStart={() => handleDragStart({ ...wf, agents: ['VOYO AI'] }, 'suggestions')}
+//                     onDragStart={() => handleDragStart({ ...wf, agents: wf.agents || ['VOYO AI'] }, 'suggestions')}
 //                     style={{ boxShadow: '0 4px 24px 0 rgba(255, 140, 0, 0.10)' }}
 //                   >
 //                     <div className="text-4xl mb-2">{wf.icon}</div>
@@ -602,6 +602,194 @@ import React, { useState, useEffect } from 'react';
 import { createApiUrl } from '@/lib/api'; // adjust path if your file lives elsewhere
 import Link from 'next/link';
 
+// Hardcoded workflow library
+const WORKFLOW_LIBRARY = {
+  restaurant: [
+    {
+      id: 1001,
+      title: 'Take Online Orders',
+      category: 'Restaurant',
+      description: 'Let customers order food directly from your website or WhatsApp.',
+      agents: ['WhatsApp Bot', 'VOYO AI'],
+      icon: '🍕',
+      preview: {
+        type: 'whatsapp',
+        message: 'Hi! I would like to order a Margherita Pizza and a Coke. Can you confirm my order?'
+      }
+    },
+    {
+      id: 1002,
+      title: 'Send Reservation Confirmation',
+      category: 'Restaurant',
+      description: 'Automatically send a WhatsApp or SMS confirmation when someone books a table.',
+      agents: ['Twilio', 'VOYO AI'],
+      icon: '📅',
+      preview: {
+        type: 'sms',
+        message: 'Your table at Bella Italia is confirmed for 7:00 PM. See you soon!'
+      }
+    },
+    {
+      id: 1003,
+      title: 'Collect Feedback After Meal',
+      category: 'Restaurant',
+      description: 'Ask guests for feedback via WhatsApp or email after their visit.',
+      agents: ['WhatsApp Bot', 'Mailchimp', 'VOYO AI'],
+      icon: '📝',
+      preview: {
+        type: 'email',
+        message: 'Thank you for dining with us! Please let us know how we did by replying to this email.'
+      }
+    },
+    {
+      id: 1004,
+      title: 'Share Today\'s Menu',
+      category: 'Restaurant',
+      description: 'Send your daily specials to regulars with one click.',
+      agents: ['WhatsApp Bot', 'VOYO AI'],
+      icon: '📋',
+      preview: {
+        type: 'whatsapp',
+        message: 'Today\'s Specials: Spaghetti Carbonara, Caesar Salad, Tiramisu.'
+      }
+    },
+    {
+      id: 1005,
+      title: 'Remind About Reservations',
+      category: 'Restaurant',
+      description: 'Send a friendly reminder before a guest\'s reservation time.',
+      agents: ['Twilio', 'VOYO AI'],
+      icon: '⏰',
+      preview: {
+        type: 'sms',
+        message: 'Reminder: Your reservation at Bella Italia is in 1 hour.'
+      }
+    }
+  ],
+  ecommerce: [
+    {
+      id: 1006,
+      title: 'Abandoned Cart Reminder',
+      category: 'E-commerce',
+      description: 'Send a reminder to customers who left items in their cart.',
+      agents: ['Shopify Bot', 'Mailchimp', 'VOYO AI'],
+      icon: '🛒',
+      preview: {
+        type: 'email',
+        message: 'You left something in your cart! Complete your purchase now and enjoy free shipping.'
+      }
+    },
+    {
+      id: 1007,
+      title: 'Order Tracking Updates',
+      category: 'E-commerce',
+      description: 'Automatically notify customers about their order status.',
+      agents: ['VOYO AI', 'Twilio'],
+      icon: '🚚',
+      preview: {
+        type: 'sms',
+        message: 'Your order #1234 has shipped! Track it here: example.com/track/1234'
+      }
+    },
+    {
+      id: 1008,
+      title: 'Product Review Request',
+      category: 'E-commerce',
+      description: 'Ask customers to review their recent purchase.',
+      agents: ['Mailchimp', 'VOYO AI'],
+      icon: '⭐',
+      preview: {
+        type: 'email',
+        message: 'How did you like your new headphones? Leave a review and get 10% off your next order!'
+      }
+    }
+  ],
+  saas: [
+    {
+      id: 1009,
+      title: 'Onboard New Users',
+      category: 'SaaS',
+      description: 'Send a welcome email and onboarding guide to new signups.',
+      agents: ['Mailchimp', 'VOYO AI'],
+      icon: '👋',
+      preview: {
+        type: 'email',
+        message: 'Welcome to SaaSify! Here\'s your quick start guide to get the most out of your account.'
+      }
+    },
+    {
+      id: 1010,
+      title: 'Automated Support Bot',
+      category: 'SaaS',
+      description: 'Answer common questions instantly with an AI chatbot.',
+      agents: ['VOYO AI'],
+      icon: '🤖',
+      preview: {
+        type: 'dashboard',
+        message: 'User: How do I reset my password?\nBot: Click "Forgot Password" on the login page and follow the instructions.'
+      }
+    },
+    {
+      id: 1011,
+      title: 'Churn Risk Alerts',
+      category: 'SaaS',
+      description: 'Get notified when a user is likely to churn.',
+      agents: ['VOYO AI'],
+      icon: '⚠️',
+      preview: {
+        type: 'dashboard',
+        message: 'Alert: User John Doe (john@email.com) is at high risk of churning. Consider reaching out.'
+      }
+    }
+  ],
+  generic: [
+    {
+      id: 1012,
+      title: 'Send Newsletters',
+      category: 'Marketing',
+      description: 'Keep your customers updated with regular emails.',
+      agents: ['Mailchimp', 'VOYO AI'],
+      icon: '📧',
+      preview: {
+        type: 'email',
+        message: 'Check out our latest updates and offers in this month\'s newsletter!'
+      }
+    },
+    {
+      id: 1013,
+      title: 'Book Appointments',
+      category: 'Scheduling',
+      description: 'Let customers book appointments online easily.',
+      agents: ['Calendly', 'VOYO AI'],
+      icon: '📆',
+      preview: {
+        type: 'dashboard',
+        message: 'New appointment booked: Jane Doe, 2:00 PM, 12th June.'
+      }
+    },
+    {
+      id: 1014,
+      title: 'Customer Feedback Collection',
+      category: 'Support',
+      description: 'Collect feedback from your customers automatically.',
+      agents: ['Google Forms', 'VOYO AI'],
+      icon: '💬',
+      preview: {
+        type: 'email',
+        message: 'We value your feedback! Please fill out this quick survey.'
+      }
+    }
+  ]
+};
+
+function detectType(input: string) {
+  const val = input.toLowerCase();
+  if (val.includes('restaurant') || val.includes('cafe') || val.includes('pizza') || val.includes('bar')) return 'restaurant';
+  if (val.includes('shop') || val.includes('store') || val.includes('ecommerce') || val.includes('cart')) return 'ecommerce';
+  if (val.includes('saas') || val.includes('app') || val.includes('software')) return 'saas';
+  return 'generic';
+}
+
 const PreviewModal = ({ open, onClose, workflow }: { open: boolean, onClose: () => void, workflow: any }) => {
   if (!open || !workflow) return null;
   return (
@@ -635,10 +823,29 @@ export default function SandboxDemo() {
       try {
         const response = await fetch(createApiUrl('/workflows'));
         const data = await response.json();
-        setWorkflows(data.workflows);
-        setFilteredWorkflows(data.workflows);
+        
+        // Combine hardcoded workflows with API workflows
+        const allHardcodedWorkflows = [
+          ...WORKFLOW_LIBRARY.restaurant,
+          ...WORKFLOW_LIBRARY.ecommerce,
+          ...WORKFLOW_LIBRARY.saas,
+          ...WORKFLOW_LIBRARY.generic
+        ];
+        
+        const combinedWorkflows = [...allHardcodedWorkflows, ...data.workflows];
+        setWorkflows(combinedWorkflows);
+        setFilteredWorkflows(combinedWorkflows);
       } catch (error) {
         console.error('Failed to fetch workflows:', error);
+        // If API fails, fallback to hardcoded workflows only
+        const allHardcodedWorkflows = [
+          ...WORKFLOW_LIBRARY.restaurant,
+          ...WORKFLOW_LIBRARY.ecommerce,
+          ...WORKFLOW_LIBRARY.saas,
+          ...WORKFLOW_LIBRARY.generic
+        ];
+        setWorkflows(allHardcodedWorkflows);
+        setFilteredWorkflows(allHardcodedWorkflows);
       }
     };
     fetchData();
@@ -724,14 +931,16 @@ export default function SandboxDemo() {
                     key={wf.id}
                     className="bg-white/80 dark:bg-[#2A1E4D] border-2 border-orange-200 dark:border-purple-400 rounded-2xl p-6 ml-2 mr-2 shadow-xl cursor-grab w-72 relative flex flex-col items-center transition-transform hover:scale-105"
                     draggable
-                    onDragStart={() => handleDragStart({ ...wf, agents: ['VOYO AI'] }, 'suggestions')}
+                    onDragStart={() => handleDragStart({ ...wf, agents: wf.agents || ['VOYO AI'] }, 'suggestions')}
                     style={{ boxShadow: '0 4px 24px 0 rgba(255, 140, 0, 0.10)' }}
                   >
                     <div className="text-4xl mb-2">{wf.icon}</div>
                     <div className="font-bold text-orange-600 dark:text-blue-400 mb-1 text-lg text-center">{wf.category}</div>
                     <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
                     <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                      <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+                      {(wf.agents || ['VOYO AI']).map((agent: string, idx: number) => (
+                        <span key={idx} className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">{agent}</span>
+                      ))}
                     </div>
                     <div className="mt-2 text-xs text-gray-400">Drag to Sandbox below</div>
                     <button
@@ -776,7 +985,9 @@ export default function SandboxDemo() {
                         <div className="font-bold text-orange-600 dark:text-blue-400 text-lg text-center">{wf.category}</div>
                         <div className="text-black dark:text-white text-base mb-2 text-center">{wf.title}</div>
                         <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                          <span className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">VOYO AI</span>
+                          {(wf.agents || ['VOYO AI']).map((agent: string, idx: number) => (
+                            <span key={idx} className="bg-orange-100 dark:bg-purple-900 text-orange-700 dark:text-purple-200 px-2 py-1 rounded text-xs font-semibold">{agent}</span>
+                          ))}
                         </div>
                         <button
                           className="absolute top-2 right-20 bg-orange-100 hover:bg-orange-200 dark:hover:bg-purple-200 dark:bg-purple-100 dark:text-purple-700 text-orange-700 text-xs px-2 py-1 rounded shadow cursor-pointer"

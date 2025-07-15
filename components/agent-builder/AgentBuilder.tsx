@@ -69,9 +69,9 @@ export default function AgentBuilder() {
   };
 
   return (
-    <div className="h-screen bg-gray-900 flex">
+    <div className="h-screen bg-[#f5f1e8] dark:bg-gray-900 flex">
       {/* Left Panel - Node Library */}
-      <div className="w-80 bg-gray-800 border-r border-gray-700 p-4">
+      <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4">
         <NodePanel onAddNode={addNode} />
       </div>
 
@@ -86,7 +86,7 @@ export default function AgentBuilder() {
           onNodeClick={onNodeClick}
           onNodeDragStop={onNodeDragStop}
           fitView
-          className="bg-gray-900"
+          className="bg-[#f5f1e8] dark:bg-gray-900"
         >
           <Controls />
           <Background />
@@ -95,10 +95,10 @@ export default function AgentBuilder() {
 
         {/* Top Toolbar */}
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="bg-gray-800 rounded-lg p-2 flex gap-2 border border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-2 flex gap-2 border border-gray-200 dark:border-gray-700">
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md flex items-center gap-2 transition-colors"
+              className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-90 text-white rounded-md flex items-center gap-2 transition-opacity"
             >
               <Save className="w-4 h-4" />
               Save
@@ -120,7 +120,7 @@ export default function AgentBuilder() {
           initial={{ x: 400 }}
           animate={{ x: 0 }}
           exit={{ x: 400 }}
-          className="w-96 bg-gray-800 border-l border-gray-700 p-4"
+          className="w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-4"
         >
           <NodeConfigPanel
             node={selectedNode}

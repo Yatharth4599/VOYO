@@ -74,7 +74,7 @@ export default function NodePanel({ onAddNode }: NodePanelProps) {
 
   return (
     <div className="h-full">
-      <h2 className="text-xl font-semibold text-white mb-4">Components</h2>
+      <h2 className="text-xl font-semibold text-black dark:text-white mb-4">Components</h2>
       <div className="space-y-3">
         {nodeTypes.map((nodeType) => (
           <motion.div
@@ -84,15 +84,15 @@ export default function NodePanel({ onAddNode }: NodePanelProps) {
             draggable
             onDragStart={(e) => handleDragStart(e, nodeType)}
             onClick={() => handleAddNode(nodeType)}
-            className="bg-gray-700 hover:bg-gray-600 rounded-lg p-3 cursor-pointer transition-colors border border-gray-600"
+            className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg p-3 cursor-pointer transition-colors border border-gray-200 dark:border-gray-600"
           >
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${nodeType.color}`}>
                 <nodeType.icon className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-white">{nodeType.label}</h3>
-                <p className="text-sm text-gray-400">{nodeType.description}</p>
+                <h3 className="font-medium text-black dark:text-white">{nodeType.label}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{nodeType.description}</p>
               </div>
             </div>
           </motion.div>

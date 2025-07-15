@@ -60,16 +60,16 @@ export default function Logo() {
         <Image
           src="/Voyo Black Logo.png"
           alt="voyo logo dark"
-          width={120}
-          height={120}
+          width={200}
+          height={200}
           className="object-contain"
         />
       ) : (
         <Image
           src="/logo-voyo-removebg-preview.png"
           alt="voyo logo light"
-          width={140}
-          height={140}
+          width={220}
+          height={220}
           className="object-contain"
         />
       )}

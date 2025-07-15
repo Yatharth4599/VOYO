@@ -252,10 +252,18 @@ interface Agent {
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
   
   useEffect(() => {
     setMounted(true);
     fetchAgents();
+    
+    // Check for stored JWT token and user info
+    const token = localStorage.getItem('jwtToken');
+    const userData = localStorage.getItem('userData');
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
   }, []);
 
   const fetchAgents = async () => {
@@ -317,9 +325,15 @@ if (!mounted) return null; // prevents render mismatch
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
-              Get started for free
-            </button>
+            {user ? (
+              <a href="/dashboard" className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer inline-flex items-center justify-center">
+                Go to dashboard
+              </a>
+            ) : (
+              <button onClick={openModal} className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-4 py-2 rounded hover:opacity-90 transition cursor-pointer">
+                Get started for free
+              </button>
+            )}
             <button className="border border-gray-400 dark:border-gray-600 text-black dark:text-gray-300 font-semibold px-6 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer" onClick={() => {
               window.scrollTo({ top: document.getElementById('sandbox-section')?.offsetTop || 0, behavior: 'smooth' });
             }}>

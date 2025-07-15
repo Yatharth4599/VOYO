@@ -25,13 +25,13 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Input Type
               </label>
               <select
                 value={config.inputType || 'text'}
                 onChange={(e) => setConfig({ ...config, inputType: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white"
               >
                 <option value="text">Text</option>
                 <option value="number">Number</option>
@@ -40,14 +40,14 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Placeholder
               </label>
               <input
                 type="text"
                 value={config.placeholder || ''}
                 onChange={(e) => setConfig({ ...config, placeholder: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white"
                 placeholder="Enter placeholder text..."
               />
             </div>
@@ -58,13 +58,13 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Model
               </label>
               <select
                 value={config.model || 'gpt-4'}
                 onChange={(e) => setConfig({ ...config, model: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white"
               >
                 <option value="gpt-4">GPT-4</option>
                 <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
@@ -72,18 +72,18 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 System Prompt
               </label>
               <textarea
                 value={config.systemPrompt || ''}
                 onChange={(e) => setConfig({ ...config, systemPrompt: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white h-24 resize-none"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white h-24 resize-none"
                 placeholder="Enter system prompt..."
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Temperature
               </label>
               <input
@@ -95,7 +95,7 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
                 onChange={(e) => setConfig({ ...config, temperature: parseFloat(e.target.value) })}
                 className="w-full"
               />
-              <span className="text-sm text-gray-400">{config.temperature || 0.7}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{config.temperature || 0.7}</span>
             </div>
           </div>
         );
@@ -104,25 +104,25 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 API URL
               </label>
               <input
                 type="url"
                 value={config.url || ''}
                 onChange={(e) => setConfig({ ...config, url: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white"
                 placeholder="https://api.example.com/endpoint"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Method
               </label>
               <select
                 value={config.method || 'GET'}
                 onChange={(e) => setConfig({ ...config, method: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white"
               >
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
@@ -131,13 +131,13 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Headers (JSON)
               </label>
               <textarea
                 value={config.headers || '{}'}
                 onChange={(e) => setConfig({ ...config, headers: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white h-20 resize-none"
+                className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-black dark:text-white h-20 resize-none"
                 placeholder='{"Content-Type": "application/json"}'
               />
             </div>
@@ -146,7 +146,7 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
 
       default:
         return (
-          <div className="text-gray-400 text-center py-8">
+          <div className="text-gray-600 dark:text-gray-400 text-center py-8">
             <Settings className="w-8 h-8 mx-auto mb-2" />
             <p>Configuration options for this node type are coming soon.</p>
           </div>
@@ -157,18 +157,18 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
   return (
     <div className="h-full">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white">Configure Node</h2>
+        <h2 className="text-xl font-semibold text-black dark:text-white">Configure Node</h2>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-white transition-colors"
+          className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-medium text-white mb-2">{node.data?.label}</h3>
-        <p className="text-sm text-gray-400">Node ID: {node.id}</p>
+        <h3 className="text-lg font-medium text-black dark:text-white mb-2">{node.data?.label}</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Node ID: {node.id}</p>
       </div>
 
       <div className="space-y-6">
@@ -178,7 +178,7 @@ export default function NodeConfigPanel({ node, onUpdate, onClose }: NodeConfigP
       <div className="absolute bottom-4 left-4 right-4">
         <button
           onClick={handleSave}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-md transition-colors"
+          className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-90 text-white py-2 px-4 rounded-md transition-opacity"
         >
           Save Configuration
         </button>

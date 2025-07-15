@@ -30,11 +30,19 @@ export default function Hero() {
   const [modal, setModal] = useState<AgentModal>({ isOpen: false, agent: null })
   const cardGridRef = useRef<HTMLDivElement | null>(null);
   const [cardGridHeight, setCardGridHeight] = useState(0);
+  const [user, setUser] = useState<{name: string, email: string} | null>(null);
 
   useEffect(() => {
     setAnimate(true)
     fetchCategories()
     fetchAllAgents()
+    
+    // Check for stored JWT token and user info
+    const token = localStorage.getItem('jwtToken');
+    const userData = localStorage.getItem('userData');
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
   }, [])
 
   const fetchCategories = async () => {
@@ -164,9 +172,19 @@ export default function Hero() {
       </div>
 
       <div className="ml-30 mt-10">
-        <h1 className="bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[40px] font-bold mb-5">
-          Explore AI Agents
-        </h1>
+        <div className="flex justify-between items-center mb-5">
+          <h1 className="bg-gradient-to-r from-amber-600 to-red-950 dark:from-gray-200 dark:to-violet-800 bg-clip-text text-transparent text-[40px] font-bold">
+            Explore AI Agents
+          </h1>
+          {user && (
+            <a 
+              href="/dashboard" 
+              className="bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-90 text-white px-6 py-3 rounded-lg transition-opacity font-semibold"
+            >
+              Go to Dashboard
+            </a>
+          )}
+        </div>
 
         {/* Search */}
         <div className="flex justify-between items-center">

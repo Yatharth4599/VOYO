@@ -76,7 +76,9 @@ export default function Navbar() {
       <div className="flex items-center py-4 px-6 lg:px-16 max-w-7xl mx-auto">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <Logo />
+          <Link href="/" className="cursor-pointer">
+            <Logo />
+          </Link>
         </div>
 
         {/* Desktop Nav */}
@@ -85,7 +87,7 @@ export default function Navbar() {
             <a href="#" className="hover:text-black dark:hover:text-white transition">Features</a>
             <a href="#" className="hover:text-black dark:hover:text-white transition">Docs</a>
             <a href="#" className="hover:text-black dark:hover:text-white transition">Pricing</a>
-            <a href="#" className="hover:text-black dark:hover:text-white transition">Blog</a>
+            <Link href="/agentsV2" className="hover:text-black dark:hover:text-white transition">Marketplace</Link>
             <a href="#" className="hover:text-black dark:hover:text-white transition">Community</a>
           </nav>
 
@@ -158,7 +160,7 @@ export default function Navbar() {
             <a href="#" className="hover:text-black dark:hover:text-gray-400 transition">Features</a>
             <a href="#" className="hover:text-black dark:hover:text-gray-400 transition">Docs</a>
             <a href="#" className="hover:text-black dark:hover:text-gray-400 transition">Pricing</a>
-            <a href="#" className="hover:text-black dark:hover:text-gray-400 transition">Blog</a>
+            <Link href="/agentsV2" className="hover:text-black dark:hover:text-gray-400 transition">Marketplace</Link>
             <a href="#" className="hover:text-black dark:hover:text-gray-400 transition">Community</a>
           </nav>
         </div>
