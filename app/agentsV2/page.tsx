@@ -7,6 +7,7 @@ import Hero from "@/components/agentsV2/Hero"
 import Footer from "@/components/landingV2/Footer"
 import LoginForm from "@/components/LoginForm"
 
+
 export default function AgentsV2() {
   const [user, setUser] = useState<{name: string, email: string} | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -14,7 +15,9 @@ export default function AgentsV2() {
 
   useEffect(() => {
     setMounted(true)
+
     
+
     // Check authentication
     const token = localStorage.getItem('jwtToken');
     const userData = localStorage.getItem('userData');
@@ -33,6 +36,7 @@ export default function AgentsV2() {
   }, [])
 
   if (!mounted) return null
+  
 
   return (
     <div>

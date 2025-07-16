@@ -43,21 +43,22 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
       {range.map((item, idx) =>
         item === '...' ? (
-          <span key={idx} className="px-2 py-1 text-gray-400 select-none">...</span>
+          <span key={`ellipsis-${idx}`} className="px-2 py-1 text-gray-400 select-none">...</span>
         ) : (
           <button
-            key={item}
+            key={`page-${item}`} 
             onClick={() => onPageChange(item)}
             className={`px-3 py-1 rounded-md border text-sm ${
               currentPage === item
-                ? 'bg-amber-500 border-amber-500 text-white font-semibold'
-                : 'hover:bg-gray-100'
+                ? 'bg-amber-500 border-amber-500 dark:bg-purple-500 dark:border-purple-500 text-white font-semibold cursor-pointer'
+                : 'hover:bg-gray-100 dark:hover:bg-zinc-800 dark:border-zinc-700 cursor-pointer'
             }`}
           >
             {item}
           </button>
         )
       )}
+
 
       <button
         onClick={() => onPageChange(currentPage + 1)}

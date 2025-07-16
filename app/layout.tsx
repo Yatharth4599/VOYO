@@ -3,6 +3,7 @@ import "./globals.css";
 import Script from "next/script";
 // import Providers from "@/components/Providers";
 import ThemeProviderWrapper from "@/components/ThemeProviderWrapper";
+import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
   title: "Voyo - Your AI Agent Marketplace",
@@ -41,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script
+        {/* <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8F9FJXMX7R"
           strategy="afterInteractive"
         />
@@ -50,15 +51,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-8F9FJXMX7R');
+            gtag('config', 'G-8F9FJXMX7R');   
           `}
-        </Script>
+        </Script> */}
       </head>
       <body>
         <ThemeProviderWrapper>
+        <Analytics />
           {children}
         </ThemeProviderWrapper>
       </body>
     </html>
   );
 }
+
