@@ -1,29 +1,3 @@
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getFirestore } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCDTIXQCV4W_w_QcNYa3rLtkfgoS9338Bo",
-//   authDomain: "voyo-agents.firebaseapp.com",
-//   projectId: "voyo-agents",
-//   storageBucket: "voyo-agents.firebasestorage.app",
-//   messagingSenderId: "291127154935",
-//   appId: "1:291127154935:web:cc9fcdc9ab155ca0c45bf2",
-//   measurementId: ""
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// export const db = getFirestore(app);
-// const analytics = getAnalytics(app);
-
-
-
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
