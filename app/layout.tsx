@@ -3,7 +3,7 @@ import "./globals.css";
 import Script from "next/script";
 // import Providers from "@/components/Providers";
 import ThemeProviderWrapper from "@/components/ThemeProviderWrapper";
-import Analytics from "@/components/Analytics";
+import Analytics from "@/components/Analytics/Analytics";
 
 export const metadata: Metadata = {
   title: "Voyo - Your AI Agent Marketplace",
@@ -56,8 +56,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script> */}
       </head>
       <body>
-        <ThemeProviderWrapper>
         <Analytics />
+        <ThemeProviderWrapper>
           {children}
         </ThemeProviderWrapper>
       </body>
