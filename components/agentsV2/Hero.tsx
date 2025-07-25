@@ -910,7 +910,7 @@ export default function Hero() {
   })
 
     logAgentClick(agent['Agent Name'])
-    logAgentView(agent['Agent Name']) // ← this right here
+    // logAgentView(agent['Agent Name']) 
 
     setModal({ isOpen: true, agent })
   }
@@ -1106,11 +1106,11 @@ export default function Hero() {
             <h2 className="font-bold text-xl whitespace-nowrap">
               {loading ? 'Loading...' : `${filteredAgents.length} AI Agents`}
             </h2>
-            {globalClicks !== null && (
+            {/* {globalClicks !== null && (
               <p className="text-xl text-gray-500 dark:text-gray-400 italic">
                 {globalClicks} total agent clicks across the app 
               </p>
-            )}
+            )} */}
             <div className="border border-gray-200 rounded-md p-2 inline-flex items-center gap-2">
               <label htmlFor="sort" className="text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
                 Sort:
